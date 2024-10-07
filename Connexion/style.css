@@ -1,0 +1,141 @@
+@font-face {
+    font-family: 'Fredoka';
+    src: url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+}
+
+
+
+:root{
+    --dark-purple-bg: #272528 ;
+    --secondary-pink: #B493BB ;
+}
+
+
+
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Fredoka', Arial, Helvetica, sans-serif;
+}
+
+
+
+body{
+    background-color: var(--dark-purple-bg);
+}
+
+
+
+header{
+    color: var(--secondary-pink);
+    background-color: rgba(0, 0, 0, .3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 10px 0;
+    border-bottom: 7px solid #B493BB;
+    column-gap: 5vw;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+
+
+img{
+    height: 10vh;
+}
+
+
+
+main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10vw;
+    height: 80vh;
+    width: 100vw;
+}
+
+
+
+section{
+    border: 2px solid var(--secondary-pink);
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    flex-direction: column;
+    width: 33vw;
+}
+
+.cat{
+    color: white;
+    font-size: 32px;
+    font-weight: bold;
+    border-bottom: 5px solid var(--secondary-pink);
+    margin: 10px;
+    line-height: 2em;
+    text-align: center;
+}
+
+
+
+form{
+    display: inline-block;
+    margin: 5px 10px;
+}
+
+
+
+section form label{
+    color: white;
+    padding-left: 10px;
+}
+
+section form input{
+    width: 25vw;
+    line-height: 2rem;
+    border-radius: 25px;
+    border: 1px solid var(--secondary-pink);
+    background-color: transparent;
+    margin-top: 2px;
+    vertical-align: middle;
+    color: var(--secondary-pink);
+    font-size: smaller;
+    padding-left: 10px;
+}
+
+img.here{
+    height: 25px;
+    vertical-align: middle;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+    font-size: x-small;
+    margin-left: 19vw;
+}
+
+section form input[type=submit]{
+    background-color: var(--secondary-pink);
+    color: var(--dark-purple-bg);
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    margin-top: 5vh;
+}
+
+
+
+.slogan{
+    color: var(--secondary-pink);
+    font-weight: bold;
+    font-size: 42px;
+    text-align: center;
+    line-height: 1.5em;
+}
