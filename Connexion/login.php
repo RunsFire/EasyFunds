@@ -58,11 +58,11 @@
                             $cnx->exec("UPDATE \"easyfunds\".\"utilisateur\" SET \"nbr_essai\"=\"nbr_essai\"+1 WHERE \"mail\"='".$_SESSION['login']."';");
                             $row[5]++;
                         }
-                        if ($row[5]<2){
+                        if ($row!=0 &&$row[5]<2){
                             echo "<h4 class=\"red\">login ou mot de passe incorrect </h4>";
-                        }else if ($row[5]==2){
+                        }else if ($row!=0 &&$row[5]==2){
                             echo "<h4 class=\"red\">ATTENTION : PLUS QUE UN ESSAI AVANT LE BLOCAGE DU COMPTE </h4>";
-                        }else if ($row[5]==3){
+                        }else if ($row!=0 &&$row[5]==3){
                             echo "<h4 class=\"red\">Votre compte est maintenant bloqué. Contactez un admin en cliquant ici </h4>"; #RAJOUTER FORMULAIRE CONTACT ADMIN
                         }
                         
