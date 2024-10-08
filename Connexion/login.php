@@ -3,35 +3,39 @@
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Se connecter</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Connexion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
-        </style>
-        
 </head>
+
 <body>
-    <div class="navbar">
-        <a href="page-accueil.html"><img src="image/Silver-Stone.png" alt="" class="taille"></a>
-    </div>
-    <div class="center-image">
-        <img src="image/old_people.png" alt="">
-    </div>
-    <form method="POST" action="login.php">
-            <div class="center">
-                <h2 class="gris">Mail de connexion</h2>
-                <input type="text" class="champ" name="mail" placeholder="Entrez votre mail" size="40" required><br><br>
-                <h2 class="gris">Mot de passe</h2>
-                <input type="password" class="champ" name="mdp" id="password-input" placeholder="Mot de passe" size="40" required />
-                    <button type="button" id="toggle-password" onclick="togglePasswordVisibility()">
-                        <i id="eye-icon" class="fas fa-eye"></i>
-                    </button>
-            <?php
+    <header>
+        <img src="https://images.theconversation.com/files/311566/original/file-20200123-162199-1qn3vm.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=926&fit=clip"
+            alt="">
+        <div class="title">
+            Easy Funds
+        </div>
+    </header>
+    <main>
+        <section>
+            <div class="cat">
+                Identifiez-vous
+            </div>
+            <form method="POST" action="login.php">
+                <label for="mail">Mail</label><br>
+                <input type="text" name="mail" id="mail" placeholder="exemple@gmail.com" style="margin-bottom: 2rem"
+                    required><br>
+                <label for="password">Mot de passe</label><br>
+                <input type="password" name="mdp" id="password-input" placeholder="p4as5W0rD">
+                <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility()">
+                    <i id="eye-icon" class="fas fa-eye"></i>
+                </button>
+                <?php
                 include("connexion.inc.php");
                 if (isset($_POST['mail']) && isset($_POST['mdp'])){
                     $_SESSION['login'] = $_POST['mail'];
@@ -57,6 +61,7 @@
                         
                     }
                     else {
+                        echo "mer";
                         $_SESSION['typeu']=$row[1];
                         $_SESSION['mdpProvisoire']=$row[2];
                         $_SESSION['num']=$row[3];
@@ -71,22 +76,23 @@
                                 header('location:mdpmdp.php');
                         }}
                     }
-            echo "<br><br>";
-            echo "<input class =\"btn\" type=\"submit\" name=\"submit\" value=\"Connexion\" /><br><br>";
-            echo "</form>";
+            echo "<br>";
             if (isset($_POST['mail']) && isset($_POST['mdp'])){
                 if ($row[5]!=3){
-                    echo "Mot de passe oublié ? <a href=\"mdpoublie.php\">  cliquez ici </a><br><br>";
+                    echo "<a href=\"mdpoublie.php\">Mot de passe oubli&eacute; ?</a><br>";
                 }
             }else{
-                echo "Mot de passe oublié ? <a href=\"mdpoublie.php\">  cliquez ici </a><br><br>";
+                echo "<a href=\"mdpoublie.php\" style=\"margin-top: 5px;\">Mot de passe oubli&eacute; ?</a><br>";
             }
             ?>
-            </div>
-            <h2 class="itim-regular green center">Unis pour le bien-être : <br> 
-            rencontres entre maisons de retraite.</h2>
-            </div>
-<script src="script/form.js"></script>
-    </div> 
+                <input type="submit" value="Se connecter" />
+            </form>
+        </section>
+        <p class="slogan">
+            Easy Funds,<br>la banque <br> qui simplifie <br> votre quotidien.
+        </p>
+        <script src="form.js"></script>
+    </main>
 </body>
+
 </html>
