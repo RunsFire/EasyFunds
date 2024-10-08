@@ -61,10 +61,10 @@
                         
                     }
                     else {
-                        echo "mer";
                         $_SESSION['typeu']=$row[1];
                         $_SESSION['mdpProvisoire']=$row[2];
                         $_SESSION['num']=$row[3];
+                        $cnx->exec("UPDATE \"easyfunds\".\"utilisateur\" SET \"nbr_essai\"=0 WHERE \"mail\"='".$_SESSION['login']."';");
                         if ( $_SESSION['typeu']=='0' && $row[2]==0){
                                 header('location:accueilUser.php');
                         } else if( $_SESSION['typeu']=='0' &&$row[2]==1){
