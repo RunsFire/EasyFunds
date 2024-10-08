@@ -1,0 +1,209 @@
+:root {
+    --main: #6A5B78;
+    --sec: #B493BB;
+    --light: #cecece;
+    --dark: #252525;
+    --default-font: "Arial";
+    --fancy-font: "monospace";
+}
+
+/*HEADER*/
+header {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 3%;
+    background-color: rgb(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: solid 2.5px var(--sec);
+}
+
+header > .logo {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    color: var(--sec);
+    align-items: center;
+}
+
+header > .logo > .small-icon  {
+    height: 40px;
+}
+
+header > .logo > .small-logo {
+    height: 20px;
+}
+
+/*HEADER TABS*/
+header > .tabs {
+    box-sizing: border-box;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+header > .tabs > .tab {
+    color: white;
+    font-family: var(--fancy-font);
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 20px 30px;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+}
+
+header > .tabs > .tab.active {
+    color: var(--sec);
+    text-decoration: 2px underline var(--sec);
+    text-underline-offset: 5px;
+    overflow: hidden;
+}
+
+header > .tabs > .tab:hover {
+    transition: 0.4s;
+    background-color: var(--main);
+    color: white;
+}
+
+header > .tabs > .tab.active:hover {
+    text-decoration: 2px underline white;
+}
+
+/*TABLE*/
+th {
+    color: white;
+    background-color: var(--main);
+    border-radius: 3px;
+    padding: 10px 0;
+    font-size: 1.2rem;
+}
+
+tr {
+    display: flex;
+    flex-direction: row;
+    gap: 0 6px;
+    font-family: var(--default-font);
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px 0;
+}
+
+tr.style1 {
+    background-color: rgb(255, 255, 255, 0.5);
+}
+
+tr.style2 {
+    background-color: rgb(255, 255, 255, 0.3);
+}
+
+
+td {
+    color: black;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 4px 0;
+}
+
+.frame {
+    width: 1150px;
+    box-sizing: border-box;
+}
+
+/*OPTIONS, second tabs*/
+
+label.option-label {
+    color: var(--main);
+    padding: 6px 15px;
+    background-color: var(--light);
+    font-size: 1.3rem;
+    border-radius: 10px;
+    font-weight: bold;
+    font-family: var(--fancy-font);
+    opacity: 0.3;
+    cursor: pointer;
+    box-shadow: 0 0 20px #202020;
+}
+
+label.option-label:hover {
+    transition: 0.2s ease-in-out;
+    opacity: 0.8;
+}
+
+input.option-radio {
+    display: none;
+}
+
+input.option-radio:checked + label.option-label {
+    opacity: 1;
+    background-color: var(--main);
+    color: white;
+}
+
+/*FORM*/
+input {
+    background-color: var(--light);
+    border: solid 2px var(--main);
+    padding: 5px 10px;
+    border-radius: 7px;
+    font-weight: bold;
+    color: var(--main);
+    font-size: 1rem;
+    width: 220px;
+}
+
+button.search {
+    background-color: var(--sec);
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    padding: 0 15px;
+    cursor: pointer;
+}
+
+button.search:hover {
+    transition: 0.1s;
+    background-color: var(--main);
+}
+
+.table-format {
+    padding: 10px;
+}
+
+button.export {
+    background-color: var(--sec);
+    font-weight: bold;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+button.export:hover {
+    transition: 0.2s;
+    background-color: var(--main);
+}
+
+select.table-format {
+    background-color: var(--light);
+    border: solid 2px var(--main);
+    padding: 5px 10px;
+    border-radius: 7px;
+    font-weight: bold;
+    color: var(--main);
+    font-size: 1rem;
+    width: 80px;
+}
+
+.display {
+    display: none;
+}
+
+.display.active {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
