@@ -9,13 +9,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Connexion</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="easyfunds-icon.png">
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
 
 <body>
     <header>
-        <img src="https://images.theconversation.com/files/311566/original/file-20200123-162199-1qn3vm.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=926&fit=clip"
+        <img src="easyfunds-icon.png"
             alt="">
         <div class="title">
             Easy Funds
@@ -42,6 +43,13 @@
                     $_SESSION['mdp'] = $_POST['mdp'];
                     $requete = $cnx -> query("SELECT \"mdp\",\"typeu\",\"mdpProvisoire\",\"num\",\"mail\",\"nbr_essai\" FROM \"easyfunds\".\"utilisateur\" WHERE \"mail\"='". $_SESSION['login']."';");
                     $row=$requete->fetch();
+                    if (isset($_POST['mail']) && isset($_POST['mdp'])){
+                        if ($row==0 || $row[5]!=3){
+                            echo "<a href=\"mdpoublie.php\">Mot de passe oubli&eacute; ?</a><br>";
+                        }
+                    }else{
+                        echo "<a href=\"mdpoublie.php\" style=\"margin-top: 5px;\">Mot de passe oubli&eacute; ?</a><br>";
+                    }
                     if ($row==0 || !(password_verify($_SESSION['mdp'],$row[0])) || $row[5]==3){
                         if ($row==0){
                             echo "<h4 class=\"red\">login ou mot de passe incorrect </h4>";
@@ -79,13 +87,6 @@
                         }}
                     }
             echo "<br>";
-            if (isset($_POST['mail']) && isset($_POST['mdp'])){
-                if ($row==0 || $row[5]!=3){
-                    echo "<a href=\"mdpoublie.php\">Mot de passe oubli&eacute; ?</a><br>";
-                }
-            }else{
-                echo "<a href=\"mdpoublie.php\" style=\"margin-top: 5px;\">Mot de passe oubli&eacute; ?</a><br>";
-            }
             ?>
                 <input type="submit" value="Se connecter" />
             </form>
