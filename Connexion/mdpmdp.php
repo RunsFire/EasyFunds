@@ -1,35 +1,41 @@
-<label?php session_start(); if ($_SESSION['mdpProvisoire']!=1){ header('location:page-accueil.html'); } ?>
-    <!DOCTYPE html>
-    <html>
+<?php session_start(); if ($_SESSION['mdpProvisoire']!=1){ header('location:page-accueil.html'); } ?>
+<!DOCTYPE html>
+<html>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Changement de mot de passe</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changement de mot de passe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-    <body>
-        <header>
-            <img src="https://images.theconversation.com/files/311566/original/file-20200123-162199-1qn3vm.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=926&fit=clip"
-                alt="">
-            <div class="title">
-                Easy Funds
+<body>
+    <header>
+        <img src="https://images.theconversation.com/files/311566/original/file-20200123-162199-1qn3vm.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=926&fit=clip"
+            alt="">
+        <div class="title">
+            Easy Funds
+        </div>
+    </header>
+    <main>
+        <section>
+            <div class="cat">
+                Identifiez-vous
             </div>
-        </header>
-        <main>
-            <section>
-                <div class="cat">
-                    Identifiez-vous
-                </div>
-                <form method="POST" action="mdpmdp.php">
-                    <div class="center">
-                        <label for="mdp">Mot de passe</label>
-                        <input type="password" name="mdp" placeholder="Entrez votre mot de passe" required><br>
-                        <label for="mdp2">Confirmer votre Mot de passe</label>
-                        <input type="password" name="mdp2" placeholder="Entrez une seconde fois votre mot de passe"
-                            required>
-                        <?php
+            <form method="POST" action="mdpmdp.php">
+                <div class="center">
+                    <label for="mdp">Mot de passe</label>
+                    <input type="password" name="mdp" placeholder="Entrez votre mot de passe" required><br>
+                    <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility()">
+                        <i id="eye-icon" class="fas fa-eye"></i>
+                    </button>
+                    <label for="mdp2">Confirmer votre Mot de passe</label>
+                    <input type="password" name="mdp2" placeholder="Entrez une seconde fois votre mot de passe"
+                        required>
+                    <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility2()">
+                        <i id="eye-icon" class="fas fa-eye"></i>
+                    </button>
+                    <?php
                 include("connexion.inc.php");
                 if (isset($_POST['mdp2']) && isset($_POST['mdp'])){
                     $mdp = $_POST['mdp'];
@@ -52,12 +58,13 @@
                    
                 }
             ?>
-                        <br><br>
-                        <input type="submit" name="submit" value="Changer mon mot de passe" /><br><br>
-                    </div>
-                </form>
-            </section>
-        </main>
-    </body>
+                    <br><br>
+                    <input type="submit" name="submit" value="Changer mon mot de passe" /><br><br>
+                </div>
+            </form>
+        </section>
+        <script src="form.js"></script>
+    </main>
+</body>
 
-    </html>
+</html>
