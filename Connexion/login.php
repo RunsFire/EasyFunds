@@ -42,9 +42,11 @@
                     $_SESSION['mdp'] = $_POST['mdp'];
                     $requete = $cnx -> query("SELECT \"mdp\",\"typeu\",\"mdpProvisoire\",\"num\",\"mail\",\"nbr_essai\" FROM \"easyfunds\".\"utilisateur\" WHERE \"mail\"='". $_SESSION['login']."';");
                     $row=$requete->fetch();
-                    $mdpBDD = $row[0];
-                    if ($row==0 || !(password_verify($_SESSION['mdp'],$mdpBDD)) || $row[5]==3){
-                        if ($row[5]!=3){
+                    if ($row==0 || !(password_verify($_SESSION['mdp'],$row[0])) || $row[5]==3){
+                        if ($row==0){
+                            echo "<h4 class=\"red\">login ou mot de passe incorrect </h4>";
+                        }
+                        if ($row!=0 && $row[5]!=3){
                             $cnx->exec("UPDATE \"easyfunds\".\"utilisateur\" SET \"nbr_essai\"=\"nbr_essai\"+1 WHERE \"mail\"='".$_SESSION['login']."';");
                             $row[5]++;
                         }
@@ -78,7 +80,7 @@
                     }
             echo "<br>";
             if (isset($_POST['mail']) && isset($_POST['mdp'])){
-                if ($row[5]!=3){
+                if ($row==0 || $row[5]!=3){
                     echo "<a href=\"mdpoublie.php\">Mot de passe oubli&eacute; ?</a><br>";
                 }
             }else{
