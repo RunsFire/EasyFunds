@@ -11,7 +11,7 @@
 
     <body>
         <header>
-            <img src="https://images.theconversation.com/files/311566/original/file-20200123-162199-1qn3vm.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=926&fit=clip"
+           <img src="easyfunds-icon.png"
                 alt="">
             <div class="title">
                 Easy Funds
@@ -46,7 +46,7 @@
                 }
             ?>
                         <input type="submit" name="submit" value="Envoyez un code" /><br><br>
-                        <div>Pour revenir à l'accueil <a href="page-accueil.html"> cliquez ici </a></div><br><br>
+                        <div>Pour revenir à l'accueil <a href="page-accueil.html"> cliquez ici </a></div>
                     </div>
                 </form>
             </section>

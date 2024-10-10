@@ -11,7 +11,7 @@
 
 <body>
     <header>
-        <img src="https://images.theconversation.com/files/311566/original/file-20200123-162199-1qn3vm.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=926&fit=clip"
+        <img src="easyfunds-icon.png"
             alt="">
         <div class="title">
             Easy Funds
