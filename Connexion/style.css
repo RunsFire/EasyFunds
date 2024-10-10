@@ -152,9 +152,9 @@ form .eyeIcon i {
 .eye::before {
     content: "";
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-image: url('../img/eye.png');
+    width: 30px;
+    height: 30px;
+    background-image: url('img/eye.png');
     background-size: contain;
     background-repeat: no-repeat;
     vertical-align: middle;
@@ -163,9 +163,9 @@ form .eyeIcon i {
 .slashed-eye::before {
     content: "";
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    background-image: url('../img/eye_closed.png');
+    width: 30px;
+    height: 30px;
+    background-image: url('img/eye_closed.png');
     background-size: contain;
     background-repeat: no-repeat;
     vertical-align: middle;
