@@ -3,7 +3,8 @@ include("connexion.inc.php");
 $ok = false;
 if (isset($_POST["message"])){
     $message = $_POST['message'];
-    $cnx -> exec("INSERT INTO \"easyfunds\".\"demande_compte\" (type_demande,info_supplementaire) VALUES ('b','$message');");
+    $num = $_SESSION['num'];
+    $cnx -> exec("INSERT INTO \"easyfunds\".\"demande_compte\" (num,type_demande,info_supplementaire) VALUES ($num,'b','$message');");
     $ok = true;
 } ?>
 <!DOCTYPE html>

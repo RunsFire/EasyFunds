@@ -16,8 +16,7 @@
 
 <body>
     <header>
-        <img src="easyfunds-icon.png"
-            alt="">
+        <img src="easyfunds-icon.png" alt="">
         <div class="title">
             Easy Funds
         </div>
@@ -57,6 +56,7 @@
                         }else if ($row!=0 &&$row[5]==2){
                             echo "<h4 class='alert'>ATTENTION : PLUS QUE UN ESSAI AVANT LE BLOCAGE DU COMPTE </h4>";
                         }else if ($row!=0 &&$row[5]==3){
+                            $_SESSION['num']=$row[3];
                             echo "<h4 class='alert'>Votre compte est maintenant bloqué. Contactez un admin en<a href=\"contact_admin.php\"> cliquant ici </a></h4>"; #RAJOUTER FORMULAIRE CONTACT ADMIN
                         }
                         
