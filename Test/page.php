@@ -4,7 +4,7 @@
 	// 	header('location:login.php');
 	// }
     include("connexion.inc.php");
-    $results = $cnx->query("SELECT * from \"easyfunds\".\"tresorerie\" ");
+    $results = $cnx->query("SELECT * from \"easyfunds\".\"tresorerie\" ORDER BY num_tresorerie DESC");
     $data = $results->fetchAll();
     $results->closeCursor();
 ?>
