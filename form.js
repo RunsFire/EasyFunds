@@ -4,10 +4,10 @@ function togglePasswordVisibility() {
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
-        eyeIcon.className = "fas fa-eye-slash";
+        eyeIcon.className = "slashed-eye";
     } else {
         passwordInput.type = "password";
-        eyeIcon.className = "fas fa-eye";
+        eyeIcon.className = "eye";
     }
 }
 
@@ -17,9 +17,9 @@ function togglePasswordVisibility2() {
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
-        eyeIcon.className = "fas fa-eye-slash";
+        eyeIcon.className = "slashed-eye";
     } else {
         passwordInput.type = "password";
-        eyeIcon.className = "fas fa-eye";
+        eyeIcon.className = "eye";
     }
 }
