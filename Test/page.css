@@ -49,6 +49,11 @@ html {
     font-weight: bold;
 }
 
+.disconnect:hover {
+    transition: 0.2s;
+    filter: brightness(50%)
+}
+
 .filtres {
     display: flex;
     flex-direction: row;
