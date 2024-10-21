@@ -26,7 +26,7 @@ html {
 
 /* STYLE FRAMES */
 .options {
-    margin: 10px 0;
+    margin: 10px 0 2px 0;
     display: flex;
     flex-direction: row;
     gap: 10px;
@@ -63,11 +63,15 @@ html {
 }
 
 .table-datas {
-    height: 400px;
+    height: 380px;
     background-color: var(--main);
     padding: 0;
     margin: 0;
-    overflow: scroll;
+    overflow-y: scroll;
+}
+
+.table-datas.shorter-table {
+    height: 340px;
 }
 
 .table-export {
@@ -77,4 +81,14 @@ html {
     align-items: center;
     justify-content: end;
     gap: 5px;
+}
+
+table {
+    overflow-x: hidden;
+}
+
+.row-space-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
