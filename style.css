@@ -1,7 +1,17 @@
-@font-face {
-    font-family: "Fredoka";
-    src: url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap");
-}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap');
+
+/*
+<weight>: Use a value from 300 to 700
+ */
+
+.fredoka {
+              font-family: "Fredoka", sans-serif;
+              font-optical-sizing: auto;
+              font-weight: 300;
+              font-style: normal;
+              font-variation-settings:
+                      "wdth" 100;
+          }
 
 :root {
     --dark-purple-bg: #272528;
@@ -92,6 +102,9 @@ section form input {
 button.here {
     height: 25px;
     vertical-align: middle;
+    border: none;
+    width: 20px;
+    background: transparent;
 }
 
 a {
@@ -120,7 +133,7 @@ section form input[type="submit"] {
     line-height: 1.5em;
 }
 
-.red {
+.alert {
     color: red;
 }
 
@@ -136,12 +149,24 @@ form .eyeIcon i {
     display: block;
 }
 
-.fa-eye:before {
-    content: "\f06e";
-    background-color: transparent;
+.eye::before {
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-image: url('img/eye.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    vertical-align: middle;
 }
 
-.fa-eye-slash:before {
-    content: "\f070";
-    background-color: transparent;
+.slashed-eye::before {
+    content: "";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-image: url('img/eye_closed.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    vertical-align: middle;
 }

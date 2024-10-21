@@ -30,7 +30,7 @@
                 include("connexion.inc.php");
                 if (isset($_POST['mail'])){
                     $_SESSION['login'] = $_POST['mail'];
-                    $requete = $cnx -> query("SELECT \"mail\", \"nbr_essai\" FROM \"easyfunds\".\"utilisateur\" WHERE \"mail\"='". $_SESSION['login']."';");
+                    $requete = $cnx -> query("SELECT mail, nbr_essai FROM utilisateur WHERE mail='". $_SESSION['login']."';");
                     $row=$requete->fetch();
                     if ($row==0){
                         echo "<h4>le mail n'est pas enregistré</h4>";
@@ -40,13 +40,13 @@
                     else {
                         $_SESSION['mdp']= uniqid();
                         include("mail/mdpoubliemail.php");
-                        $cnx->exec("UPDATE \"easyfunds\".\"utilisateur\" SET \"mdpProvisoire\"='1',\"mdp\"='".password_hash($_SESSION['mdp'],PASSWORD_BCRYPT)."' WHERE \"mail\"='".$_SESSION['login']."';");
+                        $cnx->exec("UPDATE utilisateur SET mdpprovisoire=1,mdp='".password_hash($_SESSION['mdp'],PASSWORD_BCRYPT)."' WHERE mail='".$_SESSION['login']."';");
                         echo "Un mail vous a été envoyé. <br> Ce mail contient un code provisoire qui vous permettra de vous connecter à votre compte.";
                     }
                 }
             ?>
                         <input type="submit" name="submit" value="Envoyez un code" /><br><br>
-                        <div>Pour revenir à l'accueil <a href="page-accueil.html"> cliquez ici </a></div>
+                        <div>Pour revenir à l'accueil <a href="login.php"> cliquez ici </a></div>
                     </div>
                 </form>
             </section>

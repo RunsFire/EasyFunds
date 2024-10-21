@@ -1,4 +1,4 @@
-<?php session_start(); if ($_SESSION['mdpProvisoire']!=1){ header('location:page-accueil.html'); } ?>
+<?php session_start(); if ($_SESSION['mdpProvisoire']!=1){ header('location:login.php'); } ?>
 <!DOCTYPE html>
 <html>
 
@@ -41,16 +41,16 @@
                     $mdp = $_POST['mdp'];
                     $mdp2 = $_POST['mdp2'];
                     if ($mdp==$mdp2){
-                        $cnx->exec("UPDATE\"silvereconomy\".\"log\" SET \"mdpProvisoire\"='0',mdp='".password_hash($mdp,PASSWORD_BCRYPT)."' WHERE login='".$_SESSION['login']."';");
+                        $cnx->exec("UPDATE utilisateur SET mdpprovisoire='0',mdp='".password_hash($mdp,PASSWORD_BCRYPT)."' WHERE mail='".$_SESSION['login']."';");
                         echo "<br><br>Votre mot de passe a bien été changé";
                         if ( $_SESSION['typeu']==1 ){
                             unset($_SESSION['mdpProvisoire']);
-                            $cnx->exec("UPDATE \"easyfunds\".\"utilisateur\" SET \"nbr_essai\"=0 WHERE \"mail\"='".$_SESSION['login']."';");
+                            $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='".$_SESSION['login']."';");
                         echo "<br><a href=\"accueilUser.php\">Cliquez ici</a> pour aller sur la page d'accueil";
                     }else if ($_SESSION['typeu']==2 ){
                         unset($_SESSION['mdpProvisoire']);
                         echo "<br><a href=\"accueilAdmin.php\">Cliquez ici</a> pour aller sur la page d'accueil";
-                        $cnx->exec("UPDATE \"easyfunds\".\"utilisateur\" SET \"nbr_essai\"=0 WHERE \"mail\"='".$_SESSION['login']."';");
+                        $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='".$_SESSION['login']."';");
                     }
                 }else{
                         echo "Les deux mots de passe ne correspondent pas";
