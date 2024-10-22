@@ -135,6 +135,7 @@ a.option {
     opacity: 0.3;
     cursor: pointer;
     box-shadow: 0 0 20px #202020;
+    tex-decoration: none;
 }
 
 a.option.active {
