@@ -7,6 +7,11 @@
     --fancy-font: "monospace";
 }
 
+.frame {
+    width: 1150px;
+    box-sizing: border-box;
+}
+
 /*HEADER*/
 header {
     box-sizing: border-box;
@@ -83,13 +88,14 @@ th {
 }
 
 tr {
+    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     gap: 0 6px;
     font-family: var(--default-font);
     text-align: center;
     vertical-align: middle;
-    padding: 5px 0;
+    padding: 4px 0;
 }
 
 tr.style1 {
@@ -100,6 +106,14 @@ tr.style2 {
     background-color: rgb(255, 255, 255, 0.3);
 }
 
+tr.end-row {
+    background-color: rgb(255, 255, 255, 0.8);
+    color: var(--main);
+}
+
+tr.end-row > td {
+    color: inherit;
+}
 
 td {
     color: black;
@@ -108,14 +122,9 @@ td {
     padding: 4px 0;
 }
 
-.frame {
-    width: 1150px;
-    box-sizing: border-box;
-}
+/*OPTIONS, tabs with <a>*/
 
-/*OPTIONS, second tabs*/
-
-label.option-label {
+a.option {
     color: var(--main);
     padding: 6px 15px;
     background-color: var(--light);
@@ -128,19 +137,15 @@ label.option-label {
     box-shadow: 0 0 20px #202020;
 }
 
-label.option-label:hover {
-    transition: 0.2s ease-in-out;
-    opacity: 0.8;
-}
-
-input.option-radio {
-    display: none;
-}
-
-input.option-radio:checked + label.option-label {
+a.option.active {
     opacity: 1;
     background-color: var(--main);
     color: white;
+}
+
+a.option:hover {
+    transition: 0.2s ease-in-out;
+    opacity: 0.8;
 }
 
 /*FORM*/
@@ -173,29 +178,20 @@ button.search:hover {
     padding: 10px;
 }
 
-button.export {
-    background-color: var(--sec);
-    font-weight: bold;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
+select.table-format { 
+    width: 80px; 
+    padding: 5px 10px;
 }
 
-button.export:hover {
-    transition: 0.2s;
-    background-color: var(--main);
-}
-
-select.table-format {
+select {
     background-color: var(--light);
     border: solid 2px var(--main);
-    padding: 5px 10px;
     border-radius: 7px;
     font-weight: bold;
     color: var(--main);
     font-size: 1rem;
-    width: 80px;
+
+    padding: 5px 10px;
 }
 
 .display {
@@ -205,5 +201,19 @@ select.table-format {
 .display.active {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 3px;
+}
+
+button {
+    background-color: var(--sec);
+    font-weight: bold;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    transition: 0.2s;
+    background-color: var(--main);
 }
