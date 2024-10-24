@@ -108,7 +108,9 @@
                             <td style="width:40%"><?= $ligne->raison_social ?>N</td>
                             <td style="width:40%"><?= $ligne->mail?></td>
                             <td style="width:20%">
+
                                 <bouton onclick="supprimer_utilisateur('<?= $ligne->num ?>')">Supprimer</bouton>
+
                             </td>
                             </tr>
                             <?php
