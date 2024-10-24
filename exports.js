@@ -1,20 +1,18 @@
-function exportTableToPdf(contentId) {
+function exportTableToPdf(contentId, date) {
     const tableToExport = document.querySelector(
         "div#" + contentId + " div.table.frame"
     );
-    console.log(tableToExport);
     const opt = {
         margin: 1,
-        filename: "export.pdf",
+        filename: "extrait_du_" + date + ".pdf",
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
     };
-
     html2pdf().set(opt).from(tableToExport).save();
 }
 
-function exportTableToCSV(contentId) {
+function exportTableToCSV(contentId, date) {
     const lignes = document.querySelectorAll("div#" + contentId + " tr");
     const data = [];
     lignes.forEach((ligne) => {
@@ -41,7 +39,7 @@ function exportTableToCSV(contentId) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "export.csv";
+            a.download = "extrait_du_" + date + ".csv";
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -49,11 +47,10 @@ function exportTableToCSV(contentId) {
         .catch((error) => {});
 }
 
-function exportTableToXLS(contentId) {
+function exportTableToXLS(contentId, date) {
     let table = document.querySelector("div#" + contentId + " div.table.frame");
     // Extract the HTML content of the table
     const html = table.outerHTML;
-
     // Create a Blob containing the HTML data with Excel MIME type
     const blob = new Blob([html], { type: "application/vnd.ms-excel" });
 
@@ -65,7 +62,7 @@ function exportTableToXLS(contentId) {
     a.href = url;
 
     // Set the desired filename for the downloaded file
-    a.download = "export.xls";
+    a.download = "extrait_du_" + date + ".xls";
 
     // Simulate a click on the anchor to trigger download
     a.click();
@@ -80,11 +77,12 @@ function exporter(contentId) {
     );
     const index = select.selectedIndex;
     const choix = select.options[index].value;
+    const date = new Date().toLocaleDateString();
     if (choix === "csv") {
-        exportTableToCSV(contentId);
+        exportTableToCSV(contentId, date);
     } else if (choix === "pdf") {
-        exportTableToPdf(contentId);
+        exportTableToPdf(contentId, date);
     } else if (choix === "xls") {
-        exportTableToXLS(contentId);
+        exportTableToXLS(contentId, date);
     }
 }
