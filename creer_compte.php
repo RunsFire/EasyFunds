@@ -46,6 +46,37 @@ if (!isset($_SESSION['raison_social'])){
             </div>
         </section>
 
+        <form method="POST" action="creer_compte.php">
+            Pseudo: <input type="text" name="pseudo"><br>
+            Raison social: <input type="text" name="raison_social"><br>
+            Mail: <input type="text" name="mail"><br>
+            Type de compte: <select name="type_compte">
+                <option value="utilisateur">Utilisateur</option>
+                <option value="admin">Admin</option>
+            </select><br>
+            <button type="submit">Trier</button>
+            <button name="resets" value="resets">Rénitialiser</button>
+        </form>
+
+        <?php
+        if (isset($_POST['pseudo']) && isset($_POST['raison_social']) && isset($_POST['mail']) && isset($_POST['type_compte'])){
+            $pseudo = $_POST['pseudo'];
+            $raison_social = $_POST['raison_social'];
+            $mail = $_POST['mail'];
+            if ($_POST['type_compte']== 'utilisateur'){
+                $type_compte = 1;
+            }else if ($_POST['type_compte']== 'admin'){
+                $type_compte = 0;
+            }
+            include("connexion.inc.php");
+            $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?, nbr_essai = 0," );
+            if (!$stmt->execute([$pseudo, $raison_social, $mail, $type_compte])) {
+                echo "Échec de l'ajout de l'utilisateur.";
+            } 
+        }
+        
+        ?>
+
     </section>
 
 
