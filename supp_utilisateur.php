@@ -17,14 +17,14 @@ if( suppUsr($num)){
     echo "
         <script>
             alert('Utilisateur supprimé');
-            document.location.href = 'admin_des_compte_client.php';
+            document.location.href = 'admin.php';
         </script>
     ";
 } else{
     echo "
         <script>
             alert('Nous n'avons pas pu supprimé l'utilisateur!');
-            document.location.href = 'admin_des_compte_client.php';
+            document.location.href = 'admin.php';
         </script>
     ";
 }
