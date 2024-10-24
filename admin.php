@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<?php session_start (); error_reporting(E_ALL); ini_set("display_errors", 1); if (!isset($_SESSION['raison_social'])){
-    $_SESSION['raison_social']="%" ; $_SESSION['mail']="%" ; } 
+<?php session_start (); 
+error_reporting(E_ALL); 
+ini_set("display_errors", 1);
+if (!isset($_SESSION['raison_social'])){
+    $_SESSION['raison_social']="%" ; $_SESSION['mail']="%" ; 
+} 
     // if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp'])) { 
     // header('location:login.php'); 
     // } 
@@ -51,7 +55,7 @@
 
                 <!-- FILTRES -->
                 <div class="frame filtres">
-                    <form method="GET" action="admin_des_compte_client.php">
+                    <form method="GET" action="admin.php">
                         <?php
                             if (!empty($_GET['raison_social'])){
                                 echo '<input type="text" name="raison_social" class="filtre" value='.$_GET['raison_social'].' placeholder='.$_GET['raison_social'].'>';
