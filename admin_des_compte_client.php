@@ -25,7 +25,7 @@
     <!-- ONGLETS -->
     <div class="tabs">
         <a class="tab active" href="">Client</a>
-        <a class="tab" href="">Crée un compte</a>
+        <a class="tab" href="">Créer un compte</a>
         <a class="tab" href="">Demandes</a>
     </div>
 </header>
