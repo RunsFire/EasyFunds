@@ -36,7 +36,7 @@
                 <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility()">
                     <i id="eye-icon" class="eye"></i>
                 </button>
-                <a href="mdpoublie.php">Mot de passe oubli&eacute; ?</a>
+                <a class="rightnote" href="mdpoublie.php">Mot de passe oubli&eacute; ?</a>
                 <?php
                 include("connexion.inc.php");
                 if (isset($_POST['mail']) && isset($_POST['mdp'])){
@@ -77,11 +77,11 @@
                                 header('location:mdpmdp.php');
                         }
                         else if ( $_SESSION['typeu']=='1' && $row[2]==0 ){
-                            header('location:page.php');
+                            header('location:po_des_compte_client.php');
                         }else if ( $_SESSION['typeu']=='1' && $row[2]==1 ){
                             header('location:mdpmdp.php');
                         }else if ( $_SESSION['typeu']=='2' && $row[2]==0 ){
-                            header('location:page.php');
+                            header('location:po_des_compte_client.php');
                         }else if ( $_SESSION['typeu']=='2' && $row[2]==1 ){
                             header('location:mdpmdp.php');
                         }
