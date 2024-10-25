@@ -28,7 +28,7 @@ if (!isset($_SESSION['raison_social'])){
 
     <!-- ONGLETS -->
     <div class="tabs">
-        <a class="tab" href="admin_des_compte_client.php">Client</a>
+        <a class="tab" href="admin.php">Client</a>
         <a class="tab active" href="">Créer un compte</a>
         <a class="tab" href="">Demandes</a>
     </div>
@@ -37,24 +37,19 @@ if (!isset($_SESSION['raison_social'])){
 <body>
     <section class="container">
 
-        <!-- SECTION ABOVE TABLE-DISPLAY -->
-        <section>
-            <!-- BONJOUR [UTILISATEUR] -->
-            <div class="frame greet-user ">
-                <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">".$_SESSION['pseudo']."</span></p>" ?>
-                <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
-            </div>
-        </section>
-
         <form method="POST" action="creer_compte.php">
-            Pseudo: <input type="text" name="pseudo"><br>
-            Raison social: <input type="text" name="raison_social"><br>
-            Mail: <input type="text" name="mail"><br>
-            Type de compte: <select name="type_compte">
+            <label for="pseudo">Pseudo: </label>
+            <input type="text" name="pseudo" required><br>
+            <label for="raison_social">Raison social:</label>
+            <input type="text" name="raison_social" required><br>
+            <label for="mail">Mail:</label>
+            <input type="text" name="mail" required><br>
+            <label for="type_compte">Type de compte:</label>
+            <select name="type_compte" required>
                 <option value="utilisateur">Utilisateur</option>
                 <option value="admin">Admin</option>
             </select><br>
-            <button type="submit">Trier</button>
+            <button type="submit">Valider</button>
             <button name="resets" value="resets">Rénitialiser</button>
         </form>
 
@@ -69,10 +64,12 @@ if (!isset($_SESSION['raison_social'])){
                 $type_compte = 0;
             }
             include("connexion.inc.php");
-            $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?, nbr_essai = 0," );
-            if (!$stmt->execute([$pseudo, $raison_social, $mail, $type_compte])) {
+            $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?,mdpProvisoire =?,nbr_essai = 0;" );
+            if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte,uniqid()])) {
                 echo "Échec de l'ajout de l'utilisateur.";
-            } 
+            } else{
+                echo "<p> L'utilisateur a bien été ajouter.";
+            }
         }
         
         ?>
