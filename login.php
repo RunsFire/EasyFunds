@@ -77,11 +77,11 @@
                                 header('location:mdpmdp.php');
                         }
                         else if ( $_SESSION['typeu']=='1' && $row[2]==0 ){
-                            header('location:po_des_compte_client.php');
+                            header('location:admin.php');
                         }else if ( $_SESSION['typeu']=='1' && $row[2]==1 ){
                             header('location:mdpmdp.php');
                         }else if ( $_SESSION['typeu']=='2' && $row[2]==0 ){
-                            header('location:po_des_compte_client.php');
+                            header('location:tresoreriepo.php');
                         }else if ( $_SESSION['typeu']=='2' && $row[2]==1 ){
                             header('location:mdpmdp.php');
                         }
