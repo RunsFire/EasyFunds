@@ -15,7 +15,7 @@ if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp']
 <head>
     <link rel="stylesheet" href="page.css">
     <meta charset="utf-8">
-    <title>Accueil</title>
+    <title>Créer un compte</title>
     <link rel="icon" type="image/png" href="easyfunds-icon.png">
 </head>
 

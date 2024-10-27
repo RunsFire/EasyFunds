@@ -2,9 +2,10 @@
     --main: #6A5B78;
     --sec: #B493BB;
     --light: #cecece;
-    --dark: #252525;
+    --dark: #272528;
     --default-font: "Arial";
     --fancy-font: "monospace";
+    --red: rgb(192, 67, 67);
 }
 
 .frame {
@@ -135,7 +136,6 @@ a.option {
     opacity: 0.3;
     cursor: pointer;
     box-shadow: 0 0 20px #202020;
-    tex-decoration: none;
 }
 
 a.option.active {
@@ -147,6 +147,11 @@ a.option.active {
 a.option:hover {
     transition: 0.2s ease-in-out;
     opacity: 0.8;
+}
+
+a.option.no-action:hover {
+    opacity: 1;
+    cursor: default;
 }
 
 /*FORM*/
@@ -217,4 +222,43 @@ button {
 button:hover {
     transition: 0.2s;
     background-color: var(--main);
+}
+
+
+/*INFO*/
+.info {
+    margin-left: 3px;
+    background-color: var(--light);
+    text-align: center;
+    font-size: 1.35rem;
+    padding: 7px 0 6px 0;
+    width: 480px;
+    font-style: italic;
+    border-radius: 20px 20px 0 0;
+    font-weight: bold;
+}
+
+.frame:has(.info) {
+    margin-top: 5px;
+}
+
+td.negative {
+    background-color: var(--red);
+    border-radius: 3px;
+}
+
+/*Retour*/
+.return {
+    filter: invert(1);
+    height: 30px;
+    width: 45px;
+    font-size: 5rem;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.return:hover {
+    transition: 0.2s;
+    opacity: 0.5;
 }
