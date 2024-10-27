@@ -18,80 +18,81 @@
 <html>
 
 
-    <head>
-        <link rel="stylesheet" href="page.css">
-        <meta charset="utf-8">
-        <title>Détails de la remise </title>
-        <link rel="icon" href="easyfunds-icon.png">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-        <script src="exports.js"></script>
-    </head>
+<head>
+    <link rel="stylesheet" href="page.css">
+    <meta charset="utf-8">
+    <title>Détails de la remise </title>
+    <link rel="icon" href="easyfunds-icon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="exports.js"></script>
+</head>
 
-    <!-- HEADER -->
-    <header>
-        <!-- ICON -->
-         <div class="logo">
-            <img src="easyfunds-icon.png" class="small-icon">
-            <img src="easyfund-logo.png" class="small-logo">
-         </div>
-        
-        <!-- ONGLETS -->
-        <div class="tabs">
-            <a class="tab" href="tresoreriepo.php">Trésorerie</a>
-            <a class="tab active" href="detailpo.php">Remises</a>
-            <a class="tab" href="impayespo.php">Impayés</a>
-            <a class="tab" href="demandepo.php">Demandes</a>
+<!-- HEADER -->
+<header>
+    <!-- ICON -->
+    <div class="logo">
+        <img src="easyfunds-icon.png" class="small-icon">
+        <img src="easyfund-logo.png" class="small-logo">
+    </div>
+
+    <!-- ONGLETS -->
+    <div class="tabs">
+        <a class="tab" href="tresoreriepo.php">Trésorerie</a>
+        <a class="tab active" href="detailpo.php">Remises</a>
+        <a class="tab" href="impayespo.php">Impayés</a>
+        <a class="tab" href="demandepo.php">Demandes</a>
+    </div>
+</header>
+
+<section class="container">
+
+    <!-- SECTION ABOVE TABLE -->
+    <section>
+        <!-- Retour -->
+        <div class="frame">
+            <a href="remisespo.php"><img class="return"
+                    src="https://www.pngkit.com/png/full/24-244890_left-arrow-curved-black-symbol-comments-turn-page.png"></a>
         </div>
-    </header>
 
-    <section class="container">
-
-        <!-- SECTION ABOVE TABLE -->
-        <section>
-            <!-- Retour -->
-            <div class="frame">
-                <a href="remisespo.php" ><img class="return" src="https://www.pngkit.com/png/full/24-244890_left-arrow-curved-black-symbol-comments-turn-page.png"></a>
-            </div>
-
-            <!-- BONJOUR [UTILISATEUR] -->
-            <div class="frame greet-user ">
+        <!-- BONJOUR [UTILISATEUR] -->
+        <div class="frame greet-user ">
             <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">".$_SESSION['pseudo']."</span></p>" ?>
-                <a class="disconnect" href="">Se déconnecter</a>
+            <a class="disconnect" href="">Se déconnecter</a>
+        </div>
+
+        <!-- Onglet, Transaction de la remise -->
+        <div class="frame options">
+            <a class="option active no-action">Transactions de la remise</a>
+        </div>
+    </section>
+
+    <!-- DISPLAY TABLE, transactions-->
+    <section">
+
+        <!-- Entête du tableau, Remise -->
+        <div class="frame">
+            <?php echo "<p class=\"info\">Remise ".$_SESSION['codeRemise']."</p>" ?>
+        </div>
+
+        <!----- TABLEAU, headers + datas ----->
+        <div id="po-par-client-display" class="table frame">
+            <!-- TABLEAU HEADERS-->
+            <div class="frame table-headers">
+                <table class="frame">
+                    <tr>
+                        <th style="width:20%">SIREN</th>
+                        <th style="width:20%">Date de vente</th>
+                        <th style="width:25%">numéro de Carte</th>
+                        <th style="width:20%">Réseau</th>
+                        <th style="width:20%">Autorisation</th>
+                        <th style="width:20%">Montant</th>
+                    </tr>
+                </table>
             </div>
 
-            <!-- Onglet, Transaction de la remise -->
-            <div class="frame options">
-                <a class="option active no-action">Transactions de la remise</a>
-            </div>
-        </section>
-
-        <!-- DISPLAY TABLE, transactions-->
-        <section">
-
-            <!-- Entête du tableau, Remise -->
-            <div class="frame">
-                <?php echo "<p class=\"info\">Remise ".$_SESSION['codeRemise']."</p>" ?>
-            </div>
-
-            <!----- TABLEAU, headers + datas ----->
-            <div class="table frame">
-                <!-- TABLEAU HEADERS-->
-                <div class="frame table-headers">
-                    <table class="frame">
-                        <tr>
-                            <th style="width:20%">SIREN</th>
-                            <th style="width:20%">Date de vente</th>
-                            <th style="width:25%">numéro de Carte</th>
-                            <th style="width:20%">Réseau</th>
-                            <th style="width:20%">Autorisation</th>
-                            <th style="width:20%">Montant</th>
-                        </tr>
-                    </table>
-                </div>
-
-                <!-- TABLEAU DATAS -->
-                <div class="table-datas">
-                    <table class="frame">
+            <!-- TABLEAU DATAS -->
+            <div class="table-datas">
+                <table class="frame">
                     <?php
                             include("connexion.inc.php");
                             $var = 0;
@@ -142,7 +143,7 @@
                                 $var++;
                             } $detail->closeCursor();
                     ?>
-                        <!-- TEMPLATE DONNÉES
+                    <!-- TEMPLATE DONNÉES
                             <tr class="style1">
                             <td style="width:20%">N° SIREN</td>
                             <td style="width:20%">Raison Sociale</td>
@@ -158,49 +159,46 @@
                             <td style="width:20%">Montant positif</td>
                         </tr>
                         -->
-                    </table>
-                </div>
-            </div>
-
-            <!----- SOUS LE TABLEAU ----->
-            <div class="frame row-space-between" style="margin-top: 2px;">
-                <!-- TRI -->
-                <form method="POST" action="detailpo.php">
-                    <select name="filtre">
-                        <option selected disabled hidden>--</option>
-                        <option value="SIREN">N° SIREN</option>
-                        <option value="date_vente">Date</option>
-                        <option value="reseau">Reseau</option>
-                        <option value="montant">Montant</option>
-                    </select>
-                    <select name="croissance">
-                        <option selected disabled hidden>--</option>
-                        <option value="asc">ordre croissant</option>
-                        <option value="desc">ordre décroissant</option>
-                    </select>
-                    <button type="submit">Trier</button>
-                    <button name="resets" value="resets">Rénitialiser</button>
-                </form>
-
-
-                <!-- EXPORT -->
-                <form class="table-export" onsubmit="return false">
-                    <p>Format du tableau :</p>
-                    <select name="table-format" class="table-format">
-                        <option value="csv">CSV</option>
-                        <option value="pdf">PDF</option>
-                        <option value="xls">XLS</option>
-                    </select>
-                    <button onclik="exporter('po-par-client-display')">Exporter</button>
-                </form>
+                </table>
             </div>
         </div>
-        
-            
 
-        </section>
+        <!----- SOUS LE TABLEAU ----->
+        <div class="frame row-space-between" style="margin-top: 2px;">
+            <!-- TRI -->
+            <form method="POST" action="detailpo.php">
+                <select name="filtre">
+                    <option selected disabled hidden>--</option>
+                    <option value="SIREN">N° SIREN</option>
+                    <option value="date_vente">Date</option>
+                    <option value="reseau">Reseau</option>
+                    <option value="montant">Montant</option>
+                </select>
+                <select name="croissance">
+                    <option selected disabled hidden>--</option>
+                    <option value="asc">ordre croissant</option>
+                    <option value="desc">ordre décroissant</option>
+                </select>
+                <button type="submit">Trier</button>
+                <button name="resets" value="resets">Rénitialiser</button>
+            </form>
 
 
-    </section>
+            <!-- EXPORT -->
+            <form class="table-export" onsubmit="return false">
+                <p>Format du tableau :</p>
+                <select name="table-format" class="table-format">
+                    <option value="csv">CSV</option>
+                    <option value="pdf">PDF</option>
+                    <option value="xls">XLS</option>
+                </select>
+                <button onclick="exporter('po-par-client-display')">Exporter</button>
+            </form>
+        </div>
+        </div>
+
+
+
+</section>
 
 </html>

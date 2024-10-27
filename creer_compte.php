@@ -3,11 +3,12 @@
 error_reporting(E_ALL); 
 ini_set("display_errors", 1); 
 if (!isset($_SESSION['raison_social'])){
-    $_SESSION['raison_social']="%" ; $_SESSION['mail']="%" ; 
+    $_SESSION['raison_social']="%" ; 
+    $_SESSION['mail']="%" ; 
 } 
-    // if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp'])) { 
-    // header('location:login.php'); 
-    // } 
+if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp'])) { 
+    header('location:login.php'); 
+} 
 ?>
 <html>
 
@@ -68,7 +69,7 @@ if (!isset($_SESSION['raison_social'])){
             $test_mail = $cnx->prepare("SELECT mail FROM utilisateur WHERE mail= ?;" );
             $test_mail->execute([$mail]);
             if ($test_mail->rowCount()>0){
-                echo 'cette email est deja utiliser par un utilisateur';
+                echo 'ce mail est deja utiliser par un utilisateur';
             }else{
                 $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?,mdp =?,mdpProvisoire = 1,nbr_essai = 0;" );
                 if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte,password_hash($mdp,PASSWORD_BCRYPT)])) {
