@@ -79,6 +79,8 @@ if (!isset($_SESSION['raison_social'])){
                     include("mail/creecomptemail.php");
                     echo "<p> L'utilisateur a bien été ajouté.";
                 }
+                unset($_SESSION['cree_compte_login']);
+                unset($_SESSION['cree_compte_mdp']);
             }
         }
         
