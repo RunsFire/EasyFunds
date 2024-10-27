@@ -63,12 +63,22 @@ if (!isset($_SESSION['raison_social'])){
             }else if ($_POST['type_compte']== 'admin'){
                 $type_compte = 0;
             }
+            $mdp =uniqid();
             include("connexion.inc.php");
-            $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?,mdpProvisoire =?,nbr_essai = 0;" );
-            if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte,uniqid()])) {
-                echo "Échec de l'ajout de l'utilisateur.";
-            } else{
-                echo "<p> L'utilisateur a bien été ajouter.";
+            $test_mail = $cnx->prepare("SELECT mail FROM utilisateur WHERE mail= ?;" );
+            $test_mail->execute([$mail]);
+            if ($test_mail->rowCount()>0){
+                echo 'cette email est deja utiliser par un utilisateur';
+            }else{
+                $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?,mdp =?,mdpProvisoire = 1,nbr_essai = 0;" );
+                if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte,password_hash($mdp,PASSWORD_BCRYPT)])) {
+                    echo "Échec de l'ajout de l'utilisateur.";
+                } else{
+                    $_SESSION['cree_compte_login'] = $mail;
+                    $_SESSION['cree_compte_mdp'] = $mdp;
+                    include("mail/creecomptemail.php");
+                    echo "<p> L'utilisateur a bien été ajouté.";
+                }
             }
         }
         
