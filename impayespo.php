@@ -4,11 +4,6 @@
     if (!isset( $_SESSION['typeu']) || $_SESSION['typeu']!='2'){
         header('location:login.php');
     } 
-    if (!isset($_SESSION['siren'])){
-        $_SESSION['siren']= "%";
-        $_SESSION['raison']= "%";
-        $_SESSION['date']= "%";      
-    }
     // if($_SESSION['typeu']!=2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
 	// 	header('location:login.php');
 	// }
@@ -18,7 +13,7 @@
 <head>
     <link rel="stylesheet" href="page.css">
     <meta charset="utf-8">
-    <title>Trésorerie des clients</title>
+    <title>Impayés des clients</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./node_modules/jspdf/dist/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -35,9 +30,9 @@
 
     <!-- ONGLETS -->
     <div class="tabs">
-        <a class="tab active" href="tresoreriepo.php">Trésorerie</a>
+        <a class="tab" href="tresoreriepo.php">Trésorerie</a>
         <a class="tab" href="remisespo.php">Remises</a>
-        <a class="tab" href="impayespo.php">Impayés</a>
+        <a class="tab active" href="impayespo.php">Impayés</a>
         <a class="tab" href="demandepo.php">Demandes</a>
     </div>
 </header>
@@ -52,18 +47,30 @@
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">".$_SESSION['pseudo']."</span></p>" ?>
                 <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
             </div>
+
+            <div class="frame options">
+
+                <!-- LISTE IMPAYES DES COMPTES CLIENTS -->
+                <a href="impayespo.php" class="option active">Liste</a>
+
+                <!--GRAPHE IMPAYES PAR COMPTE CLIENT -->
+                <a href="graphimpayespo.php" class="option">Somme des impayés</a>
+
+                <!--GRAPHE IMPAYES PAR COMPTE CLIENT -->
+                <a href="evolutionimpaye.php" class="option">Évolution des impayés</a>
+
+            </div>
         </section>
 
 
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
-            <!-- PO TOUS CLIENTS -->
-            <div id="po-tous-clients" class="display active">
-
+            <!-- PO PAR CLIENT, vide par défaut -->
+            <div id="po-par-client-display" class="display active">
                 <!-- FILTRES -->
                 <div class="frame filtres">
-                    <form method="POST" action="tresoreriepo.php">
+                    <form method="POST" action="impayespo.php">
                         <?php
                             if (!empty($_POST['siren'])){
                                 echo '<input type="text" name="siren" class="filtre" value='.$_POST['siren'].' placeholder="SIREN">';
@@ -85,35 +92,39 @@
                 </div>
 
                 <!----- TABLEAU, headers + datas ----->
-                <div class="table frame">
+                <div class="table frame" id="po-tous-clients">
                     <!-- TABLEAU HEADERS-->
                     <div class="frame table-headers">
                         <table class="frame">
                             <tr>
                                 <th style="width:20%">SIREN</th>
-                                <th style="width:20%">Raison Sociale</th>
-                                <th style="width:25%">Nb de transactions</th>
-                                <th style="width:20%">Date</th>
-                                <th style="width:20%">Montant total</th>
+                                <th style="width:20%">raison sociale</th>
+                                <th style="width:20%">Date vente</th>
+                                <th style="width:20%">Date remise</th>
+                                <th style="width:25%">Carte</th>
+                                <th style="width:10%">Réseau</th>
+                                <th style="width:20%">Numéro dossier</th>
+                                <th style="width:20%">Montant</th>
+                                <th style="width:20%">code impayé</th>
                             </tr>
                         </table>
                     </div>
                     <!-- TABLEAU DATAS -->
-                    <div class="table-datas">
+                    <div class="table-datas shorter-table" id="po-par-client">
                         <table class="frame">
-                            <?php
+                        <?php
                                 include("connexion.inc.php");
                                 $var = 0;
                                 if (!empty($_POST['siren'])){
                                     $_SESSION['siren'] =$_POST['siren']."%";
                                 } if (!empty($_POST['raison']) ){
-                                    $_SESSION['raison'] = $_POST['raison']."%";
+                                    $_SESSION['raison'] = "%".$_POST['raison']."%";
                                 } if (!empty($_POST['date'])){
                                     $_SESSION['date']= "%".$_POST['date']."%";
                                 } if (!empty($_POST['reset'])){
                                     $_SESSION['siren']= "%";
                                     $_SESSION['raison']= "%";
-                                    $_SESSION['date']= "%";      
+                                    $_SESSION['date']= "%";        
                                     unset($_POST['reset']);
                                 }if (!empty($_POST['resets'])){
                                     unset( $_SESSION['filtre']);
@@ -126,31 +137,41 @@
                                     $_SESSION['filtre']=$_POST['filtre'];
                                     $_SESSION['croissance']=$_POST['croissance'];
                                 } if (isset($_SESSION['filtre']) &&  isset($_SESSION['croissance'])){
-                                    $tresorerie = $cnx-> query("SELECT SIREN,raison_sociale,nombre_transactions,date,montant_total FROM tresorerie WHERE SIREN LIKE \"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date LIKE \"".$_SESSION['date']."\" ORDER BY ". $_SESSION['filtre']." ". $_SESSION['croissance'].";");
+                                    $tresorerie = $cnx-> query("SELECT SIREN,raison_sociale,date_vente,date_remise,NCarte,reseau,numero_impaye,montant,code_impaye FROM impaye WHERE SIREN LIKE \"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date_vente LIKE \"".$_SESSION['date']."\" ORDER BY ". $_SESSION['filtre']." ". $_SESSION['croissance'].";");
                                 }else{
-                                    $tresorerie = $cnx-> query("SELECT SIREN,raison_sociale,nombre_transactions,date,montant_total FROM tresorerie WHERE SIREN LIKE\"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date LIKE\"".$_SESSION['date']."\" ;");
+                                    $tresorerie = $cnx-> query("SELECT SIREN,raison_sociale,date_vente,date_remise,NCarte,reseau,numero_impaye,montant,code_impaye FROM impaye WHERE SIREN LIKE\"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date_vente LIKE\"".$_SESSION['date']."\" ;");
                                 }
                                 if ($tresorerie==null){
                                     echo "Pas de tresoreries";
                                 }else {
                                     while( $ligne = $tresorerie->fetch(PDO::FETCH_OBJ)){ 
-                                        $d=date_create($ligne->date);
+                                        $d=date_create($ligne->date_vente);
                                         $date = date_format($d,"d/m/Y");
+                                        $d2=date_create($ligne->date_remise);
+                                        $date2 = date_format($d2,"d/m/Y");
                                         if ($var%2==0){
                                             echo "<tr class=\"style1\">";
                                             echo "<td style=\"width:20%\">$ligne->SIREN</td>";
                                             echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
-                                            echo "<td style=\"width:25%\">$ligne->nombre_transactions</td>";
                                             echo "<td style=\"width:20%\">$date</td>";
-                                            echo "<td style=\"width:20%\">$ligne->montant_total euros</td>";
+                                            echo "<td style=\"width:20%\">$date2</td>";
+                                            echo "<td style=\"width:25%\">$ligne->NCarte</td>";
+                                            echo "<td style=\"width:10%\">$ligne->reseau</td>";
+                                            echo "<td style=\"width:20%\">$ligne->numero_impaye</td>";
+                                            echo "<td style=\"width:20%\">$ligne->montant euros</td>";
+                                            echo "<td style=\"width:20%\">$ligne->code_impaye</td>";
                                             echo "</tr>";
                                         }else{
                                             echo "<tr class=\"style2\">";
                                             echo "<td style=\"width:20%\">$ligne->SIREN</td>";
                                             echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
-                                            echo "<td style=\"width:25%\">$ligne->nombre_transactions</td>";
                                             echo "<td style=\"width:20%\">$date</td>";
-                                            echo "<td style=\"width:20%\">$ligne->montant_total euros</td>";
+                                            echo "<td style=\"width:20%\">$date2</td>";
+                                            echo "<td style=\"width:25%\">$ligne->NCarte</td>";
+                                            echo "<td style=\"width:10%\">$ligne->reseau</td>";
+                                            echo "<td style=\"width:20%\">$ligne->numero_impaye</td>";
+                                            echo "<td style=\"width:20%\">$ligne->montant euros</td>";
+                                            echo "<td style=\"width:20%\">$ligne->code_impaye</td>";
                                             echo "</tr>";
                                         }
                                         $var++;
@@ -161,20 +182,30 @@
                         </table>
                     </div>
                 </div>
-                 <!-- TABLEAU, total -->
-                 <div class="frame">
+
+                <!-- TABLEAU, total -->
+                <div class="frame">
                     <table class="frame">
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
                                 include("connexion.inc.php");
-                                $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie");
+                                $requete = $cnx->query("SELECT count(numero_impaye), sum(montant) FROM impaye");
                                 $row=$requete->fetch();
-                                echo "<td style=\"width:20%\">$row[0] remises</td>";
                                 echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:25%\">$row[1] transactions</td>";
                                 echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:20%\">total = $row[2] euros</td>";
+                                echo "<td style=\"width:20%\">-</td>";
+                                echo "<td style=\"width:20%\">-</td>";
+                                echo "<td style=\"width:25%\">-</td>";
+                                echo "<td style=\"width:10%\">-</td>";
+                                echo "<td style=\"width:20%\">$row[0] dossiers</td>";
+                                echo "<td style=\"width:20%\">$row[1] euros</td>";
+                                echo "<td style=\"width:20%\">-</td>";
+                                // echo "<td style=\"width:20%\">$row[0] remises</td>";
+                                // echo "<td style=\"width:20%\">-</td>";
+                                // echo "<td style=\"width:25%\">$row[1] transactions</td>";
+                                // echo "<td style=\"width:20%\">-</td>";
+                                // echo "<td style=\"width:20%\">total = $row[2] euros</td>";
                             ?>
                         </tr>
                         <!-- Remplissage
@@ -191,15 +222,14 @@
                     </table>
                 </div>
 
-
                 <!----- SOUS LE TABLEAU ----->
                 <div class="frame row-space-between" style="margin-top: 2px;">
 
                     <!-- TRI -->
-                    <form method="POST" action="tresoreriepo.php">
+                    <form method="POST" action="impayespo.php">
                         <select name="filtre">
                             <option selected disabled hidden>--</option>
-                            <option value="SIREN">SIREN</option>
+                            <option value="SIREN"> SIREN</option>
                             <option value="raison_sociale">Raison Sociale</option>
                             <option value="nombre_transactions">Nb de transactions</option>
                             <option value="date">Date</option>
@@ -215,18 +245,18 @@
                     </form>
 
 
-                    <!----- EXPORT ----->
-                    <form class="frame table-export" onsubmit="return false">
+                    <!-- EXPORT -->
+                    <form class="table-export" onsubmit="return false">
                         <p>Format du tableau :</p>
-                        <select name="table-format" class="table-format" id="formatchoisi">
+                        <select name="table-format" class="table-format">
                             <option value="csv">CSV</option>
                             <option value="pdf">PDF</option>
                             <option value="xls">XLS</option>
                         </select>
-                        <button onclick="exporter('po-tous-clients')" class="export">Exporter</button>
+                        <button onclick="exporter('po-par-client-display')">Exporter</button>
                     </form>
-
                 </div>
+            </div>
 
         </section>
 
