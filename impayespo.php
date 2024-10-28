@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <?php
-	session_start ();
-    if (!isset( $_SESSION['typeu']) || $_SESSION['typeu']!='2'){
-        header('location:login.php');
-    } 
-    // if($_SESSION['typeu']!=2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-	// 	header('location:login.php');
-	// }
+session_start();
+if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
+    header('location:login.php');
+}
+// if($_SESSION['typeu']!=2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
+// 	header('location:login.php');
+// }
 ?>
 <html>
 
@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="page.css">
     <meta charset="utf-8">
     <title>Impayés des clients</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="./node_modules/jspdf/dist/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <link rel="icon" type="image/png" href="easyfunds-icon.png">
 </head>
@@ -44,7 +42,7 @@
         <section>
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
-                <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">".$_SESSION['pseudo']."</span></p>" ?>
+                <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
                 <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
             </div>
 
@@ -72,19 +70,21 @@
                 <div class="frame filtres">
                     <form method="POST" action="impayespo.php">
                         <?php
-                            if (!empty($_POST['siren'])){
-                                echo '<input type="text" name="siren" class="filtre" value='.$_POST['siren'].' placeholder="SIREN">';
-                            }else{
-                                echo '<input type="text" name="siren" class="filtre" placeholder="SIREN">';
-                            }if (!empty($_POST['raison'])){
-                                echo '<input type="text" name="raison" class="filtre" value='.$_POST['raison'].' placeholder="Raison sociale">';
-                            }else{
-                                echo '<input type="text" name="raison" class="filtre" placeholder="Raison sociale">';
-                            }if (!empty($_POST['date'])){
-                                echo '<input type="date" name="date" class="filtre" value='.$_POST['date'].'>';
-                            }else{
-                                echo '<input type="date" name="date" class="filtre">';
-                            }
+                        if (!empty($_POST['siren'])) {
+                            echo '<input type="text" name="siren" class="filtre" value=' . $_POST['siren'] . ' placeholder="SIREN">';
+                        } else {
+                            echo '<input type="text" name="siren" class="filtre" placeholder="SIREN">';
+                        }
+                        if (!empty($_POST['raison'])) {
+                            echo '<input type="text" name="raison" class="filtre" value=' . $_POST['raison'] . ' placeholder="Raison sociale">';
+                        } else {
+                            echo '<input type="text" name="raison" class="filtre" placeholder="Raison sociale">';
+                        }
+                        if (!empty($_POST['date'])) {
+                            echo '<input type="date" name="date" class="filtre" value=' . $_POST['date'] . '>';
+                        } else {
+                            echo '<input type="date" name="date" class="filtre">';
+                        }
                         ?>
                         <button type="submit" class="search">Rechercher</button>
                         <button name="reset" value="reset" class="search">Rénitialiser</button>
@@ -112,72 +112,77 @@
                     <!-- TABLEAU DATAS -->
                     <div class="table-datas shorter-table" id="po-par-client">
                         <table class="frame">
-                        <?php
-                                include("connexion.inc.php");
-                                $var = 0;
-                                if (!empty($_POST['siren'])){
-                                    $_SESSION['siren'] =$_POST['siren']."%";
-                                } if (!empty($_POST['raison']) ){
-                                    $_SESSION['raison'] = "%".$_POST['raison']."%";
-                                } if (!empty($_POST['date'])){
-                                    $_SESSION['date']= "%".$_POST['date']."%";
-                                } if (!empty($_POST['reset'])){
-                                    $_SESSION['siren']= "%";
-                                    $_SESSION['raison']= "%";
-                                    $_SESSION['date']= "%";        
-                                    unset($_POST['reset']);
-                                }if (!empty($_POST['resets'])){
-                                    unset( $_SESSION['filtre']);
-                                    unset( $_SESSION['croissance']);
-                                    unset($_POST['filtre']);
-                                    unset($_POST['croissance']);
-                                    unset($_POST['resets']);
+                            <?php
+                            include("connexion.inc.php");
+                            $var = 0;
+                            if (!empty($_POST['siren'])) {
+                                $_SESSION['siren'] = $_POST['siren'] . "%";
+                            }
+                            if (!empty($_POST['raison'])) {
+                                $_SESSION['raison'] = "%" . $_POST['raison'] . "%";
+                            }
+                            if (!empty($_POST['date'])) {
+                                $_SESSION['date'] = "%" . $_POST['date'] . "%";
+                            }
+                            if (!empty($_POST['reset'])) {
+                                $_SESSION['siren'] = "%";
+                                $_SESSION['raison'] = "%";
+                                $_SESSION['date'] = "%";
+                                unset($_POST['reset']);
+                            }
+                            if (!empty($_POST['resets'])) {
+                                unset($_SESSION['filtre']);
+                                unset($_SESSION['croissance']);
+                                unset($_POST['filtre']);
+                                unset($_POST['croissance']);
+                                unset($_POST['resets']);
+                            }
+                            if (!empty($_POST['filtre']) && !empty($_POST['croissance'])) {
+                                $_SESSION['filtre'] = $_POST['filtre'];
+                                $_SESSION['croissance'] = $_POST['croissance'];
+                            }
+                            if (isset($_SESSION['filtre']) &&  isset($_SESSION['croissance'])) {
+                                $tresorerie = $cnx->query("SELECT SIREN,raison_sociale,date_vente,date_remise,NCarte,reseau,numero_impaye,montant,code_impaye FROM impaye WHERE SIREN LIKE \"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date_vente LIKE \"" . $_SESSION['date'] . "\" ORDER BY " . $_SESSION['filtre'] . " " . $_SESSION['croissance'] . ";");
+                            } else {
+                                $tresorerie = $cnx->query("SELECT SIREN,raison_sociale,date_vente,date_remise,NCarte,reseau,numero_impaye,montant,code_impaye FROM impaye WHERE SIREN LIKE\"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date_vente LIKE\"" . $_SESSION['date'] . "\" ;");
+                            }
+                            if ($tresorerie == null) {
+                                echo "Pas de tresoreries";
+                            } else {
+                                while ($ligne = $tresorerie->fetch(PDO::FETCH_OBJ)) {
+                                    $d = date_create($ligne->date_vente);
+                                    $date = date_format($d, "d/m/Y");
+                                    $d2 = date_create($ligne->date_remise);
+                                    $date2 = date_format($d2, "d/m/Y");
+                                    if ($var % 2 == 0) {
+                                        echo "<tr class=\"style1\">";
+                                        echo "<td style=\"width:20%\">$ligne->SIREN</td>";
+                                        echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
+                                        echo "<td style=\"width:20%\">$date</td>";
+                                        echo "<td style=\"width:20%\">$date2</td>";
+                                        echo "<td style=\"width:25%\">$ligne->NCarte</td>";
+                                        echo "<td style=\"width:10%\">$ligne->reseau</td>";
+                                        echo "<td style=\"width:20%\">$ligne->numero_impaye</td>";
+                                        echo "<td style=\"width:20%\">$ligne->montant euros</td>";
+                                        echo "<td style=\"width:20%\">$ligne->code_impaye</td>";
+                                        echo "</tr>";
+                                    } else {
+                                        echo "<tr class=\"style2\">";
+                                        echo "<td style=\"width:20%\">$ligne->SIREN</td>";
+                                        echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
+                                        echo "<td style=\"width:20%\">$date</td>";
+                                        echo "<td style=\"width:20%\">$date2</td>";
+                                        echo "<td style=\"width:25%\">$ligne->NCarte</td>";
+                                        echo "<td style=\"width:10%\">$ligne->reseau</td>";
+                                        echo "<td style=\"width:20%\">$ligne->numero_impaye</td>";
+                                        echo "<td style=\"width:20%\">$ligne->montant euros</td>";
+                                        echo "<td style=\"width:20%\">$ligne->code_impaye</td>";
+                                        echo "</tr>";
+                                    }
+                                    $var++;
                                 }
-                                if (!empty($_POST['filtre']) && !empty($_POST['croissance']) ){
-                                    $_SESSION['filtre']=$_POST['filtre'];
-                                    $_SESSION['croissance']=$_POST['croissance'];
-                                } if (isset($_SESSION['filtre']) &&  isset($_SESSION['croissance'])){
-                                    $tresorerie = $cnx-> query("SELECT SIREN,raison_sociale,date_vente,date_remise,NCarte,reseau,numero_impaye,montant,code_impaye FROM impaye WHERE SIREN LIKE \"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date_vente LIKE \"".$_SESSION['date']."\" ORDER BY ". $_SESSION['filtre']." ". $_SESSION['croissance'].";");
-                                }else{
-                                    $tresorerie = $cnx-> query("SELECT SIREN,raison_sociale,date_vente,date_remise,NCarte,reseau,numero_impaye,montant,code_impaye FROM impaye WHERE SIREN LIKE\"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date_vente LIKE\"".$_SESSION['date']."\" ;");
-                                }
-                                if ($tresorerie==null){
-                                    echo "Pas de tresoreries";
-                                }else {
-                                    while( $ligne = $tresorerie->fetch(PDO::FETCH_OBJ)){ 
-                                        $d=date_create($ligne->date_vente);
-                                        $date = date_format($d,"d/m/Y");
-                                        $d2=date_create($ligne->date_remise);
-                                        $date2 = date_format($d2,"d/m/Y");
-                                        if ($var%2==0){
-                                            echo "<tr class=\"style1\">";
-                                            echo "<td style=\"width:20%\">$ligne->SIREN</td>";
-                                            echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
-                                            echo "<td style=\"width:20%\">$date</td>";
-                                            echo "<td style=\"width:20%\">$date2</td>";
-                                            echo "<td style=\"width:25%\">$ligne->NCarte</td>";
-                                            echo "<td style=\"width:10%\">$ligne->reseau</td>";
-                                            echo "<td style=\"width:20%\">$ligne->numero_impaye</td>";
-                                            echo "<td style=\"width:20%\">$ligne->montant euros</td>";
-                                            echo "<td style=\"width:20%\">$ligne->code_impaye</td>";
-                                            echo "</tr>";
-                                        }else{
-                                            echo "<tr class=\"style2\">";
-                                            echo "<td style=\"width:20%\">$ligne->SIREN</td>";
-                                            echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
-                                            echo "<td style=\"width:20%\">$date</td>";
-                                            echo "<td style=\"width:20%\">$date2</td>";
-                                            echo "<td style=\"width:25%\">$ligne->NCarte</td>";
-                                            echo "<td style=\"width:10%\">$ligne->reseau</td>";
-                                            echo "<td style=\"width:20%\">$ligne->numero_impaye</td>";
-                                            echo "<td style=\"width:20%\">$ligne->montant euros</td>";
-                                            echo "<td style=\"width:20%\">$ligne->code_impaye</td>";
-                                            echo "</tr>";
-                                        }
-                                        $var++;
-                                }
-                                }
-                                $tresorerie->closeCursor();
+                            }
+                            $tresorerie->closeCursor();
                             ?>
                         </table>
                     </div>
@@ -189,23 +194,23 @@
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                                include("connexion.inc.php");
-                                $requete = $cnx->query("SELECT count(numero_impaye), sum(montant) FROM impaye");
-                                $row=$requete->fetch();
-                                echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:25%\">-</td>";
-                                echo "<td style=\"width:10%\">-</td>";
-                                echo "<td style=\"width:20%\">$row[0] dossiers</td>";
-                                echo "<td style=\"width:20%\">$row[1] euros</td>";
-                                echo "<td style=\"width:20%\">-</td>";
-                                // echo "<td style=\"width:20%\">$row[0] remises</td>";
-                                // echo "<td style=\"width:20%\">-</td>";
-                                // echo "<td style=\"width:25%\">$row[1] transactions</td>";
-                                // echo "<td style=\"width:20%\">-</td>";
-                                // echo "<td style=\"width:20%\">total = $row[2] euros</td>";
+                            include("connexion.inc.php");
+                            $requete = $cnx->query("SELECT count(numero_impaye), sum(montant) FROM impaye");
+                            $row = $requete->fetch();
+                            echo "<td style=\"width:20%\">-</td>";
+                            echo "<td style=\"width:20%\">-</td>";
+                            echo "<td style=\"width:20%\">-</td>";
+                            echo "<td style=\"width:20%\">-</td>";
+                            echo "<td style=\"width:25%\">-</td>";
+                            echo "<td style=\"width:10%\">-</td>";
+                            echo "<td style=\"width:20%\">$row[0] dossiers</td>";
+                            echo "<td style=\"width:20%\">$row[1] euros</td>";
+                            echo "<td style=\"width:20%\">-</td>";
+                            // echo "<td style=\"width:20%\">$row[0] remises</td>";
+                            // echo "<td style=\"width:20%\">-</td>";
+                            // echo "<td style=\"width:25%\">$row[1] transactions</td>";
+                            // echo "<td style=\"width:20%\">-</td>";
+                            // echo "<td style=\"width:20%\">total = $row[2] euros</td>";
                             ?>
                         </tr>
                         <!-- Remplissage
