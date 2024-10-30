@@ -64,32 +64,33 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
+
+            <!-- FILTRES -->
+            <div class="frame filtres">
+                <form method="POST" action="impayespo.php">
+                    <?php
+                    if (!empty($_POST['siren'])) {
+                        echo '<input type="text" name="siren" class="filtre" value=' . $_POST['siren'] . ' placeholder="SIREN">';
+                    } else {
+                        echo '<input type="text" name="siren" class="filtre" placeholder="SIREN">';
+                    }
+                    if (!empty($_POST['raison'])) {
+                        echo '<input type="text" name="raison" class="filtre" value=' . $_POST['raison'] . ' placeholder="Raison sociale">';
+                    } else {
+                        echo '<input type="text" name="raison" class="filtre" placeholder="Raison sociale">';
+                    }
+                    if (!empty($_POST['date'])) {
+                        echo '<input type="date" name="date" class="filtre" value=' . $_POST['date'] . '>';
+                    } else {
+                        echo '<input type="date" name="date" class="filtre">';
+                    }
+                    ?>
+                    <button type="submit" class="search">Rechercher</button>
+                    <button name="reset" value="reset" class="search">Rénitialiser</button>
+                </form>
+            </div>
             <!-- PO PAR CLIENT, vide par défaut -->
             <div id="po-par-client-display" class="display active">
-                <!-- FILTRES -->
-                <div class="frame filtres">
-                    <form method="POST" action="impayespo.php">
-                        <?php
-                        if (!empty($_POST['siren'])) {
-                            echo '<input type="text" name="siren" class="filtre" value=' . $_POST['siren'] . ' placeholder="SIREN">';
-                        } else {
-                            echo '<input type="text" name="siren" class="filtre" placeholder="SIREN">';
-                        }
-                        if (!empty($_POST['raison'])) {
-                            echo '<input type="text" name="raison" class="filtre" value=' . $_POST['raison'] . ' placeholder="Raison sociale">';
-                        } else {
-                            echo '<input type="text" name="raison" class="filtre" placeholder="Raison sociale">';
-                        }
-                        if (!empty($_POST['date'])) {
-                            echo '<input type="date" name="date" class="filtre" value=' . $_POST['date'] . '>';
-                        } else {
-                            echo '<input type="date" name="date" class="filtre">';
-                        }
-                        ?>
-                        <button type="submit" class="search">Rechercher</button>
-                        <button name="reset" value="reset" class="search">Rénitialiser</button>
-                    </form>
-                </div>
 
                 <!----- TABLEAU, headers + datas ----->
                 <div class="table frame" id="po-tous-clients">
@@ -226,42 +227,42 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
 
                     </table>
                 </div>
-
-                <!----- SOUS LE TABLEAU ----->
-                <div class="frame row-space-between" style="margin-top: 2px;">
-
-                    <!-- TRI -->
-                    <form method="POST" action="impayespo.php">
-                        <select name="filtre">
-                            <option selected disabled hidden>--</option>
-                            <option value="SIREN"> SIREN</option>
-                            <option value="raison_sociale">Raison Sociale</option>
-                            <option value="nombre_transactions">Nb de transactions</option>
-                            <option value="date">Date</option>
-                            <option value="montant_total">Montant total</option>
-                        </select>
-                        <select name="croissance">
-                            <option selected disabled hidden>--</option>
-                            <option value="asc">ordre croissant</option>
-                            <option value="desc">ordre décroissant</option>
-                        </select>
-                        <button type="submit">Trier</button>
-                        <button name="resets" value="resets">Rénitialiser</button>
-                    </form>
-
-
-                    <!-- EXPORT -->
-                    <form class="table-export" onsubmit="return false">
-                        <p>Format du tableau :</p>
-                        <select name="table-format" class="table-format">
-                            <option value="csv">CSV</option>
-                            <option value="pdf">PDF</option>
-                            <option value="xls">XLS</option>
-                        </select>
-                        <button onclick="exporter('po-par-client-display')">Exporter</button>
-                    </form>
-                </div>
             </div>
+            <!----- SOUS LE TABLEAU ----->
+            <div class="frame row-space-between" style="margin-top: 2px;">
+
+                <!-- TRI -->
+                <form method="POST" action="impayespo.php">
+                    <select name="filtre">
+                        <option selected disabled hidden>--</option>
+                        <option value="SIREN"> SIREN</option>
+                        <option value="raison_sociale">Raison Sociale</option>
+                        <option value="nombre_transactions">Nb de transactions</option>
+                        <option value="date">Date</option>
+                        <option value="montant_total">Montant total</option>
+                    </select>
+                    <select name="croissance">
+                        <option selected disabled hidden>--</option>
+                        <option value="asc">ordre croissant</option>
+                        <option value="desc">ordre décroissant</option>
+                    </select>
+                    <button type="submit">Trier</button>
+                    <button name="resets" value="resets">Rénitialiser</button>
+                </form>
+
+
+                <!-- EXPORT -->
+                <form class="table-export" onsubmit="return false">
+                    <p>Format du tableau :</p>
+                    <select name="table-format" class="table-format">
+                        <option value="csv">CSV</option>
+                        <option value="pdf">PDF</option>
+                        <option value="xls">XLS</option>
+                    </select>
+                    <button onclick="exporter('po-par-client-display')">Exporter</button>
+                </form>
+            </div>
+
 
         </section>
 

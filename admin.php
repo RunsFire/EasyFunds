@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<?php session_start (); 
-error_reporting(E_ALL); 
+<?php session_start();
+error_reporting(E_ALL);
 ini_set("display_errors", 1);
-if (!isset($_SESSION['raison_social'])){
-    $_SESSION['raison_social']="%" ; $_SESSION['mail']="%" ; 
-} 
-    // if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp'])) { 
-    // header('location:login.php'); 
-    // } 
+if (!isset($_SESSION['raison_social'])) {
+    $_SESSION['raison_social'] = "%";
+    $_SESSION['mail'] = "%";
+}
+if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
+    header('location:login.php');
+}
 ?>
 <html>
 
@@ -41,7 +42,7 @@ if (!isset($_SESSION['raison_social'])){
         <section>
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
-                <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">".$_SESSION['pseudo']."</span></p>" ?>
+                <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
                 <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
             </div>
         </section>
@@ -57,15 +58,16 @@ if (!isset($_SESSION['raison_social'])){
                 <div class="frame filtres">
                     <form method="GET" action="admin.php">
                         <?php
-                            if (!empty($_GET['raison_social'])){
-                                echo '<input type="text" name="raison_social" class="filtre" value='.$_GET['raison_social'].' placeholder='.$_GET['raison_social'].'>';
-                            }else{
-                                echo '<input type="text" name="raison_social" class="filtre" placeholder="Raison social">';
-                            }if (!empty($_GET['mail'])){
-                                echo '<input type="text" name="mail" class="filtre" value='.$_GET['mail'].' placeholder='.$_GET['mail'].'>';
-                            }else{
-                                echo '<input type="text" name="mail" class="filtre" placeholder="Mail">';
-                            }
+                        if (!empty($_GET['raison_social'])) {
+                            echo '<input type="text" name="raison_social" class="filtre" value=' . $_GET['raison_social'] . ' placeholder=' . $_GET['raison_social'] . '>';
+                        } else {
+                            echo '<input type="text" name="raison_social" class="filtre" placeholder="Raison social">';
+                        }
+                        if (!empty($_GET['mail'])) {
+                            echo '<input type="text" name="mail" class="filtre" value=' . $_GET['mail'] . ' placeholder=' . $_GET['mail'] . '>';
+                        } else {
+                            echo '<input type="text" name="mail" class="filtre" placeholder="Mail">';
+                        }
                         ?>
                         <button type="submit" class="search">Rechercher</button>
                         <button name="reset" value="reset" class="search">Rénitialiser</button>
@@ -88,29 +90,31 @@ if (!isset($_SESSION['raison_social'])){
                     <div class="table-datas">
                         <table class="frame">
                             <?php
-                                include("connexion.inc.php");
-                                $var = 0;
-                                if (!empty($_GET['raison_social'])){
-                                    $_SESSION['raison_social'] =$_GET['raison_social']."%";
-                                } if (!empty($_GET['mail']) ){
-                                    $_SESSION['mail'] = "%".$_GET['mail']."%";
-                                } if (!empty($_GET['reset'])){
-                                    $_SESSION['raison_social']= "%";
-                                    $_SESSION['mail']= "%";   
-                                    unset($_GET['reset']);
-                                }
-                                $utilisateurs = $cnx-> query("SELECT num,raison_social,mail FROM utilisateur WHERE typeU=0 AND raison_social LIKE \"".$_SESSION['raison_social']."\" AND mail LIKE\"".$_SESSION['mail']."\";");
-                                if ($utilisateurs==null){
-                                    echo "Pas d'utilisateurs";
-                                }else {
-                                    while( $ligne = $utilisateurs->fetch(PDO::FETCH_OBJ)){ 
-                                        if ($var%2==0){
-                                            echo "<tr class=\"style1\">";
-                                        }else{
-                                            echo "<tr class=\"style2\">";
-                                        }?>
+                            include("connexion.inc.php");
+                            $var = 0;
+                            if (!empty($_GET['raison_social'])) {
+                                $_SESSION['raison_social'] = $_GET['raison_social'] . "%";
+                            }
+                            if (!empty($_GET['mail'])) {
+                                $_SESSION['mail'] = "%" . $_GET['mail'] . "%";
+                            }
+                            if (!empty($_GET['reset'])) {
+                                $_SESSION['raison_social'] = "%";
+                                $_SESSION['mail'] = "%";
+                                unset($_GET['reset']);
+                            }
+                            $utilisateurs = $cnx->query("SELECT num,raison_social,mail FROM utilisateur WHERE typeU=0 AND raison_social LIKE \"" . $_SESSION['raison_social'] . "\" AND mail LIKE\"" . $_SESSION['mail'] . "\";");
+                            if ($utilisateurs == null) {
+                                echo "Pas d'utilisateurs";
+                            } else {
+                                while ($ligne = $utilisateurs->fetch(PDO::FETCH_OBJ)) {
+                                    if ($var % 2 == 0) {
+                                        echo "<tr class=\"style1\">";
+                                    } else {
+                                        echo "<tr class=\"style2\">";
+                                    } ?>
                             <td style="width:40%"><?= $ligne->raison_social ?>N</td>
-                            <td style="width:40%"><?= $ligne->mail?></td>
+                            <td style="width:40%"><?= $ligne->mail ?></td>
                             <td style="width:20%">
 
                                 <bouton onclick="supprimer_utilisateur('<?= $ligne->num ?>')">Supprimer</bouton>
@@ -118,10 +122,10 @@ if (!isset($_SESSION['raison_social'])){
                             </td>
                             </tr>
                             <?php
-                                       $var++;
+                                    $var++;
                                 }
-                                }
-                                $utilisateurs->closeCursor();
+                            }
+                            $utilisateurs->closeCursor();
                             ?>
                         </table>
                     </div>

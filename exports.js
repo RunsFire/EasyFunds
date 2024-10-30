@@ -1,7 +1,5 @@
 function exportTableToPdf(contentId, date) {
-    const tableToExport = document.querySelector(
-        "div#" + contentId + " div.table.frame"
-    );
+    const tableToExport = document.querySelector("div#" + contentId);
     const opt = {
         margin: 1,
         filename: "extrait_du_" + date + ".pdf",
@@ -9,7 +7,7 @@ function exportTableToPdf(contentId, date) {
         html2canvas: { scale: 2 },
         jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
     };
-    html2pdf().set(opt).from(tableToExport).save();
+    html2pdf().set(opt).from(tableToExport).toContainer().save();
 }
 
 function exportTableToCSV(contentId, date) {
@@ -48,7 +46,7 @@ function exportTableToCSV(contentId, date) {
 }
 
 function exportTableToXLS(contentId, date) {
-    let table = document.querySelector("div#" + contentId + " div.table.frame");
+    let table = document.querySelector("div#" + contentId);
     // Extract the HTML content of the table
     const html = table.outerHTML;
     // Create a Blob containing the HTML data with Excel MIME type
@@ -72,9 +70,7 @@ function exportTableToXLS(contentId, date) {
 }
 
 function exporter(contentId) {
-    const select = document.querySelector(
-        "div#" + contentId + " form.table-export select"
-    );
+    const select = document.querySelector("form.table-export select");
     const index = select.selectedIndex;
     const choix = select.options[index].value;
     const date = new Date().toLocaleDateString();
