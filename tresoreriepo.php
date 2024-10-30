@@ -56,33 +56,32 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
+            <!-- FILTRES -->
+            <div class="frame filtres">
+                <form method="POST" action="tresoreriepo.php">
+                    <?php
+                    if (!empty($_POST['siren'])) {
+                        echo '<input type="text" name="siren" class="filtre" value=' . $_POST['siren'] . ' placeholder="SIREN">';
+                    } else {
+                        echo '<input type="text" name="siren" class="filtre" placeholder="SIREN">';
+                    }
+                    if (!empty($_POST['raison'])) {
+                        echo '<input type="text" name="raison" class="filtre" value=' . $_POST['raison'] . ' placeholder="Raison sociale">';
+                    } else {
+                        echo '<input type="text" name="raison" class="filtre" placeholder="Raison sociale">';
+                    }
+                    if (!empty($_POST['date'])) {
+                        echo '<input type="date" name="date" class="filtre" value=' . $_POST['date'] . '>';
+                    } else {
+                        echo '<input type="date" name="date" class="filtre">';
+                    }
+                    ?>
+                    <button type="submit" class="search">Rechercher</button>
+                    <button name="reset" value="reset" class="search">Rénitialiser</button>
+                </form>
+            </div>
             <!-- PO TOUS CLIENTS -->
             <div id="po-tous-clients" class="display active">
-
-                <!-- FILTRES -->
-                <div class="frame filtres">
-                    <form method="POST" action="tresoreriepo.php">
-                        <?php
-                        if (!empty($_POST['siren'])) {
-                            echo '<input type="text" name="siren" class="filtre" value=' . $_POST['siren'] . ' placeholder="SIREN">';
-                        } else {
-                            echo '<input type="text" name="siren" class="filtre" placeholder="SIREN">';
-                        }
-                        if (!empty($_POST['raison'])) {
-                            echo '<input type="text" name="raison" class="filtre" value=' . $_POST['raison'] . ' placeholder="Raison sociale">';
-                        } else {
-                            echo '<input type="text" name="raison" class="filtre" placeholder="Raison sociale">';
-                        }
-                        if (!empty($_POST['date'])) {
-                            echo '<input type="date" name="date" class="filtre" value=' . $_POST['date'] . '>';
-                        } else {
-                            echo '<input type="date" name="date" class="filtre">';
-                        }
-                        ?>
-                        <button type="submit" class="search">Rechercher</button>
-                        <button name="reset" value="reset" class="search">Rénitialiser</button>
-                    </form>
-                </div>
 
                 <!----- TABLEAU, headers + datas ----->
                 <div class="table frame">
@@ -165,24 +164,24 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                             ?>
                         </table>
                     </div>
-                </div>
-                <!-- TABLEAU, total -->
-                <div class="frame">
-                    <table class="frame">
-                        <!-- DEFAULT -->
-                        <tr class="end-row">
-                            <?php
-                            include("connexion.inc.php");
-                            $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie");
-                            $row = $requete->fetch();
-                            echo "<td style=\"width:20%\">$row[0] remises</td>";
-                            echo "<td style=\"width:20%\">-</td>";
-                            echo "<td style=\"width:25%\">$row[1] transactions</td>";
-                            echo "<td style=\"width:20%\">-</td>";
-                            echo "<td style=\"width:20%\">total = $row[2] euros</td>";
-                            ?>
-                        </tr>
-                        <!-- Remplissage
+
+                    <!-- TABLEAU, total -->
+                    <div class="frame">
+                        <table class="frame">
+                            <!-- DEFAULT -->
+                            <tr class="end-row">
+                                <?php
+                                include("connexion.inc.php");
+                                $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie");
+                                $row = $requete->fetch();
+                                echo "<td style=\"width:20%\">$row[0] remises</td>";
+                                echo "<td style=\"width:20%\">-</td>";
+                                echo "<td style=\"width:25%\">$row[1] transactions</td>";
+                                echo "<td style=\"width:20%\">-</td>";
+                                echo "<td style=\"width:20%\">total = $row[2] euros</td>";
+                                ?>
+                            </tr>
+                            <!-- Remplissage
                         <tr class="end-row">
                             <td style="width:20%;">input N° SIREN</td>
                             <td style="width:20%">input Raison Sociale</td>
@@ -191,50 +190,46 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                             <td style="width:20%">Montant total</td>
                         </tr>
                         -->
-
-
-                    </table>
+                        </table>
+                    </div>
                 </div>
-
-
-                <!----- SOUS LE TABLEAU ----->
-                <div class="frame row-space-between" style="margin-top: 2px;">
-
-                    <!-- TRI -->
-                    <form method="POST" action="tresoreriepo.php">
-                        <select name="filtre">
-                            <option selected disabled hidden>--</option>
-                            <option value="SIREN">SIREN</option>
-                            <option value="raison_sociale">Raison Sociale</option>
-                            <option value="nombre_transactions">Nb de transactions</option>
-                            <option value="date">Date</option>
-                            <option value="montant_total">Montant total</option>
-                        </select>
-                        <select name="croissance">
-                            <option selected disabled hidden>--</option>
-                            <option value="asc">ordre croissant</option>
-                            <option value="desc">ordre décroissant</option>
-                        </select>
-                        <button type="submit">Trier</button>
-                        <button name="resets" value="resets">Rénitialiser</button>
-                    </form>
-
-
-                    <!----- EXPORT ----->
-                    <form class="frame table-export" onsubmit="return false">
-                        <p>Format du tableau :</p>
-                        <select name="table-format" class="table-format" id="formatchoisi">
-                            <option value="csv">CSV</option>
-                            <option value="pdf">PDF</option>
-                            <option value="xls">XLS</option>
-                        </select>
-                        <button onclick="exporter('po-tous-clients')" class="export">Exporter</button>
-                    </form>
-
-                </div>
-            </div>
-
         </section>
+
+        <!----- SOUS LE TABLEAU ----->
+        <div class="frame row-space-between" style="margin-top: 2px;">
+
+            <!-- TRI -->
+            <form method="POST" action="tresoreriepo.php">
+                <select name="filtre">
+                    <option selected disabled hidden>--</option>
+                    <option value="SIREN">SIREN</option>
+                    <option value="raison_sociale">Raison Sociale</option>
+                    <option value="nombre_transactions">Nb de transactions</option>
+                    <option value="date">Date</option>
+                    <option value="montant_total">Montant total</option>
+                </select>
+                <select name="croissance">
+                    <option selected disabled hidden>--</option>
+                    <option value="asc">ordre croissant</option>
+                    <option value="desc">ordre décroissant</option>
+                </select>
+                <button type="submit">Trier</button>
+                <button name="resets" value="resets">Rénitialiser</button>
+            </form>
+
+
+            <!----- EXPORT ----->
+            <form class="frame table-export" onsubmit="return false">
+                <p>Format du tableau :</p>
+                <select name="table-format" class="table-format" id="formatchoisi">
+                    <option value="csv">CSV</option>
+                    <option value="pdf">PDF</option>
+                    <option value="xls">XLS</option>
+                </select>
+                <button onclick="exporter('po-tous-clients')" class="export">Exporter</button>
+            </form>
+
+        </div>
 
     </section>
     <script src="exports.js"></script>
