@@ -169,7 +169,7 @@
                         <tr class="end-row">
                             <?php
                                 include("connexion.inc.php");
-                                $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie");
+                                $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie WHERE SIREN LIKE\"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date LIKE\"".$_SESSION['date']."\"");
                                 $row=$requete->fetch();
                                 $montant = str_replace(".",",",$row[2]);
                                 echo "<td style=\"width:20%\">$row[0] remises</td>";

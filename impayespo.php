@@ -209,7 +209,7 @@
                         <tr class="end-row">
                             <?php
                                 include("connexion.inc.php");
-                                $requete = $cnx->query("SELECT count(numero_impaye), sum(montant) FROM impaye");
+                                $requete = $cnx->query("SELECT count(numero_impaye), sum(montant) FROM impaye WHERE SIREN LIKE\"".$_SESSION['siren3']."\" AND raison_sociale  LIKE \"".$_SESSION['raison3']."\"AND date_vente >= \"".$_SESSION['date3']."\" AND date_remise<= \"".$_SESSION['date4']."\" AND numero_impaye LIKE   \"".$_SESSION['numdossier']."\" ");
                                 $row=$requete->fetch();
                                 $montant = str_replace(".",",",$row[1]);
                                 echo "<td style=\"width:20%\">-</td>";

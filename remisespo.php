@@ -174,7 +174,7 @@
                         <tr class="end-row">
                             <?php
                                 include("connexion.inc.php");
-                                $requete = $cnx->query("SELECT count(numero_remise), sum(nbre_transaction), sum(montant_total) FROM remise");
+                                $requete = $cnx->query("SELECT count(numero_remise), sum(nbre_transaction), sum(montant_total) FROM remise WHERE SIREN LIKE\"".$_SESSION['siren2']."\" AND raison_sociale  LIKE \"".$_SESSION['raison2']."\" AND date_traitement LIKE\"".$_SESSION['date2']."\" ");
                                 $row=$requete->fetch();
                                 $montant = str_replace(".",",",$row[2]);
                                 echo "<td style=\"width:20%\">$row[0] remises</td>";
