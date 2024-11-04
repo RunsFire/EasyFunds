@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 session_start();
 if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
@@ -8,6 +7,7 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
     header('location:login.php');
 }
 ?>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -181,11 +181,12 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                             include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(numero_remise), sum(nbre_transaction), sum(montant_total) FROM remise");
                             $row = $requete->fetch();
+                            $montant = str_replace(".", ",", $row[2]);
                             echo "<td style=\"width:20%\">$row[0] remises</td>";
                             echo "<td style=\"width:20%\">-</td>";
                             echo "<td style=\"width:25%\">$row[1] transactions</td>";
                             echo "<td style=\"width:20%\">-</td>";
-                            echo "<td style=\"width:20%\">total = $row[2] euros</td>";
+                            echo "<td style=\"width:20%\">total = $montant euros</td>";
                             ?>
                         </tr>
                         <!-- Remplissage
@@ -213,8 +214,8 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                         <option selected disabled hidden>--</option>
                         <option value="SIREN"> SIREN</option>
                         <option value="raison_sociale">Raison Sociale</option>
-                        <option value="nombre_transactions">Nb de transactions</option>
-                        <option value="date">Date</option>
+                        <option value="nbre_transaction">Nb de transactions</option>
+                        <option value="date_traitement">Date</option>
                         <option value="montant_total">Montant total</option>
                     </select>
                     <select name="croissance">

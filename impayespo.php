@@ -1,13 +1,13 @@
-<!DOCTYPE html>
 <?php
 session_start();
 if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
     header('location:login.php');
 }
-// if($_SESSION['typeu']!=2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-// 	header('location:login.php');
-// }
+if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
+    header('location:login.php');
+}
 ?>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -64,7 +64,6 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
-
             <!-- FILTRES -->
             <div class="frame filtres">
                 <form method="POST" action="impayespo.php">
@@ -111,7 +110,7 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
                         </table>
                     </div>
                     <!-- TABLEAU DATAS -->
-                    <div class="table-datas shorter-table" id="po-par-client">
+                    <div class="table-datas shorter-table">
                         <table class="frame">
                             <?php
                             include("connexion.inc.php");
@@ -155,6 +154,7 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
                                     $date = date_format($d, "d/m/Y");
                                     $d2 = date_create($ligne->date_remise);
                                     $date2 = date_format($d2, "d/m/Y");
+                                    $montant = str_replace(".", ",", $ligne->montant);
                                     if ($var % 2 == 0) {
                                         echo "<tr class=\"style1\">";
                                         echo "<td style=\"width:20%\">$ligne->SIREN</td>";
@@ -164,7 +164,7 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
                                         echo "<td style=\"width:25%\">$ligne->NCarte</td>";
                                         echo "<td style=\"width:10%\">$ligne->reseau</td>";
                                         echo "<td style=\"width:20%\">$ligne->numero_impaye</td>";
-                                        echo "<td style=\"width:20%\">$ligne->montant euros</td>";
+                                        echo "<td style=\"width:20%\" class=\"negative\">$montant euros</td>";
                                         echo "<td style=\"width:20%\">$ligne->code_impaye</td>";
                                         echo "</tr>";
                                     } else {
@@ -176,7 +176,7 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
                                         echo "<td style=\"width:25%\">$ligne->NCarte</td>";
                                         echo "<td style=\"width:10%\">$ligne->reseau</td>";
                                         echo "<td style=\"width:20%\">$ligne->numero_impaye</td>";
-                                        echo "<td style=\"width:20%\">$ligne->montant euros</td>";
+                                        echo "<td style=\"width:20%\" class=\"negative\">$montant euros</td>";
                                         echo "<td style=\"width:20%\">$ligne->code_impaye</td>";
                                         echo "</tr>";
                                     }
@@ -198,6 +198,7 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
                             include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(numero_impaye), sum(montant) FROM impaye");
                             $row = $requete->fetch();
+                            $montant = str_replace(".", ",", $row[1]);
                             echo "<td style=\"width:20%\">-</td>";
                             echo "<td style=\"width:20%\">-</td>";
                             echo "<td style=\"width:20%\">-</td>";
@@ -205,7 +206,7 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
                             echo "<td style=\"width:25%\">-</td>";
                             echo "<td style=\"width:10%\">-</td>";
                             echo "<td style=\"width:20%\">$row[0] dossiers</td>";
-                            echo "<td style=\"width:20%\">$row[1] euros</td>";
+                            echo "<td style=\"width:20%\">$montant euros</td>";
                             echo "<td style=\"width:20%\">-</td>";
                             // echo "<td style=\"width:20%\">$row[0] remises</td>";
                             // echo "<td style=\"width:20%\">-</td>";
@@ -237,9 +238,12 @@ if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
                         <option selected disabled hidden>--</option>
                         <option value="SIREN"> SIREN</option>
                         <option value="raison_sociale">Raison Sociale</option>
-                        <option value="nombre_transactions">Nb de transactions</option>
-                        <option value="date">Date</option>
-                        <option value="montant_total">Montant total</option>
+                        <option value="date_vente">Date de vente</option>
+                        <option value="date_remise">Date de remise</option>
+                        <option value="reseau">Reseau</option>
+                        <option value="numero_impaye">Numéro de dossier</option>
+                        <option value="montant">Montant total</option>
+                        <option value="code_impaye">Code d'impayé</option>
                     </select>
                     <select name="croissance">
                         <option selected disabled hidden>--</option>

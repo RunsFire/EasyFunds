@@ -8,9 +8,9 @@ if (!isset($_SESSION['siren'])) {
     $_SESSION['raison'] = "%";
     $_SESSION['date'] = "%";
 }
-if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-    header('location:login.php');
-}
+// if($_SESSION['typeu']!=2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
+// 	header('location:login.php');
+// }
 ?>
 <!DOCTYPE html>
 <html>
@@ -140,13 +140,14 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                                 while ($ligne = $tresorerie->fetch(PDO::FETCH_OBJ)) {
                                     $d = date_create($ligne->date);
                                     $date = date_format($d, "d/m/Y");
+                                    $montant = str_replace(".", ",", $ligne->montant_total);
                                     if ($var % 2 == 0) {
                                         echo "<tr class=\"style1\">";
                                         echo "<td style=\"width:20%\">$ligne->SIREN</td>";
                                         echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
                                         echo "<td style=\"width:25%\">$ligne->nombre_transactions</td>";
                                         echo "<td style=\"width:20%\">$date</td>";
-                                        echo "<td style=\"width:20%\">$ligne->montant_total euros</td>";
+                                        echo "<td style=\"width:20%\">$montant euros</td>";
                                         echo "</tr>";
                                     } else {
                                         echo "<tr class=\"style2\">";
@@ -154,7 +155,7 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                                         echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
                                         echo "<td style=\"width:25%\">$ligne->nombre_transactions</td>";
                                         echo "<td style=\"width:20%\">$date</td>";
-                                        echo "<td style=\"width:20%\">$ligne->montant_total euros</td>";
+                                        echo "<td style=\"width:20%\">$montant euros</td>";
                                         echo "</tr>";
                                     }
                                     $var++;
@@ -164,24 +165,25 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                             ?>
                         </table>
                     </div>
-
-                    <!-- TABLEAU, total -->
-                    <div class="frame">
-                        <table class="frame">
-                            <!-- DEFAULT -->
-                            <tr class="end-row">
-                                <?php
-                                include("connexion.inc.php");
-                                $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie");
-                                $row = $requete->fetch();
-                                echo "<td style=\"width:20%\">$row[0] remises</td>";
-                                echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:25%\">$row[1] transactions</td>";
-                                echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:20%\">total = $row[2] euros</td>";
-                                ?>
-                            </tr>
-                            <!-- Remplissage
+                </div>
+                <!-- TABLEAU, total -->
+                <div class="frame">
+                    <table class="frame">
+                        <!-- DEFAULT -->
+                        <tr class="end-row">
+                            <?php
+                            include("connexion.inc.php");
+                            $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie");
+                            $row = $requete->fetch();
+                            $montant = str_replace(".", ",", $row[2]);
+                            echo "<td style=\"width:20%\">$row[0] remises</td>";
+                            echo "<td style=\"width:20%\">-</td>";
+                            echo "<td style=\"width:25%\">$row[1] transactions</td>";
+                            echo "<td style=\"width:20%\">-</td>";
+                            echo "<td style=\"width:20%\">total = $montant euros</td>";
+                            ?>
+                        </tr>
+                        <!-- Remplissage
                         <tr class="end-row">
                             <td style="width:20%;">input N° SIREN</td>
                             <td style="width:20%">input Raison Sociale</td>
@@ -190,9 +192,9 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                             <td style="width:20%">Montant total</td>
                         </tr>
                         -->
-                        </table>
-                    </div>
+                    </table>
                 </div>
+            </div>
         </section>
 
         <!----- SOUS LE TABLEAU ----->
@@ -230,6 +232,8 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
             </form>
 
         </div>
+
+    </section>
 
     </section>
     <script src="exports.js"></script>
