@@ -31,7 +31,7 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
     <div class="tabs">
         <a class="tab active" href="">Client</a>
         <a class="tab" href="creer_compte.php">Créer un compte</a>
-        <a class="tab" href="">Demandes</a>
+        <a class="tab" href="admin_demande.php">Demandes</a>
     </div>
 </header>
 

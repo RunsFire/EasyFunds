@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<?php session_start (); 
-error_reporting(E_ALL); 
-ini_set("display_errors", 1); 
-if (!isset($_SESSION['raison_social'])){
-    $_SESSION['raison_social']="%" ; 
-    $_SESSION['mail']="%" ; 
-} 
-if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp'])) { 
-    header('location:login.php'); 
-} 
+<?php session_start();
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+if (!isset($_SESSION['raison_social'])) {
+    $_SESSION['raison_social'] = "%";
+    $_SESSION['mail'] = "%";
+}
+if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
+    header('location:login.php');
+}
 ?>
 <html>
 
@@ -31,7 +31,7 @@ if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp']
     <div class="tabs">
         <a class="tab" href="admin.php">Client</a>
         <a class="tab active" href="">Créer un compte</a>
-        <a class="tab" href="">Demandes</a>
+        <a class="tab" href="admin_demande.php">Demandes</a>
     </div>
 </header>
 
@@ -55,26 +55,26 @@ if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp']
         </form>
 
         <?php
-        if (isset($_POST['pseudo']) && isset($_POST['raison_social']) && isset($_POST['mail']) && isset($_POST['type_compte'])){
+        if (isset($_POST['pseudo']) && isset($_POST['raison_social']) && isset($_POST['mail']) && isset($_POST['type_compte'])) {
             $pseudo = $_POST['pseudo'];
             $raison_social = $_POST['raison_social'];
             $mail = $_POST['mail'];
-            if ($_POST['type_compte']== 'utilisateur'){
+            if ($_POST['type_compte'] == 'utilisateur') {
                 $type_compte = 1;
-            }else if ($_POST['type_compte']== 'admin'){
+            } else if ($_POST['type_compte'] == 'admin') {
                 $type_compte = 0;
             }
-            $mdp =uniqid();
+            $mdp = uniqid();
             include("connexion.inc.php");
-            $test_mail = $cnx->prepare("SELECT mail FROM utilisateur WHERE mail= ?;" );
+            $test_mail = $cnx->prepare("SELECT mail FROM utilisateur WHERE mail= ?;");
             $test_mail->execute([$mail]);
-            if ($test_mail->rowCount()>0){
+            if ($test_mail->rowCount() > 0) {
                 echo 'ce mail est deja utiliser par un utilisateur';
-            }else{
-                $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?,mdp =?,mdpProvisoire = 1,nbr_essai = 0;" );
-                if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte,password_hash($mdp,PASSWORD_BCRYPT)])) {
+            } else {
+                $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?,mdp =?,mdpProvisoire = 1,nbr_essai = 0;");
+                if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte, password_hash($mdp, PASSWORD_BCRYPT)])) {
                     echo "Échec de l'ajout de l'utilisateur.";
-                } else{
+                } else {
                     $_SESSION['cree_compte_login'] = $mail;
                     $_SESSION['cree_compte_mdp'] = $mdp;
                     include("mail/creecomptemail.php");
@@ -84,7 +84,7 @@ if($_SESSION['typeu']!=1 || !isset($_SESSION['login'])&& !isset($_SESSION['mdp']
                 unset($_SESSION['cree_compte_mdp']);
             }
         }
-        
+
         ?>
 
     </section>
