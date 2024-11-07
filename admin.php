@@ -51,7 +51,7 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
-            <!-- PO TOUS CLIENTS -->
+            <!-- Tous les clients -->
             <div id="liste-utilisateur" class="display active">
 
                 <!-- FILTRES -->
@@ -113,14 +113,14 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                     } else {
                                         echo "<tr class=\"style2\">";
                                     } ?>
-                            <td style="width:40%"><?= $ligne->raison_social ?>N</td>
-                            <td style="width:40%"><?= $ligne->mail ?></td>
-                            <td style="width:20%">
+                                    <td style="width:40%"><?= $ligne->raison_social ?>N</td>
+                                    <td style="width:40%"><?= $ligne->mail ?></td>
+                                    <td style="width:20%">
 
-                                <bouton onclick="supprimer_utilisateur('<?= $ligne->num ?>')">Supprimer</bouton>
+                                        <bouton onclick="supprimer_utilisateur('<?= $ligne->num ?>')">Supprimer</bouton>
 
-                            </td>
-                            </tr>
+                                    </td>
+                                    </tr>
                             <?php
                                     $var++;
                                 }
@@ -132,12 +132,12 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 </div>
         </section>
         <script>
-        function supprimer_utilisateur(num) {
-            const result = confirm('Voulez vous supprimer cet utilisateur');
-            if (result) {
-                document.location.replace('supp_utilisateur.php?num=' + num);
+            function supprimer_utilisateur(num) {
+                const result = confirm('Voulez vous supprimer cet utilisateur');
+                if (result) {
+                    document.location.replace('supp_utilisateur.php?num=' + num);
+                }
             }
-        }
         </script>
 
     </section>
@@ -147,25 +147,25 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
     <footer>
 
         <script>
-        //Option : tous-clients / par-client
-        function displayTable(optionId, displayId) {
-            //remove checked from all options
-            const allOptionsRadio = document.querySelectorAll(" .option-radio");
-            allOptionsRadio.forEach(radio => {
-                radio.checked = false
-            });
-            //add checked to option
-            const toCheck = document.getElementById(optionId);
-            toCheck.checked = true;
-            //remove active from all displays
-            const allDisplays = document.querySelectorAll(".display");
-            allDisplays.forEach(display => {
-                display.classList.remove("active");
-            })
-            //add active to display
-            const toDisplay = document.getElementById(displayId);
-            toDisplay.classList.add("active");
-        }
+            //Option : tous-clients / par-client
+            function displayTable(optionId, displayId) {
+                //remove checked from all options
+                const allOptionsRadio = document.querySelectorAll(" .option-radio");
+                allOptionsRadio.forEach(radio => {
+                    radio.checked = false
+                });
+                //add checked to option
+                const toCheck = document.getElementById(optionId);
+                toCheck.checked = true;
+                //remove active from all displays
+                const allDisplays = document.querySelectorAll(".display");
+                allDisplays.forEach(display => {
+                    display.classList.remove("active");
+                })
+                //add active to display
+                const toDisplay = document.getElementById(displayId);
+                toDisplay.classList.add("active");
+            }
         </script>
 
     </footer>
