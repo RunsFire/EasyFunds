@@ -62,7 +62,8 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                 <th style="width:10%">Type de demande</th>
                                 <th style="width:20%">Raison_social</th>
                                 <th style="width:20%">Mail</th>
-                                <th style="width:50%">Commentaire</th>
+                                <th style="width:40%">Commentaire</th>
+                                <th style="width:10%">option</th>
                             </tr>
                         </table>
                     </div>
@@ -72,7 +73,7 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                             <?php
                             include("connexion.inc.php");
                             $var = 0;
-                            $demandes = $cnx->query("SELECT raison_social,mail,type_demande,info_supplementaire FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE typeU<3 ;");
+                            $demandes = $cnx->query("SELECT num_demande, raison_social,mail,type_demande,info_supplementaire FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE typeU<3 ;");
                             if ($demandes == null) {
                                 echo "Pas de demande";
                             } else {
@@ -82,20 +83,23 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                     } else {
                                         echo "<tr class=\"style2\">";
                                     } ?>
-                            <td style="width:10%"><?php
-                                    $type_demande = $ligne->type_demande;
-                                    if($type_demande=="b"){
-                                        echo "Bloquer";
-                                    }else if($type_demande=="s"){
-                                        echo "Supprimer";
-                                    }else if($type_demande=="c"){
-                                        echo "Créer";
-                                    }
-                                    ?></td>
-                            <td style="width:20%"><?= $ligne->raison_social ?>N</td>
-                            <td style="width:20%"><?= $ligne->mail ?></td>
-                            <td style="width:50%"><?= $ligne->info_supplementaire ?></td>
-                            </tr>
+                                    <td style="width:10%"><?php
+                                                            $type_demande = $ligne->type_demande;
+                                                            if ($type_demande == "b") {
+                                                                echo "Bloquer";
+                                                            } else if ($type_demande == "s") {
+                                                                echo "Supprimer";
+                                                            } else if ($type_demande == "c") {
+                                                                echo "Créer";
+                                                            }
+                                                            ?></td>
+                                    <td style="width:20%"><?= $ligne->raison_social ?>N</td>
+                                    <td style="width:20%"><?= $ligne->mail ?></td>
+                                    <td style="width:40%"><?= $ligne->info_supplementaire ?></td>
+                                    <td style="width:10%">
+                                        <bouton onclick="refuser_demande('<?= $ligne->num_demande ?>')">Refuser</bouton>
+                                    </td>
+                                    </tr>
                             <?php
                                     $var++;
                                 }
@@ -106,6 +110,29 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                     </div>
                 </div>
         </section>
+        <?php
+        if (isset($_SESSION["supp_demande"])) {
+            if ($_SESSION["supp_demande"] == "effectuer") {
+                echo "
+                    <script>
+                        alert('La demande a bien été refusé');
+                    </script>";
+            } else if ($_SESSION["supp_demande"] == "echouer") {
+                echo "
+                    <script>
+                        alert('Nous n'avons pas pu supprimé la demande!');
+                    </script>";
+            }
+        }
+        ?>
+        <script>
+            function refuser_demande(num) {
+                const result = confirm('Voulez vous refuser cette demande');
+                if (result) {
+                    document.location.replace('supp_demande.php?num=' + num);
+                }
+            }
+        </script>
 
 
     </section>
@@ -114,25 +141,25 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
     <footer>
 
         <script>
-        //Option : tous-clients / par-client
-        function displayTable(optionId, displayId) {
-            //remove checked from all options
-            const allOptionsRadio = document.querySelectorAll(" .option-radio");
-            allOptionsRadio.forEach(radio => {
-                radio.checked = false
-            });
-            //add checked to option
-            const toCheck = document.getElementById(optionId);
-            toCheck.checked = true;
-            //remove active from all displays
-            const allDisplays = document.querySelectorAll(".display");
-            allDisplays.forEach(display => {
-                display.classList.remove("active");
-            })
-            //add active to display
-            const toDisplay = document.getElementById(displayId);
-            toDisplay.classList.add("active");
-        }
+            //Option : tous-clients / par-client
+            function displayTable(optionId, displayId) {
+                //remove checked from all options
+                const allOptionsRadio = document.querySelectorAll(" .option-radio");
+                allOptionsRadio.forEach(radio => {
+                    radio.checked = false
+                });
+                //add checked to option
+                const toCheck = document.getElementById(optionId);
+                toCheck.checked = true;
+                //remove active from all displays
+                const allDisplays = document.querySelectorAll(".display");
+                allDisplays.forEach(display => {
+                    display.classList.remove("active");
+                })
+                //add active to display
+                const toDisplay = document.getElementById(displayId);
+                toDisplay.classList.add("active");
+            }
         </script>
 
     </footer>
