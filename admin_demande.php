@@ -60,8 +60,8 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                         <table class="frame">
                             <tr>
                                 <th style="width:10%">Type de demande</th>
-                                <th style="width:20%">Raison_social</th>
-                                <th style="width:20%">Mail</th>
+                                <th style="width:15%">Raison_social</th>
+                                <th style="width:25%">Mail</th>
                                 <th style="width:40%">Commentaire</th>
                                 <th style="width:10%">option</th>
                             </tr>
@@ -83,25 +83,43 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                     } else {
                                         echo "<tr class=\"style2\">";
                                     } ?>
-                                    <td style="width:10%"><?php
+                            <td style="width:10%"><?php
                                                             $type_demande = $ligne->type_demande;
                                                             if ($type_demande == "b") {
-                                                                echo "Bloquer";
+                                                                echo "Débloquer";
                                                             } else if ($type_demande == "s") {
                                                                 echo "Supprimer";
                                                             } else if ($type_demande == "c") {
                                                                 echo "Créer";
                                                             }
                                                             ?></td>
-                                    <td style="width:20%"><?= $ligne->raison_social ?>N</td>
-                                    <td style="width:20%"><?= $ligne->mail ?></td>
-                                    <td style="width:40%"><?= $ligne->info_supplementaire ?></td>
-                                    <td style="width:10%">
-                                        <bouton onclick="refuser_demande('<?= $ligne->num_demande ?>')">
-                                            Refuser
-                                        </bouton>
-                                    </td>
-                                    </tr>
+                            <td style="width:15%"><?= $ligne->raison_social ?>N</td>
+                            <td style="width:25%"><?= $ligne->mail ?></td>
+                            <td style="width:40%"><?= $ligne->info_supplementaire ?></td>
+                            <td style="width:10%">
+                                <bouton onclick="refuser_demande('<?= $ligne->num_demande ?>')" class="table-butt">
+                                    Refuser
+                                </bouton><br><br>
+                                <?php
+                                        if ($type_demande == "b") { ?>
+                                <bouton onclick="debloquer_utilisateur('<?= $ligne->num_demande ?>')"
+                                    class="table-butt">
+                                    Débloquer
+                                </bouton>
+                                <?php } else if ($type_demande == "s") { ?>
+                                <bouton onclick="supprimer_utilisateur('<?= $ligne->num_demande ?>')"
+                                    class="table-butt">
+                                    Supprimer
+                                </bouton>
+                                <?php } else if ($type_demande == "c") { ?>
+                                <bouton onclick="" class="table-butt">
+                                    Créer
+                                </bouton>
+                                <?php }
+                                        ?>
+
+                            </td>
+                            </tr>
                             <?php
                                     $var++;
                                 }
@@ -127,14 +145,42 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
             }
             unset($_SESSION['supp_demande']);
         }
+        if (isset($_SESSION["debloquer"])) {
+            if ($_SESSION["debloquer"] == "effectuer") {
+                echo "
+                    <script>
+                        alert('Le compte a bien été debloquer');
+                    </script>";
+            } else if ($_SESSION["debloquer"] == "echouer") {
+                echo "
+                    <script>
+                        alert('Nous n'avons pas pu débloquer ce compte!');
+                    </script>";
+            }
+            unset($_SESSION['supp_demande']);
+        }
         ?>
         <script>
-            function refuser_demande(num, mail, type) {
-                const result = confirm('Voulez vous refuser cette demande');
-                if (result) {
-                    document.location.replace('supp_demande.php?num=' + num);
-                }
+        function refuser_demande(num, mail, type) {
+            const result = confirm('Voulez vous refuser cette demande?');
+            if (result) {
+                document.location.replace('supp_demande.php?num=' + num);
             }
+        }
+
+        function supprimer_utilisateur(num) {
+            const result = confirm('Voulez vous supprimer cet utilisateur?');
+            if (result) {
+                document.location.replace('supp_utilisateur.php?num=' + num);
+            }
+        }
+
+        function debloquer_utilisateur(num) {
+            const result = confirm('Voulez vous débloquer cet utilisateur?');
+            if (result) {
+                document.location.replace('debloquer_utilisateur.php?num=' + num);
+            }
+        }
         </script>
 
 
@@ -144,25 +190,25 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
     <footer>
 
         <script>
-            //Option : tous-clients / par-client
-            function displayTable(optionId, displayId) {
-                //remove checked from all options
-                const allOptionsRadio = document.querySelectorAll(" .option-radio");
-                allOptionsRadio.forEach(radio => {
-                    radio.checked = false
-                });
-                //add checked to option
-                const toCheck = document.getElementById(optionId);
-                toCheck.checked = true;
-                //remove active from all displays
-                const allDisplays = document.querySelectorAll(".display");
-                allDisplays.forEach(display => {
-                    display.classList.remove("active");
-                })
-                //add active to display
-                const toDisplay = document.getElementById(displayId);
-                toDisplay.classList.add("active");
-            }
+        //Option : tous-clients / par-client
+        function displayTable(optionId, displayId) {
+            //remove checked from all options
+            const allOptionsRadio = document.querySelectorAll(" .option-radio");
+            allOptionsRadio.forEach(radio => {
+                radio.checked = false
+            });
+            //add checked to option
+            const toCheck = document.getElementById(optionId);
+            toCheck.checked = true;
+            //remove active from all displays
+            const allDisplays = document.querySelectorAll(".display");
+            allDisplays.forEach(display => {
+                display.classList.remove("active");
+            })
+            //add active to display
+            const toDisplay = document.getElementById(displayId);
+            toDisplay.classList.add("active");
+        }
         </script>
 
     </footer>
