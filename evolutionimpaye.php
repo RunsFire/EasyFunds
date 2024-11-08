@@ -7,6 +7,7 @@
     include("connexion.inc.php");
     $date = date_create(date('Y-m-d'));
     if (!isset($_POST["choix"]) || (isset($_POST['choix']) && $_POST['choix']=='4')){
+        $_POST["choix"]=4;
         $date2 = date_sub($date,date_interval_create_from_date_string('3 month'));
     } else if (isset($_POST['choix']) && $_POST['choix']=='12'){
         $date2= date_sub($date,date_interval_create_from_date_string('1 year'));
