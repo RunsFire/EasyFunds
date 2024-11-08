@@ -56,15 +56,15 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
 
                 <!-- FILTRES -->
                 <div class="frame filtres">
-                    <form method="GET" action="admin.php">
+                    <form method="POST" action="admin.php">
                         <?php
-                        if (!empty($_GET['raison_social'])) {
-                            echo '<input type="text" name="raison_social" class="filtre" value=' . $_GET['raison_social'] . ' placeholder=' . $_GET['raison_social'] . '>';
+                        if (!empty($_POST['raison_social'])) {
+                            echo '<input type="text" name="raison_social" class="filtre" value=' . $_POST['raison_social'] . ' placeholder="Raison social">';
                         } else {
                             echo '<input type="text" name="raison_social" class="filtre" placeholder="Raison social">';
                         }
-                        if (!empty($_GET['mail'])) {
-                            echo '<input type="text" name="mail" class="filtre" value=' . $_GET['mail'] . ' placeholder=' . $_GET['mail'] . '>';
+                        if (!empty($_POST['mail'])) {
+                            echo '<input type="text" name="mail" class="filtre" value=' . $_POST['mail'] . ' placeholder="Mail">';
                         } else {
                             echo '<input type="text" name="mail" class="filtre" placeholder="Mail">';
                         }
@@ -92,16 +92,16 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                             <?php
                             include("connexion.inc.php");
                             $var = 0;
-                            if (!empty($_GET['raison_social'])) {
-                                $_SESSION['raison_social'] = $_GET['raison_social'] . "%";
+                            if (!empty($_POST['raison_social'])) {
+                                $_SESSION['raison_social'] = $_POST['raison_social'] . "%";
                             }
-                            if (!empty($_GET['mail'])) {
-                                $_SESSION['mail'] = "%" . $_GET['mail'] . "%";
+                            if (!empty($_POST['mail'])) {
+                                $_SESSION['mail'] = $_POST['mail'] . "%";
                             }
-                            if (!empty($_GET['reset'])) {
+                            if (!empty($_POST['reset'])) {
                                 $_SESSION['raison_social'] = "%";
                                 $_SESSION['mail'] = "%";
-                                unset($_GET['reset']);
+                                unset($_POST['reset']);
                             }
                             $utilisateurs = $cnx->query("SELECT num,raison_social,mail FROM utilisateur WHERE typeU=0 AND raison_social LIKE \"" . $_SESSION['raison_social'] . "\" AND mail LIKE\"" . $_SESSION['mail'] . "\";");
                             if ($utilisateurs == null) {
