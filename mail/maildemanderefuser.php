@@ -24,15 +24,15 @@ try {
 
     //Recipients
     $mail->setFrom('damien.tremerie@edu.univ-eiffel.fr', 'Easy Funds');
-    $mail->addAddress($_SESSION['email']);     //Add a recipient
+    $mail->addAddress($_SESSION['demande_refuse_mail']);     //Add a recipient
 
     $mail->SMTPDebug = 0;
 
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = $_SESSION["objet"];
-    $mail->Body    = $_SESSION["message"];
-    $mail->AltBody = $_SESSION["message"];
+    $mail->Subject = 'Votre demande de ' . $_SESSION['type'] . ' de compte a été refuser';
+    $mail->Body    = 'Bonjour, <br>Les administrateurs ont refusé votre demande.';
+    $mail->AltBody = 'Bonjour, <br>Les administrateurs ont refusé votre demande.';
 
     $mail->send();
 } catch (Exception $e) {

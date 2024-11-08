@@ -24,15 +24,15 @@ try {
 
     //Recipients
     $mail->setFrom('damien.tremerie@edu.univ-eiffel.fr', 'Easy Funds');
-    $mail->addAddress($_SESSION['email']);     //Add a recipient
+    $mail->addAddress($_SESSION['mail_admin']);     //Add a recipient
 
     $mail->SMTPDebug = 0;
-
+    
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = $_SESSION["objet"];
-    $mail->Body    = $_SESSION["message"];
-    $mail->AltBody = $_SESSION["message"];
+    $mail->Subject = 'Demande de '.$_SESSION['type'].' d\'un compte';
+    $mail->Body    = 'Bonjour, <br>Votre PO vous a adresse une nouvelle demande.<br>Connectez vous a votre compte pour acceder a cette demande.';
+    $mail->AltBody = 'Bonjour, <br>Votre PO vous a adresse une nouvelle demande.<br>Connectez vous a votre compte pour acceder a cette demande';
 
     $mail->send();
 } catch (Exception $e) {

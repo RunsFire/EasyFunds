@@ -73,7 +73,7 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                             <?php
                             include("connexion.inc.php");
                             $var = 0;
-                            $demandes = $cnx->query("SELECT num_demande, raison_social,mail,type_demande,info_supplementaire FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE typeU<3 ;");
+                            $demandes = $cnx->query("SELECT num_demande, raison_social,mail,type_demande,info_supplementaire FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE typeU<3 ORDER BY type_demande ;");
                             if ($demandes == null) {
                                 echo "Pas de demande";
                             } else {
@@ -97,7 +97,9 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                     <td style="width:20%"><?= $ligne->mail ?></td>
                                     <td style="width:40%"><?= $ligne->info_supplementaire ?></td>
                                     <td style="width:10%">
-                                        <bouton onclick="refuser_demande('<?= $ligne->num_demande ?>')">Refuser</bouton>
+                                        <bouton onclick="refuser_demande('<?= $ligne->num_demande ?>')">
+                                            Refuser
+                                        </bouton>
                                     </td>
                                     </tr>
                             <?php
@@ -123,10 +125,11 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                         alert('Nous n'avons pas pu supprimé la demande!');
                     </script>";
             }
+            unset($_SESSION['supp_demande']);
         }
         ?>
         <script>
-            function refuser_demande(num) {
+            function refuser_demande(num, mail, type) {
                 const result = confirm('Voulez vous refuser cette demande');
                 if (result) {
                     document.location.replace('supp_demande.php?num=' + num);
