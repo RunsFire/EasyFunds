@@ -9,6 +9,7 @@ if (!isset($_SESSION['raison_social'])) {
 if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
     header('location:login.php');
 }
+include("connexion.inc.php");
 ?>
 <html>
 
@@ -29,7 +30,6 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
 
     <!-- ONGLETS -->
     <div class="tabs">
-        <a class="tab" href="admin.php">Client</a>
         <a class="tab active" href="">Créer un compte</a>
         <a class="tab" href="admin_demande.php">Demandes</a>
     </div>
@@ -55,6 +55,14 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
         </form>
 
         <?php
+        function suppDemande($num)
+        {
+            //supprimer la demande
+            global $cnx;
+            $result = $cnx->exec("DELETE FROM demande_compte WHERE num_demande = $num");
+            return $result;
+        }
+
         if (isset($_POST['pseudo']) && isset($_POST['raison_social']) && isset($_POST['mail']) && isset($_POST['type_compte'])) {
             $pseudo = $_POST['pseudo'];
             $raison_social = $_POST['raison_social'];
@@ -65,7 +73,6 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 $type_compte = 0;
             }
             $mdp = uniqid();
-            include("connexion.inc.php");
             $test_mail = $cnx->prepare("SELECT mail FROM utilisateur WHERE mail= ?;");
             $test_mail->execute([$mail]);
             if ($test_mail->rowCount() > 0) {
@@ -75,18 +82,18 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte, password_hash($mdp, PASSWORD_BCRYPT)])) {
                     echo "Échec de l'ajout de l'utilisateur.";
                 } else {
+                    $num = $GET["num"];
                     $_SESSION['cree_compte_login'] = $mail;
                     $_SESSION['cree_compte_mdp'] = $mdp;
                     include("mail/creecomptemail.php");
-                    echo "<p> L'utilisateur a bien été ajouté.";
+                    $_SESSION['creer_utilisateur'] = "effectuer";
+                    suppDemande($num);
                 }
                 unset($_SESSION['cree_compte_login']);
                 unset($_SESSION['cree_compte_mdp']);
             }
         }
-
         ?>
-
     </section>
 
 

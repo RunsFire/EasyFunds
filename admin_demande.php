@@ -29,8 +29,6 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
 
     <!-- ONGLETS -->
     <div class="tabs">
-        <a class="tab" href="admin.php">Client</a>
-        <a class="tab" href="creer_compte.php">Créer un compte</a>
         <a class="tab active" href="">Demandes</a>
     </div>
 </header>
@@ -83,16 +81,17 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                     } else {
                                         echo "<tr class=\"style2\">";
                                     } ?>
-                            <td style="width:10%"><?php
-                                                            $type_demande = $ligne->type_demande;
-                                                            if ($type_demande == "b") {
-                                                                echo "Débloquer";
-                                                            } else if ($type_demande == "s") {
-                                                                echo "Supprimer";
-                                                            } else if ($type_demande == "c") {
-                                                                echo "Créer";
-                                                            }
-                                                            ?></td>
+                            <td style="width:10%">
+                                <?php
+                                        $type_demande = $ligne->type_demande;
+                                        if ($type_demande == "b") {
+                                            echo "Débloquer";
+                                        } else if ($type_demande == "s") {
+                                            echo "Supprimer";
+                                        } else if ($type_demande == "c") {
+                                            echo "Créer";
+                                        }
+                                        ?></td>
                             <td style="width:15%"><?= $ligne->raison_social ?>N</td>
                             <td style="width:25%"><?= $ligne->mail ?></td>
                             <td style="width:40%"><?= $ligne->info_supplementaire ?></td>
@@ -112,12 +111,10 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                     Supprimer
                                 </bouton>
                                 <?php } else if ($type_demande == "c") { ?>
-                                <bouton onclick="" class="table-butt">
+                                <bouton onclick="creer_utilisateur('<?= $ligne->num_demande ?>')" class="table-butt">
                                     Créer
                                 </bouton>
-                                <?php }
-                                        ?>
-
+                                <?php } ?>
                             </td>
                             </tr>
                             <?php
@@ -131,34 +128,27 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 </div>
         </section>
         <?php
-        if (isset($_SESSION["supp_demande"])) {
-            if ($_SESSION["supp_demande"] == "effectuer") {
-                echo "
-                    <script>
-                        alert('La demande a bien été refusé');
-                    </script>";
-            } else if ($_SESSION["supp_demande"] == "echouer") {
-                echo "
-                    <script>
-                        alert('Nous n'avons pas pu supprimé la demande!');
-                    </script>";
+        function afficher_alert($name_val_session, $mess_effectuer, $mess_echouer)
+        {
+            if (isset($_SESSION[$name_val_session])) {
+                if ($_SESSION[$name_val_session] == "effectuer") {
+                    echo "
+                        <script>
+                            alert('$mess_effectuer');
+                        </script>";
+                } else if ($_SESSION[$name_val_session] == "echouer") {
+                    echo "
+                        <script>
+                            alert('$mess_echouer');
+                        </script>";
+                }
+                unset($_SESSION[$name_val_session]);
             }
-            unset($_SESSION['supp_demande']);
         }
-        if (isset($_SESSION["debloquer"])) {
-            if ($_SESSION["debloquer"] == "effectuer") {
-                echo "
-                    <script>
-                        alert('Le compte a bien été debloquer');
-                    </script>";
-            } else if ($_SESSION["debloquer"] == "echouer") {
-                echo "
-                    <script>
-                        alert('Nous n'avons pas pu débloquer ce compte!');
-                    </script>";
-            }
-            unset($_SESSION['supp_demande']);
-        }
+        afficher_alert("supp_demande", "La demande a bien été refusé", "Nous n'avons pas pu supprimé la demande!");
+        afficher_alert("debloquer", "Le compte a bien été debloquer", "Nous n'avons pas pu débloquer ce compte!");
+        afficher_alert("supp_utilisateur", "L'utilisateur a bien été supprimer", "Nous n'avons pas pu supprimé l'utilisateur!");
+        afficher_alert("creer_utilisateur", "L'utilisateur a bien été créer", "");
         ?>
         <script>
         function refuser_demande(num, mail, type) {
@@ -181,8 +171,14 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 document.location.replace('debloquer_utilisateur.php?num=' + num);
             }
         }
-        </script>
 
+        function creer_utilisateur(num) {
+            const result = confirm('Voulez vous créer un compte pour cet utilisateur?');
+            if (result) {
+                document.location.replace('creer_compte.php?num=' + num);
+            }
+        }
+        </script>
 
     </section>
 

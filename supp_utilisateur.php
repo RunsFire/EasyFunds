@@ -6,6 +6,17 @@ if ($_SESSION['typeu'] != 1 ||  !isset($_SESSION['login']) && !isset($_SESSION['
 }
 
 $num = $_GET['num'];
+$result = $cnx->query("SELECT mail,type_demande FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
+$result2 = $result->fetch(PDO::FETCH_ASSOC);
+$mail = $result2['mail'];
+
+function suppDemande($num)
+{
+    //supprimer la demande
+    global $cnx;
+    $result = $cnx->exec("DELETE FROM demande_compte WHERE num_demande = $num");
+    return $result;
+}
 
 function suppUsr($num)
 {
@@ -15,17 +26,11 @@ function suppUsr($num)
 }
 
 if (suppUsr($num)) {
-    echo "
-        <script>
-            alert('Utilisateur supprimé');
-            document.location.href = 'admin.php';
-        </script>
-    ";
+    $_SESSION['supp_utilisateur'] = "effectuer";
+    $_SESSION['supp_utilisateur_mail'] = $mail;
+    include("mail/mailsupputilisateur.php");
+    unset($_SESSION['supp_utilisateur_mail']);
+    suppDemande($num);
 } else {
-    echo "
-        <script>
-            alert('Nous n'avons pas pu supprimé l'utilisateur!');
-            document.location.href = 'admin.php';
-        </script>
-    ";
+    $_SESSION['supp_utilisateur'] = "echouer";
 }
