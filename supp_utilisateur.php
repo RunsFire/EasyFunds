@@ -6,7 +6,7 @@ if ($_SESSION['typeu'] != 1 ||  !isset($_SESSION['login']) && !isset($_SESSION['
 }
 
 $num = $_GET['num'];
-$result = $cnx->query("SELECT mail,type_demande FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
+$result = $cnx->query("SELECT mail FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
 $result2 = $result->fetch(PDO::FETCH_ASSOC);
 $mail = $result2['mail'];
 

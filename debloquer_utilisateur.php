@@ -6,10 +6,15 @@ if ($_SESSION['typeu'] != 1 ||  !isset($_SESSION['login']) && !isset($_SESSION['
 }
 
 $num = $_GET['num'];
-$result = $cnx->query("SELECT mail FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
-$result2 = $result->fetch(PDO::FETCH_ASSOC);
-$mail = $result2['mail'];
-$type = $result2['type_demande'];
+$result = $cnx->query("SELECT num, mail FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
+if ($result->rowCount() > 0) {
+    $result2 = $result->fetch(PDO::FETCH_ASSOC);
+    $num_utilisateur = $result2['num'];
+    $mail = $result2['mail'];
+} else {
+    $_SESSION['debloquer'] = "echouer";
+    header('Location:admin_demande.php');
+}
 
 function suppDemande($num)
 {
@@ -27,7 +32,7 @@ function debloqueUtil($num)
 }
 
 // si l'utilisateur a bien été debloquer on envoie un mail a l'utilisateur
-if (debloqueUtil($num)) {
+if (debloqueUtil($num_utilisateur)) {
     // on envoie un mail a l'utilisateur
     $_SESSION['debloquer'] = "effectuer";
     $_SESSION['debloque_utilisateur'] = $mail;
