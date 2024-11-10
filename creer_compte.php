@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-<?php session_start();
+<?php
+session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-if (!isset($_SESSION['raison_social'])) {
-    $_SESSION['raison_social'] = "%";
-    $_SESSION['mail'] = "%";
-}
 if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
     header('location:login.php');
 }
@@ -62,8 +59,9 @@ include("connexion.inc.php");
             $result = $cnx->exec("DELETE FROM demande_compte WHERE num_demande = $num");
             return $result;
         }
-
+        // si le formulaire a été envoyer
         if (isset($_POST['pseudo']) && isset($_POST['raison_social']) && isset($_POST['mail']) && isset($_POST['type_compte'])) {
+            // on initialise les variables
             $pseudo = $_POST['pseudo'];
             $raison_social = $_POST['raison_social'];
             $mail = $_POST['mail'];
@@ -72,25 +70,32 @@ include("connexion.inc.php");
             } else if ($_POST['type_compte'] == 'admin') {
                 $type_compte = 0;
             }
-            $mdp = uniqid();
+            $mdp = uniqid(); // on genere un mot de passe provisoire
+            // on verifie que le mail n'est pas deja utiliser
             $test_mail = $cnx->prepare("SELECT mail FROM utilisateur WHERE mail= ?;");
             $test_mail->execute([$mail]);
             if ($test_mail->rowCount() > 0) {
                 echo 'ce mail est deja utiliser par un utilisateur';
             } else {
+                // si le mail n'est pas deja utiliser on insert dans la bdd
                 $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?,mdp =?,mdpProvisoire = 1,nbr_essai = 0;");
                 if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte, password_hash($mdp, PASSWORD_BCRYPT)])) {
                     echo "Échec de l'ajout de l'utilisateur.";
                 } else {
                     $num = $GET["num"];
+                    // on envoie un mail a l'utilisateur
                     $_SESSION['cree_compte_login'] = $mail;
                     $_SESSION['cree_compte_mdp'] = $mdp;
                     include("mail/creecomptemail.php");
                     $_SESSION['creer_utilisateur'] = "effectuer";
+                    // on supprime la demande
                     suppDemande($num);
                 }
+                // on supprimer les variables provisoire
                 unset($_SESSION['cree_compte_login']);
                 unset($_SESSION['cree_compte_mdp']);
+                // on redirige vers la page de demande
+                header('Location:admin_demande.php');
             }
         }
         ?>

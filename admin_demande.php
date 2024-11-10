@@ -96,22 +96,28 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                             <td style="width:25%"><?= $ligne->mail ?></td>
                             <td style="width:40%"><?= $ligne->info_supplementaire ?></td>
                             <td style="width:10%">
-                                <bouton onclick="refuser_demande('<?= $ligne->num_demande ?>')" class="table-butt">
+                                <bouton
+                                    onclick="actions('<?= $ligne->num_demande ?>','Voulez vous refuser cette demande?','supp_demande.php')"
+                                    class="table-butt">
                                     Refuser
                                 </bouton><br><br>
                                 <?php
                                         if ($type_demande == "b") { ?>
-                                <bouton onclick="debloquer_utilisateur('<?= $ligne->num_demande ?>')"
+                                <bouton
+                                    onclick="actions('<?= $ligne->num_demande ?>','Voulez vous débloquer cet utilisateur?','debloquer_utilisateur.php')"
                                     class="table-butt">
                                     Débloquer
                                 </bouton>
                                 <?php } else if ($type_demande == "s") { ?>
-                                <bouton onclick="supprimer_utilisateur('<?= $ligne->num_demande ?>')"
+                                <bouton
+                                    onclick="actions('<?= $ligne->num_demande ?>','Voulez vous supprimer cet utilisateur?','supp_utilisateur.php')"
                                     class="table-butt">
                                     Supprimer
                                 </bouton>
                                 <?php } else if ($type_demande == "c") { ?>
-                                <bouton onclick="creer_utilisateur('<?= $ligne->num_demande ?>')" class="table-butt">
+                                <bouton
+                                    onclick="actions('<?= $ligne->num_demande ?>','Voulez vous créer un compte pour cet utilisateur?','creer_compte.php')"
+                                    class="table-butt">
                                     Créer
                                 </bouton>
                                 <?php } ?>
@@ -128,21 +134,25 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 </div>
         </section>
         <?php
-        function afficher_alert($name_val_session, $mess_effectuer, $mess_echouer)
+        // permet d'afficher si une action a échouer ou a été effectuer
+        function afficher_alert($name_var_session, $mess_effectuer, $mess_echouer)
         {
-            if (isset($_SESSION[$name_val_session])) {
-                if ($_SESSION[$name_val_session] == "effectuer") {
+            // on verifie que la variable de session existe
+            if (isset($_SESSION[$name_var_session])) {
+                // si variable = effectuer on affiche le message mess_effectuer
+                if ($_SESSION[$name_var_session] == "effectuer") {
                     echo "
                         <script>
                             alert('$mess_effectuer');
                         </script>";
-                } else if ($_SESSION[$name_val_session] == "echouer") {
+                } // sinon on affiche le mess_echouer
+                else if ($_SESSION[$name_var_session] == "echouer") {
                     echo "
                         <script>
                             alert('$mess_echouer');
                         </script>";
-                }
-                unset($_SESSION[$name_val_session]);
+                } // on supprime la variable
+                unset($_SESSION[$name_var_session]);
             }
         }
         afficher_alert("supp_demande", "La demande a bien été refusé", "Nous n'avons pas pu supprimé la demande!");
@@ -151,33 +161,42 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
         afficher_alert("creer_utilisateur", "L'utilisateur a bien été créer", "");
         ?>
         <script>
-        function refuser_demande(num, mail, type) {
-            const result = confirm('Voulez vous refuser cette demande?');
+        function actions(num, question, page) {
+            // quand on clique sur une actions une question s'affiche 
+            const result = confirm(question);
+            // si on clique sur ok on est rediriger vers une page qui effectue l'action.
             if (result) {
-                document.location.replace('supp_demande.php?num=' + num);
+                document.location.replace(page + '?num=' + num);
             }
         }
 
-        function supprimer_utilisateur(num) {
-            const result = confirm('Voulez vous supprimer cet utilisateur?');
-            if (result) {
-                document.location.replace('supp_utilisateur.php?num=' + num);
-            }
-        }
+        // function refuser_demande(num) {
+        //     const result = confirm('Voulez vous refuser cette demande?');
+        //     if (result) {
+        //         document.location.replace('supp_demande.php?num=' + num);
+        //     }
+        // }
 
-        function debloquer_utilisateur(num) {
-            const result = confirm('Voulez vous débloquer cet utilisateur?');
-            if (result) {
-                document.location.replace('debloquer_utilisateur.php?num=' + num);
-            }
-        }
+        // function supprimer_utilisateur(num) {
+        //     const result = confirm('Voulez vous supprimer cet utilisateur?');
+        //     if (result) {
+        //         document.location.replace('supp_utilisateur.php?num=' + num);
+        //     }
+        // }
 
-        function creer_utilisateur(num) {
-            const result = confirm('Voulez vous créer un compte pour cet utilisateur?');
-            if (result) {
-                document.location.replace('creer_compte.php?num=' + num);
-            }
-        }
+        // function debloquer_utilisateur(num) {
+        //     const result = confirm('Voulez vous débloquer cet utilisateur?');
+        //     if (result) {
+        //         document.location.replace('debloquer_utilisateur.php?num=' + num);
+        //     }
+        // }
+
+        // function creer_utilisateur(num) {
+        //     const result = confirm('Voulez vous créer un compte pour cet utilisateur?');
+        //     if (result) {
+        //         document.location.replace('creer_compte.php?num=' + num);
+        //     }
+        // }
         </script>
 
     </section>

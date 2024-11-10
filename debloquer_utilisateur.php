@@ -28,12 +28,15 @@ function debloqueUtil($num)
 
 // si l'utilisateur a bien été debloquer on envoie un mail a l'utilisateur
 if (debloqueUtil($num)) {
+    // on envoie un mail a l'utilisateur
     $_SESSION['debloquer'] = "effectuer";
     $_SESSION['debloque_utilisateur'] = $mail;
     include("mail/maildebloqueutilisateur.php");
     unset($_SESSION['debloque_utilisateur']);
+    // on supprimer la demande
     suppDemande($num);
 } else {
     $_SESSION['debloquer'] = "echouer";
 }
+// on redirige vers la page de demande
 header('Location:admin_demande.php');

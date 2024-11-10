@@ -20,6 +20,7 @@ function suppDemande($num)
 
 // si la demande a bien été supprimer on envoie un mail a l'utilisateur
 if (suppDemande($num)) {
+    // on envoie un mail a l'utilisateur
     $_SESSION['supp_demande'] = "effectuer";
     if ($type == "b") {
         $_SESSION['type'] = "deblocage";
@@ -30,9 +31,11 @@ if (suppDemande($num)) {
     }
     $_SESSION['demande_refuse_mail'] = $mail;
     include("mail/maildemanderefuser.php");
+    // on supprimer les variables provisoires
     unset($_SESSION['type']);
     unset($_SESSION['demande_refuse_mail']);
 } else {
     $_SESSION['supp_demande'] = "echouer";
 }
+// on redirige vers la page de demande
 header('Location:admin_demande.php');

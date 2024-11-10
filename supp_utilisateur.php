@@ -20,17 +20,22 @@ function suppDemande($num)
 
 function suppUsr($num)
 {
+    //supprimer l'uitlisateur
     global $cnx;
     $result = $cnx->exec("DELETE FROM utilisateur WHERE num= '$num'");
     return $result;
 }
 
 if (suppUsr($num)) {
+    // on envoie un mail a l'utilisateur
     $_SESSION['supp_utilisateur'] = "effectuer";
     $_SESSION['supp_utilisateur_mail'] = $mail;
     include("mail/mailsupputilisateur.php");
     unset($_SESSION['supp_utilisateur_mail']);
+    // on supprimer la demande
     suppDemande($num);
 } else {
     $_SESSION['supp_utilisateur'] = "echouer";
 }
+// on redirige vers la page de demande
+header('Location:admin_demande.php');
