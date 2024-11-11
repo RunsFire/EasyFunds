@@ -19,7 +19,7 @@ $num = $_SESSION['num'];
 <head>
     <link rel="stylesheet" href="page.css">
     <meta charset="utf-8">
-    <title>Trésorerie des clients</title>
+    <title>Trésorerie</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <link rel="icon" type="image/png" href="easyfunds-icon.png">
 </head>
