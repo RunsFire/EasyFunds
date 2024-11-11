@@ -6,14 +6,15 @@ if ($_SESSION['typeu'] != 1 ||  !isset($_SESSION['login']) && !isset($_SESSION['
 }
 
 $num = $_GET['num'];
-$result = $cnx->query("SELECT num, mail FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
-if ($result->rowCount() > 0) {
+$result = $cnx->query("SELECT num, mail FROM utilisateur u JOIN demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
+if ($result->rowCount() != 0) {
     $result2 = $result->fetch(PDO::FETCH_ASSOC);
     $num_utilisateur = $result2['num'];
     $mail = $result2['mail'];
 } else {
     $_SESSION['debloquer'] = "echouer";
-    header('Location:admin_demande.php');
+    header('location:admin_demande.php');
+    exit();
 }
 
 function suppDemande($num)
@@ -27,7 +28,7 @@ function debloqueUtil($num)
 {
     //debloquer l'utilisateur
     global $cnx;
-    $result = $cnx->exec("UPDATE utilisateur set nbr_essai=0 WHERE num_demande = $num");
+    $result = $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE num = $num");
     return $result;
 }
 
@@ -44,4 +45,4 @@ if (debloqueUtil($num_utilisateur)) {
     $_SESSION['debloquer'] = "echouer";
 }
 // on redirige vers la page de demande
-header('Location:admin_demande.php');
+header('location:admin_demande.php');

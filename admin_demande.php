@@ -2,10 +2,6 @@
 <?php session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
-if (!isset($_SESSION['raison_social'])) {
-    $_SESSION['raison_social'] = "%";
-    $_SESSION['mail'] = "%";
-}
 if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
     header('location:login.php');
 }
@@ -143,13 +139,13 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 if ($_SESSION[$name_var_session] == "effectuer") {
                     echo "
                         <script>
-                            alert('$mess_effectuer');
+                            alert(\" $mess_effectuer \");
                         </script>";
                 } // sinon on affiche le mess_echouer
                 else if ($_SESSION[$name_var_session] == "echouer") {
                     echo "
                         <script>
-                            alert('$mess_echouer');
+                            alert(\" $mess_echouer \");
                         </script>";
                 } // on supprime la variable
                 unset($_SESSION[$name_var_session]);
@@ -169,34 +165,6 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 document.location.replace(page + '?num=' + num);
             }
         }
-
-        // function refuser_demande(num) {
-        //     const result = confirm('Voulez vous refuser cette demande?');
-        //     if (result) {
-        //         document.location.replace('supp_demande.php?num=' + num);
-        //     }
-        // }
-
-        // function supprimer_utilisateur(num) {
-        //     const result = confirm('Voulez vous supprimer cet utilisateur?');
-        //     if (result) {
-        //         document.location.replace('supp_utilisateur.php?num=' + num);
-        //     }
-        // }
-
-        // function debloquer_utilisateur(num) {
-        //     const result = confirm('Voulez vous débloquer cet utilisateur?');
-        //     if (result) {
-        //         document.location.replace('debloquer_utilisateur.php?num=' + num);
-        //     }
-        // }
-
-        // function creer_utilisateur(num) {
-        //     const result = confirm('Voulez vous créer un compte pour cet utilisateur?');
-        //     if (result) {
-        //         document.location.replace('creer_compte.php?num=' + num);
-        //     }
-        // }
         </script>
 
     </section>
