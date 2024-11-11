@@ -38,6 +38,10 @@ include("connexion.inc.php");
         <form method="POST" action="creer_compte.php">
             <label for="pseudo">Pseudo: </label>
             <input type="text" name="pseudo" required><br>
+            <input type="numeric" name="num" required hidden value="<?php if (isset($_GET['num'])) {
+                                                                        echo $_GET['num'];
+                                                                    }
+                                                                    ?>">
             <label for="raison_social">Raison social:</label>
             <input type="text" name="raison_social" required><br>
             <label for="mail">Mail:</label>
@@ -66,9 +70,9 @@ include("connexion.inc.php");
             $raison_social = $_POST['raison_social'];
             $mail = $_POST['mail'];
             if ($_POST['type_compte'] == 'utilisateur') {
-                $type_compte = 1;
-            } else if ($_POST['type_compte'] == 'admin') {
                 $type_compte = 0;
+            } else if ($_POST['type_compte'] == 'admin') {
+                $type_compte = 1;
             }
             $mdp = uniqid(); // on genere un mot de passe provisoire
             // on verifie que le mail n'est pas deja utiliser
@@ -82,7 +86,7 @@ include("connexion.inc.php");
                 if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte, password_hash($mdp, PASSWORD_BCRYPT)])) {
                     echo "Échec de l'ajout de l'utilisateur.";
                 } else {
-                    $num = $GET["num"];
+                    $num = $_POST["num"];
                     // on envoie un mail a l'utilisateur
                     $_SESSION['cree_compte_login'] = $mail;
                     $_SESSION['cree_compte_mdp'] = $mdp;

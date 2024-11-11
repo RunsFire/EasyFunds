@@ -69,7 +69,7 @@ session_start();
                         $_SESSION['pseudo'] = $row[6];
                         $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='" . $_SESSION['login'] . "';");
                         if ($_SESSION['typeu'] == '0' && $row[2] == 0) {
-                            header('location:accueilUser.php');
+                            header('location:tresorerie_utilisateur.php');
                         } else if ($_SESSION['typeu'] == '0' && $row[2] == 1) {
                             header('location:mdpmdp.php');
                         } else if ($_SESSION['typeu'] == '1' && $row[2] == 0) {

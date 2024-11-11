@@ -135,7 +135,7 @@ if (!isset($_SESSION['siren'])) {
                             } else {
                                 $tresorerie = $cnx->query("SELECT SIREN,raison_sociale,nombre_transactions,date,montant_total FROM tresorerie WHERE SIREN LIKE\"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE\"" . $_SESSION['date'] . "\" ;");
                             }
-                            if ($tresorerie == null) {
+                            if (!$tresorerie) {
                                 echo "Pas de tresoreries";
                             } else {
                                 while ($ligne = $tresorerie->fetch(PDO::FETCH_OBJ)) {
