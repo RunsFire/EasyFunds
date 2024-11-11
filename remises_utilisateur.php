@@ -53,8 +53,8 @@ $num = $_SESSION['num'];
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
-            <!-- PO PAR CLIENT, vide par défaut -->
-            <div id="po-par-client-display" class="display active">
+            <!-- CLIENT, vide par défaut -->
+            <div id="client" class="display active">
                 <!-- FILTRES -->
                 <div class="frame filtres">
                     <form method="POST" action="remisespo.php">
@@ -81,7 +81,7 @@ $num = $_SESSION['num'];
                 </div>
 
                 <!----- TABLEAU, headers + datas ----->
-                <div class="table frame" id="po-tous-clients">
+                <div class="table frame" id="clients">
                     <!-- TABLEAU HEADERS-->
                     <div class="frame table-headers">
                         <table class="frame">
@@ -214,7 +214,7 @@ $num = $_SESSION['num'];
                             <option value="pdf">PDF</option>
                             <option value="xls">XLS</option>
                         </select>
-                        <button onclick="exporter('po-par-client-display')">Exporter</button>
+                        <button onclick="exporter('client')">Exporter</button>
                     </form>
                 </div>
             </div>

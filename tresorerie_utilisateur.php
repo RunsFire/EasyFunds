@@ -56,8 +56,8 @@ $num = $_SESSION['num'];
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
-            <!-- PO TOUS CLIENTS -->
-            <div id="po-tous-clients" class="display active">
+            <!-- CLIENTS -->
+            <div id="clients" class="display active">
 
                 <!-- FILTRES -->
                 <div class="frame filtres">
@@ -213,7 +213,7 @@ $num = $_SESSION['num'];
                             <option value="pdf">PDF</option>
                             <option value="xls">XLS</option>
                         </select>
-                        <button onclick="exporter('po-tous-clients')" class="export">Exporter</button>
+                        <button onclick="exporter('clients')" class="export">Exporter</button>
                     </form>
 
                 </div>
