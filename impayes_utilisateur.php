@@ -56,10 +56,10 @@ $num = $_SESSION['num'];
                 <a href="impayes_utilisateur.php" class="option active">Liste</a>
 
                 <!--GRAPHE IMPAYES PAR COMPTE CLIENT -->
-                <a href="graphimpayespo.php" class="option">Somme des impayés</a>
+                <a href="graphimpayes_utilisateur.php" class="option">Somme des impayés</a>
 
                 <!--GRAPHE IMPAYES PAR COMPTE CLIENT -->
-                <a href="evolutionimpaye.php" class="option">Évolution des impayés</a>
+                <a href="evolutionimpaye_utilisateur.php" class="option">Évolution des impayés</a>
 
             </div>
         </section>
