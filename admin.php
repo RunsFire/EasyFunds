@@ -51,22 +51,22 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
-            <!-- Tous les clients -->
+            <!-- PO TOUS CLIENTS -->
             <div id="liste-utilisateur" class="display active">
 
                 <!-- FILTRES -->
                 <div class="frame filtres">
-                    <form method="POST" action="admin.php">
+                    <form method="GET" action="admin.php">
                         <?php
-                        if (!empty($_POST['raison_social'])) {
-                            echo '<input type="text" name="raison_social" class="filtre" value=' . $_POST['raison_social'] . ' placeholder="Raison social">';
+                        if (!empty($_GET['raison_social'])) {
+                            echo '<input type="text" name="raison_social" class="filtre" value=' . $_GET['raison_social'] . ' placeholder=' . $_GET['raison_social'] . '>';
                         } else {
                             echo '<input type="text" name="raison_social" class="filtre" placeholder="Raison social">';
                         }
-                        if (!empty($_POST['mail'])) {
-                            echo '<input type="text" name="mail" class="filtre" value=' . $_POST['mail'] . ' placeholder="Mail">';
+                        if (!empty($_GET['mail'])) {
+                            echo '<input type="email" name="mail" class="filtre" value=' . $_GET['mail'] . ' placeholder=' . $_GET['mail'] . '>';
                         } else {
-                            echo '<input type="text" name="mail" class="filtre" placeholder="Mail">';
+                            echo '<input type="email" name="mail" class="filtre" placeholder="Mail">';
                         }
                         ?>
                         <button type="submit" class="search">Rechercher</button>
@@ -92,16 +92,16 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                             <?php
                             include("connexion.inc.php");
                             $var = 0;
-                            if (!empty($_POST['raison_social'])) {
-                                $_SESSION['raison_social'] = $_POST['raison_social'] . "%";
+                            if (!empty($_GET['raison_social'])) {
+                                $_SESSION['raison_social'] = $_GET['raison_social'] . "%";
                             }
-                            if (!empty($_POST['mail'])) {
-                                $_SESSION['mail'] = $_POST['mail'] . "%";
+                            if (!empty($_GET['mail'])) {
+                                $_SESSION['mail'] = "%" . $_GET['mail'] . "%";
                             }
-                            if (!empty($_POST['reset'])) {
+                            if (!empty($_GET['reset'])) {
                                 $_SESSION['raison_social'] = "%";
                                 $_SESSION['mail'] = "%";
-                                unset($_POST['reset']);
+                                unset($_GET['reset']);
                             }
                             $utilisateurs = $cnx->query("SELECT num,raison_social,mail FROM utilisateur WHERE typeU=0 AND raison_social LIKE \"" . $_SESSION['raison_social'] . "\" AND mail LIKE\"" . $_SESSION['mail'] . "\";");
                             if ($utilisateurs == null) {
@@ -113,14 +113,14 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                     } else {
                                         echo "<tr class=\"style2\">";
                                     } ?>
-                                    <td style="width:40%"><?= $ligne->raison_social ?>N</td>
-                                    <td style="width:40%"><?= $ligne->mail ?></td>
-                                    <td style="width:20%">
+                            <td style="width:40%"><?= $ligne->raison_social ?>N</td>
+                            <td style="width:40%"><?= $ligne->mail ?></td>
+                            <td style="width:20%">
 
-                                        <bouton onclick="supprimer_utilisateur('<?= $ligne->num ?>')">Supprimer</bouton>
+                                <bouton onclick="supprimer_utilisateur('<?= $ligne->num ?>')" class="table-butt">Supprimer</bouton>
 
-                                    </td>
-                                    </tr>
+                            </td>
+                            </tr>
                             <?php
                                     $var++;
                                 }
@@ -132,12 +132,12 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                 </div>
         </section>
         <script>
-            function supprimer_utilisateur(num) {
-                const result = confirm('Voulez vous supprimer cet utilisateur');
-                if (result) {
-                    document.location.replace('supp_utilisateur.php?num=' + num);
-                }
+        function supprimer_utilisateur(num) {
+            const result = confirm('Voulez vous supprimer cet utilisateur');
+            if (result) {
+                document.location.replace('supp_utilisateur.php?num=' + num);
             }
+        }
         </script>
 
     </section>
@@ -147,25 +147,25 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
     <footer>
 
         <script>
-            //Option : tous-clients / par-client
-            function displayTable(optionId, displayId) {
-                //remove checked from all options
-                const allOptionsRadio = document.querySelectorAll(" .option-radio");
-                allOptionsRadio.forEach(radio => {
-                    radio.checked = false
-                });
-                //add checked to option
-                const toCheck = document.getElementById(optionId);
-                toCheck.checked = true;
-                //remove active from all displays
-                const allDisplays = document.querySelectorAll(".display");
-                allDisplays.forEach(display => {
-                    display.classList.remove("active");
-                })
-                //add active to display
-                const toDisplay = document.getElementById(displayId);
-                toDisplay.classList.add("active");
-            }
+        //Option : tous-clients / par-client
+        function displayTable(optionId, displayId) {
+            //remove checked from all options
+            const allOptionsRadio = document.querySelectorAll(" .option-radio");
+            allOptionsRadio.forEach(radio => {
+                radio.checked = false
+            });
+            //add checked to option
+            const toCheck = document.getElementById(optionId);
+            toCheck.checked = true;
+            //remove active from all displays
+            const allDisplays = document.querySelectorAll(".display");
+            allDisplays.forEach(display => {
+                display.classList.remove("active");
+            })
+            //add active to display
+            const toDisplay = document.getElementById(displayId);
+            toDisplay.classList.add("active");
+        }
         </script>
 
     </footer>

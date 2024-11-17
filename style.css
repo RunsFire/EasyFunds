@@ -5,13 +5,13 @@
  */
 
 .fredoka {
-              font-family: "Fredoka", sans-serif;
-              font-optical-sizing: auto;
-              font-weight: 300;
-              font-style: normal;
-              font-variation-settings:
-                      "wdth" 100;
-          }
+  font-family: "Fredoka", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings:
+          "wdth" 100;
+}
 
 :root {
     --dark-purple-bg: #272528;
@@ -114,6 +114,11 @@ button.here {
     display: flex;
     justify-content: end;
     margin-right: 30px;
+    margin-top: 5px;
+}
+
+a.white_link:any-link {
+    color: inherit;
 }
 
 section form input[type="submit"] {
@@ -139,7 +144,7 @@ section form input[type="submit"] {
     color: red;
 }
 
-.alert_worked {
+h4.alert_worked {
     color: limegreen;
 }
 

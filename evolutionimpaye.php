@@ -12,29 +12,31 @@
     } else if (isset($_POST['choix']) && $_POST['choix']=='12'){
         $date2= date_sub($date,date_interval_create_from_date_string('1 year'));
     }   
-    $date3 = $date2->format("Y-m-d");
-    $lstmois = [];
-    $liste_mois_fr = array("01" => "Janvier" , "02" => "Février" , "03" => "Mars" , "04" => "Avril" , "05" => "Mai" , "06" => "Juin" , "07" => "Juillet" , "08" => "Août" , "09" => "Septembre" , "10" => "Octobre" , "11" => "Novembre" , "12" => "Décembre");
-    $donnees = [];
-    $compteur=0;
-    if (isset($_POST['choix'])){
-        while ($compteur < $_POST['choix']){
-            array_push($lstmois,$liste_mois_fr[$date2->format('m')]." ".$date2->format("Y"));
-            $donnees[$liste_mois_fr[$date2->format('m')]]=0;
-            $date2 = date_add($date,date_interval_create_from_date_string('1 month'));
-            $compteur++;
-        }
-        $requete = $cnx->query("SELECT date_vente FROM impaye WHERE date_vente>='$date3';");
-        while( $ligne = $requete->fetch(PDO::FETCH_OBJ)){
-            $date4 = date_create($ligne->date_vente);
-            $donnees[$liste_mois_fr[$date4->format('m')]]++;
-        }
-        $requete->closeCursor();
-        $mois = [];
-        $regex = '/^[A-Za-zéèêëîïôöûüàâäç]+/';
-        foreach ($lstmois as $dateString) {
-            if (preg_match($regex, $dateString, $matches)) {
-                $mois[] = $matches[0];
+    if ($_POST['choix']=='4' || $_POST['choix']=='12'){
+        $date3 = $date2->format("Y-m-d");
+        $lstmois = [];
+        $liste_mois_fr = array("01" => "Janvier" , "02" => "Février" , "03" => "Mars" , "04" => "Avril" , "05" => "Mai" , "06" => "Juin" , "07" => "Juillet" , "08" => "Août" , "09" => "Septembre" , "10" => "Octobre" , "11" => "Novembre" , "12" => "Décembre");
+        $donnees = [];
+        $compteur=0;
+        if (isset($_POST['choix'])){
+            while ($compteur < $_POST['choix']){
+                array_push($lstmois,$liste_mois_fr[$date2->format('m')]." ".$date2->format("Y"));
+                $donnees[$liste_mois_fr[$date2->format('m')]]=0;
+                $date2 = date_add($date,date_interval_create_from_date_string('1 month'));
+                $compteur++;
+            }
+            $requete = $cnx->query("SELECT date_vente FROM impaye WHERE date_vente>='$date3';");
+            while( $ligne = $requete->fetch(PDO::FETCH_OBJ)){
+                $date4 = date_create($ligne->date_vente);
+                $donnees[$liste_mois_fr[$date4->format('m')]]++;
+            }
+            $requete->closeCursor();
+            $mois = [];
+            $regex = '/^[A-Za-zéèêëîïôöûüàâäç]+/';
+            foreach ($lstmois as $dateString) {
+                if (preg_match($regex, $dateString, $matches)) {
+                    $mois[] = $matches[0];
+                }
             }
         }
     }
@@ -49,7 +51,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./node_modules/jspdf/dist/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js "></script>
     <link rel="icon" type="image/png" href="easyfunds-icon.png">
 </head>
 
@@ -94,20 +96,24 @@
 
             </div>
         </section>
-        <form method="POST" action="evolutionimpaye.php">
+        <form method="POST" action="evolutionimpaye.php" class="radio-form">
             <?php
             if ($_POST['choix']=='4'){
-                echo '<input type="radio" id="quatre" name="choix" value="4" checked /> les 4 derniers mois';
+                echo '<input type="radio" id="quatre" name="choix" value="4" checked /><label for="quatre">Les 4 derniers mois</label>';
             }else {
-                echo '<input type="radio" id="quatre" name="choix" value="4"/> les 4 derniers mois';
+                echo '<input type="radio" id="quatre" name="choix" value="4" /><label for="quatre">Les 4 derniers mois</label>';
             }if ($_POST['choix']=='12'){
-                echo '<input type="radio" id="six" name="choix" value="12" checked /> les 12 derniers mois'; 
+                echo '<input type="radio" id="six" name="choix" value="12" checked /><label for="six">Les 12 derniers mois</label>';
             }else {
-                echo '<input type="radio" id="six" name="choix" value="12" /> les 12 derniers mois'; 
+                echo '<input type="radio" id="six" name="choix" value="12" /><label for="six">Les 12 derniers mois</label>';
             } if ($_POST['choix']=='date'){
-                echo '<input type="radio" id="date" name="choix" value="date" checked /> entre 2 dates<br>';
+                echo '<input type="radio" id="date" name="choix" value="date" checked /><label for="date">Entre 2 dates</label><br><br>';
+                echo '<form method="POST" action="evolutionimpaye.php">';
+                echo '<input type="date" name="date" class="filtre" max='.$date->format("Y-m-d").'>';
+                echo '<input type="date" name="date2" class="filtre" max='.$date->format("Y-m-d").'>';
+
             } else {
-                echo '<input type="radio" id="date" name="choix" value="date"  /> entre 2 dates<br>';
+                echo '<input type="radio" id="date" name="choix" value="date"/><label for="date">Entre 2 dates</label><br>';
             }
             ?>
             <button type="submit">Choisir</button>
@@ -156,6 +162,34 @@
                 title: {
                     display: false,
                     text: "Somme des impayés (en euros)"
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: (context) => {
+                                return context.index === 0 ? '#747474' : 'transparent';
+                            }
+                        },
+                        ticks: {
+                            color: 'white'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: '#747474'
+                        },
+                        ticks: {
+                            color: 'white',
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'rgb(255, 255, 255)'
+                        }
+                    }
                 }
             }
             });
