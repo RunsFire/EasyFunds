@@ -20,7 +20,7 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
     <!-- ICON -->
     <div class="logo">
         <img src="easyfunds-icon.png" class="small-icon">
-        <img src="easyfund-logo.png" class="small-logo">
+        <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 
     <!-- ONGLETS -->
@@ -77,8 +77,8 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                     } else {
                                         echo "<tr class=\"style2\">";
                                     } ?>
-                            <td style="width:10%">
-                                <?php
+                                    <td style="width:10%">
+                                        <?php
                                         $type_demande = $ligne->type_demande;
                                         if ($type_demande == "b") {
                                             echo "Débloquer";
@@ -88,37 +88,37 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                                             echo "Créer";
                                         }
                                         ?></td>
-                            <td style="width:15%"><?= $ligne->raison_social ?>N</td>
-                            <td style="width:25%"><?= $ligne->mail ?></td>
-                            <td style="width:40%"><?= $ligne->info_supplementaire ?></td>
-                            <td style="width:10%">
-                                <bouton
-                                    onclick="actions('<?= $ligne->num_demande ?>','Voulez vous refuser cette demande?','supp_demande.php')"
-                                    class="table-butt">
-                                    Refuser
-                                </bouton><br><br>
-                                <?php
+                                    <td style="width:15%"><?= $ligne->raison_social ?>N</td>
+                                    <td style="width:25%"><?= $ligne->mail ?></td>
+                                    <td style="width:40%"><?= $ligne->info_supplementaire ?></td>
+                                    <td style="width:10%">
+                                        <bouton
+                                            onclick="actions('<?= $ligne->num_demande ?>','Voulez vous refuser cette demande?','supp_demande.php')"
+                                            class="table-butt">
+                                            Refuser
+                                        </bouton><br><br>
+                                        <?php
                                         if ($type_demande == "b") { ?>
-                                <bouton
-                                    onclick="actions('<?= $ligne->num_demande ?>','Voulez vous débloquer cet utilisateur?','debloquer_utilisateur.php')"
-                                    class="table-butt">
-                                    Débloquer
-                                </bouton>
-                                <?php } else if ($type_demande == "s") { ?>
-                                <bouton
-                                    onclick="actions('<?= $ligne->num_demande ?>','Voulez vous supprimer cet utilisateur?','supp_utilisateur.php')"
-                                    class="table-butt">
-                                    Supprimer
-                                </bouton>
-                                <?php } else if ($type_demande == "c") { ?>
-                                <bouton
-                                    onclick="actions('<?= $ligne->num_demande ?>','Voulez vous créer un compte pour cet utilisateur?','creer_compte.php')"
-                                    class="table-butt">
-                                    Créer
-                                </bouton>
-                                <?php } ?>
-                            </td>
-                            </tr>
+                                            <bouton
+                                                onclick="actions('<?= $ligne->num_demande ?>','Voulez vous débloquer cet utilisateur?','debloquer_utilisateur.php')"
+                                                class="table-butt">
+                                                Débloquer
+                                            </bouton>
+                                        <?php } else if ($type_demande == "s") { ?>
+                                            <bouton
+                                                onclick="actions('<?= $ligne->num_demande ?>','Voulez vous supprimer cet utilisateur?','supp_utilisateur.php')"
+                                                class="table-butt">
+                                                Supprimer
+                                            </bouton>
+                                        <?php } else if ($type_demande == "c") { ?>
+                                            <bouton
+                                                onclick="actions('<?= $ligne->num_demande ?>','Voulez vous créer un compte pour cet utilisateur?','creer_compte.php')"
+                                                class="table-butt">
+                                                Créer
+                                            </bouton>
+                                        <?php } ?>
+                                    </td>
+                                    </tr>
                             <?php
                                     $var++;
                                 }
@@ -157,14 +157,14 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
         afficher_alert("creer_utilisateur", "L'utilisateur a bien été créer", "");
         ?>
         <script>
-        function actions(num, question, page) {
-            // quand on clique sur une actions une question s'affiche 
-            const result = confirm(question);
-            // si on clique sur ok on est rediriger vers une page qui effectue l'action.
-            if (result) {
-                document.location.replace(page + '?num=' + num);
+            function actions(num, question, page) {
+                // quand on clique sur une actions une question s'affiche 
+                const result = confirm(question);
+                // si on clique sur ok on est rediriger vers une page qui effectue l'action.
+                if (result) {
+                    document.location.replace(page + '?num=' + num);
+                }
             }
-        }
         </script>
 
     </section>
@@ -173,25 +173,25 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
     <footer>
 
         <script>
-        //Option : tous-clients / par-client
-        function displayTable(optionId, displayId) {
-            //remove checked from all options
-            const allOptionsRadio = document.querySelectorAll(" .option-radio");
-            allOptionsRadio.forEach(radio => {
-                radio.checked = false
-            });
-            //add checked to option
-            const toCheck = document.getElementById(optionId);
-            toCheck.checked = true;
-            //remove active from all displays
-            const allDisplays = document.querySelectorAll(".display");
-            allDisplays.forEach(display => {
-                display.classList.remove("active");
-            })
-            //add active to display
-            const toDisplay = document.getElementById(displayId);
-            toDisplay.classList.add("active");
-        }
+            //Option : tous-clients / par-client
+            function displayTable(optionId, displayId) {
+                //remove checked from all options
+                const allOptionsRadio = document.querySelectorAll(" .option-radio");
+                allOptionsRadio.forEach(radio => {
+                    radio.checked = false
+                });
+                //add checked to option
+                const toCheck = document.getElementById(optionId);
+                toCheck.checked = true;
+                //remove active from all displays
+                const allDisplays = document.querySelectorAll(".display");
+                allDisplays.forEach(display => {
+                    display.classList.remove("active");
+                })
+                //add active to display
+                const toDisplay = document.getElementById(displayId);
+                toDisplay.classList.add("active");
+            }
         </script>
 
     </footer>
