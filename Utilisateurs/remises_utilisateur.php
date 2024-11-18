@@ -2,7 +2,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '0') {
-    header('location:login.php');
+    header('location:../login.php');
 }
 if (!isset($_SESSION['siren2'])) {
     $_SESSION['siren2'] = "%";
@@ -10,11 +10,12 @@ if (!isset($_SESSION['siren2'])) {
     $_SESSION['date2'] = "%";
 }
 $num = $_SESSION['num'];
+include("../connexion.inc.php");
 ?>
 <html>
 
 <head>
-    <link rel="stylesheet" href="page.css">
+    <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Remises</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -45,7 +46,7 @@ $num = $_SESSION['num'];
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
-                <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
+                <a class="disconnect" href="../deconnexion.php">Se déconnecter</a>
             </div>
         </section>
 
@@ -98,7 +99,6 @@ $num = $_SESSION['num'];
                     <div class="table-datas shorter-table" id="po-par-client">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['siren'])) {
                                 $_SESSION['siren2'] = $_POST['siren'] . "%";
@@ -169,7 +169,6 @@ $num = $_SESSION['num'];
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                            include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(numero_remise), sum(nbre_transaction), sum(montant_total) FROM remise WHERE num_utilisateur= $num AND SIREN LIKE\"" . $_SESSION['siren2'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison2'] . "\" AND date_traitement LIKE\"" . $_SESSION['date2'] . "\" ");
                             $row = $requete->fetch();
                             $montant = str_replace(".", ",", 0 + $row[2]);
@@ -222,7 +221,7 @@ $num = $_SESSION['num'];
         </section>
 
     </section>
-    <script src="exports.js"></script>
+    <script src="../exports.js"></script>
 
 
     <!-- FOOTER -->

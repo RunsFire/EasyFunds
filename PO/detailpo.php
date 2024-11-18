@@ -55,7 +55,7 @@ if (isset($_GET['remise'])) {
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
-                <a class="deconnexion.php" href="">Se déconnecter</a>
+                <a class="disconnect" href="../deconnexion.php">Se déconnecter</a>
             </div>
 
             <!-- Onglet, Transaction de la remise -->

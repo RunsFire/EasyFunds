@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '0') {
-    header('location:login.php');
+    header('location:../login.php');
 }
 if (!isset($_SESSION['siren'])) {
     $_SESSION['siren'] = "%";
@@ -11,17 +11,18 @@ if (!isset($_SESSION['siren'])) {
 if (isset($_GET['remise'])) {
     $_SESSION['codeRemise'] = $_GET['remise'];
 }
+include("../connexion.inc.php");
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <link rel="stylesheet" href="page.css">
+    <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Détails de la remise </title>
     <link rel="icon" href="easyfunds-icon.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-    <script src="exports.js"></script>
+    <script src="../exports.js"></script>
 </head>
 
 <!-- HEADER -->
@@ -55,7 +56,7 @@ if (isset($_GET['remise'])) {
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
-                <a class="disconnect" href="">Se déconnecter</a>
+                <a class="disconnect" href="../deconnexion.php">Se déconnecter</a>
             </div>
 
             <!-- Onglet, Transaction de la remise -->
@@ -95,7 +96,6 @@ if (isset($_GET['remise'])) {
                     <div class="table-datas">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['resets'])) {
                                 unset($_SESSION['filtre']);

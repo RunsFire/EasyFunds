@@ -2,7 +2,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '0') {
-    header('location:login.php');
+    header('location:../login.php');
 }
 if (!isset($_SESSION['siren3'])) {
     $_SESSION['siren3'] = "%";
@@ -12,11 +12,12 @@ if (!isset($_SESSION['siren3'])) {
     $_SESSION['numdossier'] = "%";
 }
 $num = $_SESSION['num'];
+include("../connexion.inc.php");
 ?>
 <html>
 
 <head>
-    <link rel="stylesheet" href="page.css">
+    <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Impayés</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -47,7 +48,7 @@ $num = $_SESSION['num'];
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
-                <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
+                <a class="disconnect" href="../deconnexion.php">Se déconnecter</a>
             </div>
 
             <div class="frame options">
@@ -127,7 +128,6 @@ $num = $_SESSION['num'];
                     <div class="table-datas shorter-table">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['siren'])) {
                                 $_SESSION['siren3'] = $_POST['siren'] . "%";
@@ -207,7 +207,6 @@ $num = $_SESSION['num'];
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                            include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(numero_impaye), sum(montant) FROM impaye WHERE num_utilisateur= $num AND SIREN LIKE\"" . $_SESSION['siren3'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison3'] . "\"AND date_vente >= \"" . $_SESSION['date3'] . "\" AND date_remise<= \"" . $_SESSION['date4'] . "\" AND numero_impaye LIKE   \"" . $_SESSION['numdossier'] . "\" ");
                             $row = $requete->fetch();
                             $montant = str_replace(".", ",", 0 + $row[1]);
@@ -267,7 +266,7 @@ $num = $_SESSION['num'];
         </section>
 
     </section>
-    <script src="exports.js"></script>
+    <script src="../exports.js"></script>
 
 
     <!-- FOOTER -->
