@@ -17,8 +17,7 @@ if ($_SESSION['mdpProvisoire'] != 1) {
 
 <body>
     <header>
-        <img src="/img/easyfunds-icon.png"
-            alt="">
+        <img src="/img/easyfunds-icon.png" alt="">
         <div class="title">
             Easy Funds
         </div>
@@ -31,13 +30,16 @@ if ($_SESSION['mdpProvisoire'] != 1) {
             <form method="POST" action="mdpmdp.php">
                 <label for="mdp">Mot de passe</label><br />
                 <input type="password" name="mdp" id="password-input" placeholder="Entrez votre mot de passe" required>
-                <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility()" tabindex="-1">
+                <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility()"
+                    tabindex="-1">
                     <i id="eye-icon" class="eye"></i>
                 </button>
                 <br><br><br>
                 <label for="mdp2">Confirmer votre Mot de passe</label><br />
-                <input type="password" name="mdp2" id="cpassword" placeholder="Entrez une seconde fois votre mot de passe" required>
-                <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility2()" tabindex="-1">
+                <input type="password" name="mdp2" id="cpassword"
+                    placeholder="Entrez une seconde fois votre mot de passe" required>
+                <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility2()"
+                    tabindex="-1">
                     <i id="eye-icon2" class="eye"></i>
                 </button>
                 <?php
@@ -51,14 +53,14 @@ if ($_SESSION['mdpProvisoire'] != 1) {
                         if ($_SESSION['typeu'] == 0) {
                             unset($_SESSION['mdpProvisoire']);
                             $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='" . $_SESSION['login'] . "';");
-                            echo "<br><div style='color: white'><a href=\"accueilUser.php\" class='white_link'>Cliquez ici</a> pour aller sur la page d'accueil</div>";
+                            echo "<br><div style='color: white'><a href=\"/Utilisateurs/tresorerie_utilisateur.php\" class='white_link'>Cliquez ici</a> pour aller sur la page d'accueil</div>";
                         } else if ($_SESSION['typeu'] == 1) {
                             unset($_SESSION['mdpProvisoire']);
-                            echo "<br><div style='color: white'><a href=\"admin.php\" class='white_link'> Cliquez ici</a> pour aller sur la page d'accueil</div>";
+                            echo "<br><div style='color: white'><a href=\"/Admin/admin_demande.php\" class='white_link'> Cliquez ici</a> pour aller sur la page d'accueil</div>";
                             $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='" . $_SESSION['login'] . "';");
                         } else if ($_SESSION['typeu'] == 2) {
                             unset($_SESSION['mdpProvisoire']);
-                            echo "<br><div style='color: white'><a href=\"tresoreriepo.php\" class='white_link'> Cliquez ici</a> pour aller sur la page d'accueil</div>";
+                            echo "<br><div style='color: white'><a href=\"/PO/tresoreriepo.php\" class='white_link'> Cliquez ici</a> pour aller sur la page d'accueil</div>";
                             $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='" . $_SESSION['login'] . "';");
                         }
                     } else {
