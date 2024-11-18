@@ -29,7 +29,7 @@ if (isset($_GET['remise'])) {
     <!-- ICON -->
     <div class="logo">
         <img src="easyfunds-icon.png" class="small-icon">
-        <img src="easyfund-logo.png" class="small-logo">
+        <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 
     <!-- ONGLETS -->

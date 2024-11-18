@@ -27,7 +27,7 @@ if (isset($_POST["message"])) {
     <!-- ICON -->
     <div class="logo">
         <img src="easyfunds-icon.png" class="small-icon">
-        <img src="easyfund-logo.png" class="small-logo">
+        <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 
     <!-- ONGLETS -->
@@ -54,8 +54,8 @@ if (isset($_POST["message"])) {
                 <div class="cat">
                     <?php
                     if ($ok) { ?>
-                    <h4 class="alert_worked">Votre demande a bien &eacute;t&eacute; prise en compte.</h4>
-                    <?php
+                        <h4 class="alert_worked">Votre demande a bien &eacute;t&eacute; prise en compte.</h4>
+                        <?php
                         $req = $cnx->query("SELECT mail from  utilisateur WHERE typeu='1'");
                         while ($ligne = $req->fetch(PDO::FETCH_OBJ)) {
                             $_SESSION['mail_admin'] = $ligne->mail;
@@ -71,7 +71,7 @@ if (isset($_POST["message"])) {
                         unset($_SESSION['type']);
                         ?>
                 </div>
-                <?php
+            <?php
                     } else {
             ?>
                 <h6 class="sbttl">Type de requête</h6>
@@ -86,7 +86,7 @@ if (isset($_POST["message"])) {
                         required></textarea><br>
                     <input type="submit" name="submit" value="Envoyer" class="sub-cent" /><br><br>
                 </form>
-                <?php
+            <?php
                     }
             ?>
             </section>

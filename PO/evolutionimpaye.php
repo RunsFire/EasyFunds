@@ -63,7 +63,7 @@ if ($_POST['choix'] == '4' || $_POST['choix'] == '12') {
     <!-- ICON -->
     <div class="logo">
         <img src="easyfunds-icon.png" class="small-icon">
-        <img src="easyfund-logo.png" class="small-logo">
+        <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 
     <!-- ONGLETS -->
@@ -129,18 +129,18 @@ if ($_POST['choix'] == '4' || $_POST['choix'] == '12') {
         <div style="width:60%;">
             <canvas id="myChart">
                 <script>
-                const backgroundColorPlugin = {
-                    id: 'customBackgroundColor',
-                    beforeDraw: (chart) => {
-                        const ctx = chart.canvas.getContext('2d');
-                        ctx.save();
-                        ctx.fillStyle = '#272528';
-                        ctx.fillRect(0, 0, chart.width, chart.height);
-                        ctx.restore();
-                    }
-                };
-                Chart.register(backgroundColorPlugin);
-                <?php
+                    const backgroundColorPlugin = {
+                        id: 'customBackgroundColor',
+                        beforeDraw: (chart) => {
+                            const ctx = chart.canvas.getContext('2d');
+                            ctx.save();
+                            ctx.fillStyle = '#272528';
+                            ctx.fillRect(0, 0, chart.width, chart.height);
+                            ctx.restore();
+                        }
+                    };
+                    Chart.register(backgroundColorPlugin);
+                    <?php
                     if ($_POST['choix'] == 4) {
                         $d1 =  $donnees[$mois[0]];
                         $d2 =  $donnees[$mois[1]];
@@ -165,71 +165,71 @@ if ($_POST['choix'] == '4' || $_POST['choix'] == '12') {
                         echo "var donnees = [$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$d10,$d11,$d12];";
                     }
                     ?>
-                var barColors = ["#9E00FF", "#7823AC", "#9357B8", "#593A6D", "#C264FC", "#8B12D6", "#9E00FF", "#995AC1",
-                    "#A347E0", "#6A1E88", "#B864EA", "#7D38B2"
-                ];
-                var myChart = new Chart("myChart", {
-                    type: "bar",
-                    data: {
-                        labels: lstMois,
-                        datasets: [{
-                            backgroundColor: barColors,
-                            label: 'Évolution des impayés',
-                            data: donnees,
-                        }]
-                    },
-                    options: {
-                        title: {
-                            display: false,
-                            text: "Somme des impayés (en euros)"
+                    var barColors = ["#9E00FF", "#7823AC", "#9357B8", "#593A6D", "#C264FC", "#8B12D6", "#9E00FF", "#995AC1",
+                        "#A347E0", "#6A1E88", "#B864EA", "#7D38B2"
+                    ];
+                    var myChart = new Chart("myChart", {
+                        type: "bar",
+                        data: {
+                            labels: lstMois,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                label: 'Évolution des impayés',
+                                data: donnees,
+                            }]
                         },
-                        scales: {
-                            x: {
-                                grid: {
-                                    color: (context) => {
-                                        return context.index === 0 ? '#747474' : 'transparent';
+                        options: {
+                            title: {
+                                display: false,
+                                text: "Somme des impayés (en euros)"
+                            },
+                            scales: {
+                                x: {
+                                    grid: {
+                                        color: (context) => {
+                                            return context.index === 0 ? '#747474' : 'transparent';
+                                        }
+                                    },
+                                    ticks: {
+                                        color: 'white'
                                     }
                                 },
-                                ticks: {
-                                    color: 'white'
+                                y: {
+                                    grid: {
+                                        color: '#747474'
+                                    },
+                                    ticks: {
+                                        color: 'white',
+                                    }
                                 }
                             },
-                            y: {
-                                grid: {
-                                    color: '#747474'
-                                },
-                                ticks: {
-                                    color: 'white',
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: 'rgb(255, 255, 255)',
+                            plugins: {
+                                legend: {
+                                    labels: {
+                                        color: 'rgb(255, 255, 255)',
+                                    }
                                 }
                             }
                         }
-                    }
-                });
-                document.getElementById('exportPdf').addEventListener('click', async function() {
-                    const {
-                        jsPDF
-                    } = window.jspdf; // Import jsPDF
-                    const pdf = new jsPDF({
-                        orientation: "landscape"
-                    }); // Create a new PDF instance
+                    });
+                    document.getElementById('exportPdf').addEventListener('click', async function() {
+                        const {
+                            jsPDF
+                        } = window.jspdf; // Import jsPDF
+                        const pdf = new jsPDF({
+                            orientation: "landscape"
+                        }); // Create a new PDF instance
 
-                    // Convert chart to Base64 image
-                    const chartImage = myChart.toBase64Image();
+                        // Convert chart to Base64 image
+                        const chartImage = myChart.toBase64Image();
 
-                    // Add the image to the PDF
-                    pdf.addImage(chartImage, 'PNG', 10, 10, 260,
-                        150); // (image, format, x, y, width, height)
+                        // Add the image to the PDF
+                        pdf.addImage(chartImage, 'PNG', 10, 10, 260,
+                            150); // (image, format, x, y, width, height)
 
-                    // Save the PDF
-                    pdf.save('evolution_impaye.pdf');
-                });
+                        // Save the PDF
+                        pdf.save('evolution_impaye.pdf');
+                    });
                 </script>
             </canvas>
         </div>
@@ -241,25 +241,25 @@ if ($_POST['choix'] == '4' || $_POST['choix'] == '12') {
         <footer>
 
             <script>
-            //Option : tous-clients / par-client
-            function displayTable(optionId, displayId) {
-                //remove checked from all options
-                const allOptionsRadio = document.querySelectorAll(".option-radio");
-                allOptionsRadio.forEach(radio => {
-                    radio.checked = false
-                });
-                //add checked to option
-                const toCheck = document.getElementById(optionId);
-                toCheck.checked = true;
-                //remove active from all displays
-                const allDisplays = document.querySelectorAll(".display");
-                allDisplays.forEach(display => {
-                    display.classList.remove("active");
-                })
-                //add active to display
-                const toDisplay = document.getElementById(displayId);
-                toDisplay.classList.add("active");
-            }
+                //Option : tous-clients / par-client
+                function displayTable(optionId, displayId) {
+                    //remove checked from all options
+                    const allOptionsRadio = document.querySelectorAll(".option-radio");
+                    allOptionsRadio.forEach(radio => {
+                        radio.checked = false
+                    });
+                    //add checked to option
+                    const toCheck = document.getElementById(optionId);
+                    toCheck.checked = true;
+                    //remove active from all displays
+                    const allDisplays = document.querySelectorAll(".display");
+                    allDisplays.forEach(display => {
+                        display.classList.remove("active");
+                    })
+                    //add active to display
+                    const toDisplay = document.getElementById(displayId);
+                    toDisplay.classList.add("active");
+                }
             </script>
 
         </footer>

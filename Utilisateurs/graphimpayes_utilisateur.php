@@ -41,7 +41,7 @@ $huit = $h->fetch();
     <!-- ICON -->
     <div class="logo">
         <img src="easyfunds-icon.png" class="small-icon">
-        <img src="easyfund-logo.png" class="small-logo">
+        <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 
     <!-- ONGLETS -->
@@ -80,67 +80,67 @@ $huit = $h->fetch();
         <div style="width:37%;">
             <canvas id="myChart">
                 <script>
-                const backgroundColorPlugin = {
-                    id: 'customBackgroundColor',
-                    beforeDraw: (chart) => {
-                        const ctx = chart.canvas.getContext('2d');
-                        ctx.save();
-                        ctx.fillStyle = '#272528';
-                        ctx.fillRect(0, 0, chart.width, chart.height);
-                        ctx.restore();
-                    }
-                };
-                Chart.register(backgroundColorPlugin);
-                var xValues = ["Fraude à la carte", "Compte à découvert", "Compte clôturé", "Compte bloqué",
-                    "Provision insuffisante", "Opération contestée par le débiteur", "Titulaire décédé",
-                    "Raison non communiqué, contactez la banque du client"
-                ];
-                <?php echo "var yValues = [$un[0],$deux[0],$trois[0],$quatre[0],$cinq[0],$six[0],$sept[0],$huit[0]];"; ?>
-                var barColors = [
-                    "#9E00FF",
-                    "#7823AC",
-                    "#9357B8",
-                    "#593A6D",
-                    "#C264FC",
-                    "#8B12D6",
-                    "#9E00FF",
-                    "#995AC1"
-                ];
-
-                var myChart = new Chart("myChart", {
-                    type: "doughnut",
-                    data: {
-                        labels: xValues,
-                        datasets: [{
-                            backgroundColor: barColors,
-                            data: yValues
-                        }]
-                    },
-                    options: {
-                        title: {
-                            display: false,
-                            text: "Somme des impayés (en euros)"
+                    const backgroundColorPlugin = {
+                        id: 'customBackgroundColor',
+                        beforeDraw: (chart) => {
+                            const ctx = chart.canvas.getContext('2d');
+                            ctx.save();
+                            ctx.fillStyle = '#272528';
+                            ctx.fillRect(0, 0, chart.width, chart.height);
+                            ctx.restore();
                         }
-                    }
-                });
-                document.getElementById('exportPdf').addEventListener('click', async function() {
-                    const {
-                        jsPDF
-                    } = window.jspdf; // Import jsPDF
-                    const pdf = new jsPDF({
-                        orientation: "landscape"
-                    }); // Create a new PDF instance
+                    };
+                    Chart.register(backgroundColorPlugin);
+                    var xValues = ["Fraude à la carte", "Compte à découvert", "Compte clôturé", "Compte bloqué",
+                        "Provision insuffisante", "Opération contestée par le débiteur", "Titulaire décédé",
+                        "Raison non communiqué, contactez la banque du client"
+                    ];
+                    <?php echo "var yValues = [$un[0],$deux[0],$trois[0],$quatre[0],$cinq[0],$six[0],$sept[0],$huit[0]];"; ?>
+                    var barColors = [
+                        "#9E00FF",
+                        "#7823AC",
+                        "#9357B8",
+                        "#593A6D",
+                        "#C264FC",
+                        "#8B12D6",
+                        "#9E00FF",
+                        "#995AC1"
+                    ];
 
-                    // Convert chart to Base64 image
-                    const chartImage = myChart.toBase64Image();
+                    var myChart = new Chart("myChart", {
+                        type: "doughnut",
+                        data: {
+                            labels: xValues,
+                            datasets: [{
+                                backgroundColor: barColors,
+                                data: yValues
+                            }]
+                        },
+                        options: {
+                            title: {
+                                display: false,
+                                text: "Somme des impayés (en euros)"
+                            }
+                        }
+                    });
+                    document.getElementById('exportPdf').addEventListener('click', async function() {
+                        const {
+                            jsPDF
+                        } = window.jspdf; // Import jsPDF
+                        const pdf = new jsPDF({
+                            orientation: "landscape"
+                        }); // Create a new PDF instance
 
-                    // Add the image to the PDF
-                    pdf.addImage(chartImage, 'PNG', 10, 10, 190,
-                    190); // (image, format, x, y, width, height)
+                        // Convert chart to Base64 image
+                        const chartImage = myChart.toBase64Image();
 
-                    // Save the PDF
-                    pdf.save('somme_impaye.pdf');
-                });
+                        // Add the image to the PDF
+                        pdf.addImage(chartImage, 'PNG', 10, 10, 190,
+                            190); // (image, format, x, y, width, height)
+
+                        // Save the PDF
+                        pdf.save('somme_impaye.pdf');
+                    });
                 </script>
             </canvas>
         </div>
@@ -152,25 +152,25 @@ $huit = $h->fetch();
         <footer>
 
             <script>
-            //Option : tous-clients / par-client
-            function displayTable(optionId, displayId) {
-                //remove checked from all options
-                const allOptionsRadio = document.querySelectorAll(".option-radio");
-                allOptionsRadio.forEach(radio => {
-                    radio.checked = false
-                });
-                //add checked to option
-                const toCheck = document.getElementById(optionId);
-                toCheck.checked = true;
-                //remove active from all displays
-                const allDisplays = document.querySelectorAll(".display");
-                allDisplays.forEach(display => {
-                    display.classList.remove("active");
-                })
-                //add active to display
-                const toDisplay = document.getElementById(displayId);
-                toDisplay.classList.add("active");
-            }
+                //Option : tous-clients / par-client
+                function displayTable(optionId, displayId) {
+                    //remove checked from all options
+                    const allOptionsRadio = document.querySelectorAll(".option-radio");
+                    allOptionsRadio.forEach(radio => {
+                        radio.checked = false
+                    });
+                    //add checked to option
+                    const toCheck = document.getElementById(optionId);
+                    toCheck.checked = true;
+                    //remove active from all displays
+                    const allDisplays = document.querySelectorAll(".display");
+                    allDisplays.forEach(display => {
+                        display.classList.remove("active");
+                    })
+                    //add active to display
+                    const toDisplay = document.getElementById(displayId);
+                    toDisplay.classList.add("active");
+                }
             </script>
 
         </footer>

@@ -29,7 +29,7 @@ include("../connexion.inc.php");
     <!-- ICON -->
     <div class="logo">
         <img src="easyfunds-icon.png" class="small-icon">
-        <img src="easyfund-logo.png" class="small-logo">
+        <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 
     <!-- ONGLETS -->
@@ -273,25 +273,25 @@ include("../connexion.inc.php");
     <footer>
 
         <script>
-        //Option : tous-clients / par-client
-        function displayTable(optionId, displayId) {
-            //remove checked from all options
-            const allOptionsRadio = document.querySelectorAll(".option-radio");
-            allOptionsRadio.forEach(radio => {
-                radio.checked = false
-            });
-            //add checked to option
-            const toCheck = document.getElementById(optionId);
-            toCheck.checked = true;
-            //remove active from all displays
-            const allDisplays = document.querySelectorAll(".display");
-            allDisplays.forEach(display => {
-                display.classList.remove("active");
-            })
-            //add active to display
-            const toDisplay = document.getElementById(displayId);
-            toDisplay.classList.add("active");
-        }
+            //Option : tous-clients / par-client
+            function displayTable(optionId, displayId) {
+                //remove checked from all options
+                const allOptionsRadio = document.querySelectorAll(".option-radio");
+                allOptionsRadio.forEach(radio => {
+                    radio.checked = false
+                });
+                //add checked to option
+                const toCheck = document.getElementById(optionId);
+                toCheck.checked = true;
+                //remove active from all displays
+                const allDisplays = document.querySelectorAll(".display");
+                allDisplays.forEach(display => {
+                    display.classList.remove("active");
+                })
+                //add active to display
+                const toDisplay = document.getElementById(displayId);
+                toDisplay.classList.add("active");
+            }
         </script>
 
     </footer>
