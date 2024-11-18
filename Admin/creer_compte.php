@@ -11,7 +11,7 @@ include("../connexion.inc.php");
 <html>
 
 <head>
-    <link rel="stylesheet" href="page.css">
+    <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Créer un compte</title>
     <link rel="icon" type="image/png" href="easyfunds-icon.png">
