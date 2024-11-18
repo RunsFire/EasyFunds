@@ -1,8 +1,8 @@
 <?php
 session_start();
-include('connexion.inc.php');
+include('../connexion.inc.php');
 if ($_SESSION['typeu'] != 1 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-    header('location:login.php');
+    header('location:../login.php');
 }
 
 $num = $_GET['num'];
@@ -30,7 +30,7 @@ if (suppDemande($num)) {
         $_SESSION['type'] = "création";
     }
     $_SESSION['demande_refuse_mail'] = $mail;
-    include("mail/maildemanderefuser.php");
+    include("../mail/maildemanderefuser.php");
     // on supprimer les variables provisoires
     unset($_SESSION['type']);
     unset($_SESSION['demande_refuse_mail']);

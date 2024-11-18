@@ -4,9 +4,9 @@ session_start();
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-    header('location:login.php');
+    header('location:../login.php');
 }
-include("connexion.inc.php");
+include("../connexion.inc.php");
 ?>
 <html>
 
@@ -90,7 +90,7 @@ include("connexion.inc.php");
                     // on envoie un mail a l'utilisateur
                     $_SESSION['cree_compte_login'] = $mail;
                     $_SESSION['cree_compte_mdp'] = $mdp;
-                    include("mail/creecomptemail.php");
+                    include("../mail/creecomptemail.php");
                     $_SESSION['creer_utilisateur'] = "effectuer";
                     // on supprime la demande
                     suppDemande($num);

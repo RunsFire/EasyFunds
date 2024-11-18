@@ -1,8 +1,8 @@
 <?php
 session_start();
-include('connexion.inc.php');
+include('../connexion.inc.php');
 if ($_SESSION['typeu'] != 1 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-    header('location:login.php');
+    header('location:../login.php');
 }
 
 $num = $_GET['num'];
@@ -31,7 +31,7 @@ if (suppUsr($num_utilisateur)) {
     // on envoie un mail a l'utilisateur
     $_SESSION['supp_utilisateur'] = "effectuer";
     $_SESSION['supp_utilisateur_mail'] = $mail;
-    include("mail/mailsupputilisateur.php");
+    include("../mail/mailsupputilisateur.php");
     unset($_SESSION['supp_utilisateur_mail']);
     // on supprimer la demande
     suppDemande($num);
