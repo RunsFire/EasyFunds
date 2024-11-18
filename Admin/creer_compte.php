@@ -14,14 +14,14 @@ include("../connexion.inc.php");
     <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Créer un compte</title>
-    <link rel="icon" type="image/png" href="easyfunds-icon.png">
+    <link rel="icon" type="image/png" href="/img/easyfunds-icon.png">
 </head>
 
 <!-- HEADER -->
 <header>
     <!-- ICON -->
     <div class="logo">
-        <img src="easyfunds-icon.png" class="small-icon">
+        <img src="/img/easyfunds-icon.png" class="small-icon">
         <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 

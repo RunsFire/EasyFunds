@@ -55,14 +55,14 @@ if ($_POST['choix'] == '4' || $_POST['choix'] == '12') {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js "></script>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
-    <link rel="icon" type="image/png" href="easyfunds-icon.png">
+    <link rel="icon" type="image/png" href="/img/easyfunds-icon.png">
 </head>
 
 <!-- HEADER -->
 <header>
     <!-- ICON -->
     <div class="logo">
-        <img src="easyfunds-icon.png" class="small-icon">
+        <img src="/img/easyfunds-icon.png" class="small-icon">
         <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 

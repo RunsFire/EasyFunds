@@ -19,14 +19,14 @@ if (isset($_POST["message"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacter un administrateur</title>
     <link rel="stylesheet" href="../page.css">
-    <link rel="icon" type="image/png" href="easyfunds-icon.png">
+    <link rel="icon" type="image/png" href="/img/easyfunds-icon.png">
 </head>
 </head>
 <!-- HEADER -->
 <header>
     <!-- ICON -->
     <div class="logo">
-        <img src="easyfunds-icon.png" class="small-icon">
+        <img src="/img/easyfunds-icon.png" class="small-icon">
         <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 

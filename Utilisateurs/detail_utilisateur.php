@@ -20,7 +20,7 @@ include("../connexion.inc.php");
     <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Détails de la remise </title>
-    <link rel="icon" href="easyfunds-icon.png">
+    <link rel="icon" href="/img/easyfunds-icon.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script src="../exports.js"></script>
 </head>
@@ -29,7 +29,7 @@ include("../connexion.inc.php");
 <header>
     <!-- ICON -->
     <div class="logo">
-        <img src="easyfunds-icon.png" class="small-icon">
+        <img src="/img/easyfunds-icon.png" class="small-icon">
         <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 

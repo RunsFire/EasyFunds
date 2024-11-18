@@ -9,14 +9,14 @@ session_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Connexion</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/png" href="easyfunds-icon.png">
+    <link rel="icon" type="image/png" href="/img/easyfunds-icon.png">
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 </head>
 
 <body>
     <header>
-        <img src="easyfunds-icon.png" alt="">
+        <img src="/img/easyfunds-icon.png" alt="">
         <div class="title">
             Easy Funds
         </div>

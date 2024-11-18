@@ -21,14 +21,14 @@ include("../connexion.inc.php");
     <meta charset="utf-8">
     <title>Impayés</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-    <link rel="icon" type="image/png" href="easyfunds-icon.png">
+    <link rel="icon" type="image/png" href="/img/easyfunds-icon.png">
 </head>
 
 <!-- HEADER -->
 <header>
     <!-- ICON -->
     <div class="logo">
-        <img src="easyfunds-icon.png" class="small-icon">
+        <img src="/img/easyfunds-icon.png" class="small-icon">
         <img src="/img/easyfund-logo.png" class="small-logo">
     </div>
 
