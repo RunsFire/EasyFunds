@@ -16,12 +16,12 @@ if (isset($_GET['remise'])) {
 <html>
 
 <head>
-    <link rel="stylesheet" href="page.css">
+    <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Détails de la remise </title>
     <link rel="icon" href="easyfunds-icon.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-    <script src="exports.js"></script>
+    <script src="../exports.js"></script>
 </head>
 
 <!-- HEADER -->
@@ -95,7 +95,7 @@ if (isset($_GET['remise'])) {
                     <div class="table-datas">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
+                            include("../connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['resets'])) {
                                 unset($_SESSION['filtre']);

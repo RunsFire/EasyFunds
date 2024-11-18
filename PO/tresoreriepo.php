@@ -2,21 +2,19 @@
 <?php
 session_start();
 if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
-    header('location:login.php');
+    header('location:../login.php');
 }
 if (!isset($_SESSION['siren'])) {
     $_SESSION['siren'] = "%";
     $_SESSION['raison'] = "%";
     $_SESSION['date'] = "%";
 }
-// if($_SESSION['typeu']!=2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-// 	header('location:login.php');
-// }
+include("../connexion.inc.php");
 ?>
 <html>
 
 <head>
-    <link rel="stylesheet" href="page.css">
+    <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Trésorerie des clients</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -48,7 +46,7 @@ if (!isset($_SESSION['siren'])) {
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
-                <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
+                <a class="disconnect" href="../deconnexion.php">Se déconnecter</a>
             </div>
         </section>
 
@@ -102,7 +100,6 @@ if (!isset($_SESSION['siren'])) {
                     <div class="table-datas">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['siren'])) {
                                 $_SESSION['siren'] = $_POST['siren'] . "%";
@@ -173,7 +170,6 @@ if (!isset($_SESSION['siren'])) {
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                            include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie WHERE SIREN LIKE\"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE\"" . $_SESSION['date'] . "\"");
                             $row = $requete->fetch();
                             $montant = str_replace(".", ",", $row[2]);
@@ -238,7 +234,7 @@ if (!isset($_SESSION['siren'])) {
         </section>
 
     </section>
-    <script src="exports.js"></script>
+    <script src="../exports.js"></script>
 
 
     <!-- FOOTER -->

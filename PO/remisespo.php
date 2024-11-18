@@ -1,17 +1,18 @@
 <?php
 session_start();
 if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
-    header('location:login.php');
+    header('location:../login.php');
 }
 if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-    header('location:login.php');
+    header('location:../login.php');
 }
+include("../connexion.inc.php");
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-    <link rel="stylesheet" href="page.css">
+    <link rel="stylesheet" href="../page.css">
     <meta charset="utf-8">
     <title>Remises des clients</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -45,7 +46,7 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
-                <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
+                <a class="disconnect" href="../deconnexion.php">Se déconnecter</a>
             </div>
         </section>
 
@@ -99,7 +100,6 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                     <div class="table-datas shorter-table" id="po-par-client">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['siren'])) {
                                 $_SESSION['siren'] = $_POST['siren'] . "%";
@@ -178,7 +178,6 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                            include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(numero_remise), sum(nbre_transaction), sum(montant_total) FROM remise");
                             $row = $requete->fetch();
                             $montant = str_replace(".", ",", $row[2]);
@@ -242,7 +241,7 @@ if ($_SESSION['typeu'] != 2 ||  !isset($_SESSION['login']) && !isset($_SESSION['
         </section>
 
     </section>
-    <script src="exports.js"></script>
+    <script src="../exports.js"></script>
 
 
     <!-- FOOTER -->
