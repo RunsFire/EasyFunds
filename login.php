@@ -68,18 +68,14 @@ session_start();
                         $_SESSION['num'] = $row[3];
                         $_SESSION['pseudo'] = $row[6];
                         $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='" . $_SESSION['login'] . "';");
-                        if ($_SESSION['typeu'] == '0' && $row[2] == 0) {
-                            header('location:tresorerie_utilisateur.php');
-                        } else if ($_SESSION['typeu'] == '0' && $row[2] == 1) {
+                        if ($row[2] == 1) {
                             header('location:mdpmdp.php');
+                        } else if ($_SESSION['typeu'] == '0' && $row[2] == 0) {
+                            header('location:/Utilisateurs/tresorerie_utilisateur.php');
                         } else if ($_SESSION['typeu'] == '1' && $row[2] == 0) {
-                            header('location:admin_demande.php');
-                        } else if ($_SESSION['typeu'] == '1' && $row[2] == 1) {
-                            header('location:mdpmdp.php');
+                            header('location:/Admin/admin_demande.php');
                         } else if ($_SESSION['typeu'] == '2' && $row[2] == 0) {
-                            header('location:tresoreriepo.php');
-                        } else if ($_SESSION['typeu'] == '2' && $row[2] == 1) {
-                            header('location:mdpmdp.php');
+                            header('location:/PO/tresoreriepo.php');
                         }
                     }
                 }
