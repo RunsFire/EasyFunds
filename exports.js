@@ -1,13 +1,40 @@
 function exportTableToPdf(contentId, date) {
-    const tableToExport = document.querySelector("div#" + contentId);
-    const opt = {
-        margin: 1,
-        filename: "extrait_du_" + date + ".pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
-    };
-    html2pdf().set(opt).from(tableToExport).toContainer().save();
+    const lignes = document.querySelectorAll("div#" + contentId + " tr");
+    const data = [];
+    lignes.forEach((ligne) => {
+        let tds = ligne.querySelectorAll("td");
+        const tmp = [];
+        if (tds.length == 0) {
+            tds = ligne.querySelectorAll("th");
+            tds.forEach((td) => {
+                tmp.push(td.textContent.toUpperCase());
+            });
+        } else {
+            tds.forEach((td) => {
+                tmp.push(td.textContent);
+            });
+        }
+        data.push(tmp);
+    });
+    const header = data.shift();
+
+    const { jsPDF } = window.jspdf; // Import jsPDF
+    const doc = new jsPDF("l", "pt", "a4");
+    doc.text("Hello world!", 10, 10);
+    doc.autoTable({
+        head: [header],
+        body: data,
+    });
+    doc.save("extrait_du_" + date + ".pdf");
+    // const tableToExport = document.querySelector("div#" + contentId);
+    // const opt = {
+    //     margin: 1,
+    //     filename: "extrait_du_" + date + ".pdf",
+    //     image: { type: "jpeg", quality: 0.98 },
+    //     html2canvas: { scale: 2 },
+    //     jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+    // };
+    // html2pdf().set(opt).from(tableToExport).toContainer().save();
 }
 
 function exportTableToCSV(contentId, date) {
