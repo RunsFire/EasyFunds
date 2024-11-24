@@ -19,10 +19,8 @@ if (!isset($_SESSION['siren'])) {
     <link rel="stylesheet" href="page.css">
     <meta charset="utf-8">
     <title>Trésorerie des clients</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="icon" type="image/png" href="easyfunds-icon.png">
 </head>
 
@@ -248,25 +246,25 @@ if (!isset($_SESSION['siren'])) {
     <footer>
 
         <script>
-        //Option : tous-clients / par-client
-        function displayTable(optionId, displayId) {
-            //remove checked from all options
-            const allOptionsRadio = document.querySelectorAll(".option-radio");
-            allOptionsRadio.forEach(radio => {
-                radio.checked = false
-            });
-            //add checked to option
-            const toCheck = document.getElementById(optionId);
-            toCheck.checked = true;
-            //remove active from all displays
-            const allDisplays = document.querySelectorAll(".display");
-            allDisplays.forEach(display => {
-                display.classList.remove("active");
-            })
-            //add active to display
-            const toDisplay = document.getElementById(displayId);
-            toDisplay.classList.add("active");
-        }
+            //Option : tous-clients / par-client
+            function displayTable(optionId, displayId) {
+                //remove checked from all options
+                const allOptionsRadio = document.querySelectorAll(".option-radio");
+                allOptionsRadio.forEach(radio => {
+                    radio.checked = false
+                });
+                //add checked to option
+                const toCheck = document.getElementById(optionId);
+                toCheck.checked = true;
+                //remove active from all displays
+                const allDisplays = document.querySelectorAll(".display");
+                allDisplays.forEach(display => {
+                    display.classList.remove("active");
+                })
+                //add active to display
+                const toDisplay = document.getElementById(displayId);
+                toDisplay.classList.add("active");
+            }
         </script>
 
     </footer>

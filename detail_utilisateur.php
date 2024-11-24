@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
+if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '0') {
     header('location:login.php');
 }
 if (!isset($_SESSION['siren'])) {
@@ -35,10 +35,9 @@ if (isset($_GET['remise'])) {
 
     <!-- ONGLETS -->
     <div class="tabs">
-        <a class="tab" href="tresoreriepo.php">Trésorerie</a>
-        <a class="tab active" href="detailpo.php">Remises</a>
-        <a class="tab" href="impayespo.php">Impayés</a>
-        <a class="tab" href="demandepo.php">Demandes</a>
+        <a class="tab" href="tresorerie_utilisateur.php">Trésorerie</a>
+        <a class="tab active" href="remises_utilisateur.php">Remises</a>
+        <a class="tab" href="impayes_utilisateur.php">Impayés</a>
     </div>
 </header>
 
@@ -49,14 +48,14 @@ if (isset($_GET['remise'])) {
         <section>
             <!-- Retour -->
             <div class="frame">
-                <a href="remisespo.php"><img class="return"
+                <a href="remises_utilisateur.php"><img class="return"
                         src="https://www.pngkit.com/png/full/24-244890_left-arrow-curved-black-symbol-comments-turn-page.png"></a>
             </div>
 
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
-                <a class="disconnect" href="">Se déconnecter</a>
+                <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
             </div>
 
             <!-- Onglet, Transaction de la remise -->
@@ -114,7 +113,6 @@ if (isset($_GET['remise'])) {
                             } else {
                                 $detail = $cnx->query("SELECT SIREN,date_vente,nCarte,reseau,num_detail,montant FROM tableau_details WHERE numero_remise=" . $_SESSION['codeRemise'] . ";");
                             }
-                            echo "----" . $detail->rowCount();
                             if ($detail->rowCount() > 0) {
                                 while ($ligne = $detail->fetch(PDO::FETCH_OBJ)) {
                                     $d = date_create(datetime: $ligne->date_vente);
@@ -175,7 +173,7 @@ if (isset($_GET['remise'])) {
                 <!----- SOUS LE TABLEAU ----->
                 <div class="frame row-space-between" style="margin-top: 2px;">
                     <!-- TRI -->
-                    <form method="POST" action="detailpo.php">
+                    <form method="POST" action="detail_utilisateur.php">
                         <select name="filtre">
                             <option selected disabled hidden>--</option>
                             <option value="SIREN">N° SIREN</option>
