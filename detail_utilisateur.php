@@ -11,6 +11,12 @@ if (!isset($_SESSION['siren'])) {
 if (isset($_GET['remise'])) {
     $_SESSION['codeRemise'] = $_GET['remise'];
 }
+include("connexion.inc.php");
+$num = $_SESSION['num'];
+$requete = $cnx->query("SELECT pseudo, raison_social FROM utilisateur WHERE num= $num ");
+$row = $requete->fetch();
+$siren = $row[0];
+$raison_social = $row[1];
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,7 +26,8 @@ if (isset($_GET['remise'])) {
     <meta charset="utf-8">
     <title>Détails de la remise </title>
     <link rel="icon" href="easyfunds-icon.png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <script src="exports.js"></script>
 </head>
 
@@ -94,7 +101,6 @@ if (isset($_GET['remise'])) {
                     <div class="table-datas">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['resets'])) {
                                 unset($_SESSION['filtre']);
@@ -198,7 +204,8 @@ if (isset($_GET['remise'])) {
                             <option value="pdf">PDF</option>
                             <option value="xls">XLS</option>
                         </select>
-                        <button onclick="exporter('po-par-client-display')">Exporter</button>
+                        <button
+                            onclick="exporter('po-par-client-display','<?= $siren ?>' , '<?= $raison_social ?>')">Exporter</button>
                     </form>
                 </div>
             </div>

@@ -11,7 +11,12 @@ if (!isset($_SESSION['siren3'])) {
     $_SESSION['date4'] = "3000-01-01";
     $_SESSION['numdossier'] = "%";
 }
+include("connexion.inc.php");
 $num = $_SESSION['num'];
+$requete = $cnx->query("SELECT pseudo, raison_social FROM utilisateur WHERE num= $num ");
+$row = $requete->fetch();
+$siren = $row[0];
+$raison_social = $row[1];
 ?>
 <html>
 
@@ -128,7 +133,6 @@ $num = $_SESSION['num'];
                     <div class="table-datas shorter-table">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['siren'])) {
                                 $_SESSION['siren3'] = $_POST['siren'] . "%";
@@ -208,7 +212,6 @@ $num = $_SESSION['num'];
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                            include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(numero_impaye), sum(montant) FROM impaye WHERE num_utilisateur= $num AND SIREN LIKE\"" . $_SESSION['siren3'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison3'] . "\"AND date_vente >= \"" . $_SESSION['date3'] . "\" AND date_remise<= \"" . $_SESSION['date4'] . "\" AND numero_impaye LIKE   \"" . $_SESSION['numdossier'] . "\" ");
                             $row = $requete->fetch();
                             $montant = str_replace(".", ",", 0 + $row[1]);
@@ -260,7 +263,8 @@ $num = $_SESSION['num'];
                             <option value="pdf">PDF</option>
                             <option value="xls">XLS</option>
                         </select>
-                        <button onclick="exporter('po-par-client-display')">Exporter</button>
+                        <button
+                            onclick="exporter('po-par-client-display','<?= $siren ?>' , '<?= $raison_social ?>')">Exporter</button>
                     </form>
                 </div>
             </div>

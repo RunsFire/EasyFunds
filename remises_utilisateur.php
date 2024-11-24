@@ -9,7 +9,12 @@ if (!isset($_SESSION['siren2'])) {
     $_SESSION['raison2'] = "%";
     $_SESSION['date2'] = "%";
 }
+include("connexion.inc.php");
 $num = $_SESSION['num'];
+$requete = $cnx->query("SELECT pseudo, raison_social FROM utilisateur WHERE num= $num ");
+$row = $requete->fetch();
+$siren = $row[0];
+$raison_social = $row[1];
 ?>
 <html>
 
@@ -99,7 +104,6 @@ $num = $_SESSION['num'];
                     <div class="table-datas shorter-table" id="po-par-client">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['siren'])) {
                                 $_SESSION['siren2'] = $_POST['siren'] . "%";
@@ -144,7 +148,7 @@ $num = $_SESSION['num'];
                                     } else {
                                         echo "<tr class=\"style2\"";
                                     }
-                                    echo "onclick=\"window.location.href='detailpo.php?remise=$ligne->numero_remise'\">";
+                                    echo "onclick=\"window.location.href='detail_utilisateur.php?remise=$ligne->numero_remise'\">";
                                     echo "<td style=\"width:20%\">$ligne->SIREN</td>";
                                     echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
                                     echo "<td style=\"width:25%\">$ligne->nbre_transaction</td>";
@@ -170,7 +174,6 @@ $num = $_SESSION['num'];
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                            include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(numero_remise), sum(nbre_transaction), sum(montant_total) FROM remise WHERE num_utilisateur= $num AND SIREN LIKE\"" . $_SESSION['siren2'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison2'] . "\" AND date_traitement LIKE\"" . $_SESSION['date2'] . "\" ");
                             $row = $requete->fetch();
                             $montant = str_replace(".", ",", 0 + $row[2]);
@@ -215,7 +218,7 @@ $num = $_SESSION['num'];
                             <option value="pdf">PDF</option>
                             <option value="xls">XLS</option>
                         </select>
-                        <button onclick="exporter('client')">Exporter</button>
+                        <button onclick="exporter('client','<?= $siren ?>' , '<?= $raison_social ?>')">Exporter</button>
                     </form>
                 </div>
             </div>

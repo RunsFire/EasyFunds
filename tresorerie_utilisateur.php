@@ -12,7 +12,12 @@ if (!isset($_SESSION['siren'])) {
 if ($_SESSION['typeu'] != 0 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
     header('location:login.php');
 }
+include("connexion.inc.php");
 $num = $_SESSION['num'];
+$requete = $cnx->query("SELECT pseudo, raison_social FROM utilisateur WHERE num= $num ");
+$row = $requete->fetch();
+$siren = $row[0];
+$raison_social = $row[1];
 ?>
 <html>
 
@@ -103,7 +108,6 @@ $num = $_SESSION['num'];
                     <div class="table-datas">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['siren'])) {
                                 $_SESSION['siren'] = $_POST['siren'] . "%";
@@ -168,7 +172,6 @@ $num = $_SESSION['num'];
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                            include("connexion.inc.php");
                             $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie WHERE num_utilisateur= $num AND SIREN LIKE\"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE\"" . $_SESSION['date'] . "\"");
                             $row = $requete->fetch();
                             $montant = str_replace(".", ",", 0 + $row[2]);
@@ -214,7 +217,8 @@ $num = $_SESSION['num'];
                             <option value="pdf">PDF</option>
                             <option value="xls">XLS</option>
                         </select>
-                        <button onclick="exporter('clients')" class="export">Exporter</button>
+                        <button onclick="exporter('clients','<?= $siren ?>' , '<?= $raison_social ?>')"
+                            class="export">Exporter</button>
                     </form>
 
                 </div>
