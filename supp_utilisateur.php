@@ -6,9 +6,10 @@ if ($_SESSION['typeu'] != 1 ||  !isset($_SESSION['login']) && !isset($_SESSION['
 }
 
 $num = $_GET['num'];
-$result = $cnx->query("SELECT mail FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
+$result = $cnx->query("SELECT mail,num_utilisateur FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE num_demande=$num ;");
 $result2 = $result->fetch(PDO::FETCH_ASSOC);
 $mail = $result2['mail'];
+$num_utilisateur = $result2['num_utilisateur'];
 
 function suppDemande($num)
 {
@@ -26,7 +27,7 @@ function suppUsr($num)
     return $result;
 }
 
-if (suppUsr($num)) {
+if (suppUsr($num_utilisateur)) {
     // on envoie un mail a l'utilisateur
     $_SESSION['supp_utilisateur'] = "effectuer";
     $_SESSION['supp_utilisateur_mail'] = $mail;

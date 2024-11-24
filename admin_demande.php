@@ -67,7 +67,7 @@ if ($_SESSION['typeu'] != 1 || !isset($_SESSION['login']) && !isset($_SESSION['m
                             <?php
                             include("connexion.inc.php");
                             $var = 0;
-                            $demandes = $cnx->query("SELECT num_demande, raison_social,mail,type_demande,info_supplementaire FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE typeU<3 ORDER BY type_demande ;");
+                            $demandes = $cnx->query("SELECT num_demande, raison_social,mail,type_demande,info_supplementaire FROM utilisateur u Join demande_compte d ON u.num=d.num_utilisateur WHERE typeU<3 ORDER BY type_demande,num_demande DESC ;");
                             if ($demandes == null) {
                                 echo "Pas de demande";
                             } else {

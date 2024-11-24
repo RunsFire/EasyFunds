@@ -20,8 +20,7 @@ if (isset($_GET['remise'])) {
     <meta charset="utf-8">
     <title>Détails de la remise </title>
     <link rel="icon" href="easyfunds-icon.png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script src="exports.js"></script>
 </head>
 
@@ -56,7 +55,7 @@ if (isset($_GET['remise'])) {
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
                 <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
-                <a class="disconnect" href="">Se déconnecter</a>
+                <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
             </div>
 
             <!-- Onglet, Transaction de la remise -->
@@ -114,7 +113,6 @@ if (isset($_GET['remise'])) {
                             } else {
                                 $detail = $cnx->query("SELECT SIREN,date_vente,nCarte,reseau,num_detail,montant FROM tableau_details WHERE numero_remise=" . $_SESSION['codeRemise'] . ";");
                             }
-                            echo "----" . $detail->rowCount();
                             if ($detail->rowCount() > 0) {
                                 while ($ligne = $detail->fetch(PDO::FETCH_OBJ)) {
                                     $d = date_create(datetime: $ligne->date_vente);

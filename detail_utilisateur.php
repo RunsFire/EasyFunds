@@ -20,8 +20,7 @@ if (isset($_GET['remise'])) {
     <meta charset="utf-8">
     <title>Détails de la remise </title>
     <link rel="icon" href="easyfunds-icon.png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script src="exports.js"></script>
 </head>
 

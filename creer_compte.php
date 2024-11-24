@@ -33,26 +33,25 @@ include("connexion.inc.php");
 </header>
 
 <body>
-    <section class="container">
-
-        <form method="POST" action="creer_compte.php">
-            <label for="pseudo">Pseudo: </label>
-            <input type="text" name="pseudo" required><br>
+    <section class="container has-frame">
+        <form method="POST" action="creer_compte.php" class="twopart-form">
+            <label for="pseudo">SIREN: </label>
+            <input type="text" name="pseudo" required>
             <input type="numeric" name="num" required hidden value="<?php if (isset($_GET['num'])) {
                                                                         echo $_GET['num'];
                                                                     }
                                                                     ?>">
             <label for="raison_social">Raison social:</label>
-            <input type="text" name="raison_social" required><br>
+            <input type="text" name="raison_social" required>
             <label for="mail">Mail:</label>
-            <input type="text" name="mail" required><br>
+            <input type="text" name="mail" required>
             <label for="type_compte">Type de compte:</label>
             <select name="type_compte" required>
                 <option value="utilisateur">Utilisateur</option>
                 <option value="admin">Admin</option>
-            </select><br>
+            </select>
             <button type="submit">Valider</button>
-            <button name="resets" value="resets">Rénitialiser</button>
+            <button type="reset" name="resets" value="resets">Rénitialiser</button>
         </form>
 
         <?php

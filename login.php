@@ -35,7 +35,7 @@ session_start();
                 <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility()">
                     <i id="eye-icon" class="eye"></i>
                 </button>
-                <a class="rightnote" href="mdpoublie.php">Mot de passe oubli&eacute; ?</a>
+                <div class="rightnote"> <a href="mdpoublie.php">Mot de passe oubli&eacute; ?</a></div>
                 <?php
                 include("connexion.inc.php");
                 if (isset($_POST['mail']) && isset($_POST['mdp'])) {
