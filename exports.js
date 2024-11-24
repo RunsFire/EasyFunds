@@ -1,4 +1,70 @@
-function exportTableToPdf(contentId, date) {
+function exportTableToPdf(data, nom_fichier, nom_client, siren) {
+    // on recupere la premier ligne du tableau (le header)
+    const header = data.shift();
+
+    // on appelle l'API jspdf au format a4 avec une orientation portrait
+    const { jsPDF } = window.jspdf; // Import jsPDF
+    const doc = new jsPDF("p", "pt", "a4");
+
+    // si on a mis les valeurs du client (donc c'est un client qui demande l'export)
+    if (nom_client != "" && siren != "") {
+        // on recupere le nom du ficheir pour savoir si on export des remises, des impayes ou des transactions(tresorerie)
+        var path = window.location.pathname;
+        var nom_page = path.split("/").pop();
+
+        // on ecrit dans le document
+        doc.text(
+            "LISTE DES " +
+                nom_page.toUpperCase() +
+                " DE L'ENTREPRISE" +
+                nom_client.toUpperCase() +
+                " N° SIREN " +
+                siren.toUpperCase(),
+            100,
+            20
+        );
+    }
+    // on ajoute la table
+    doc.autoTable({
+        head: [header],
+        body: data,
+    });
+    // on fait telechager
+    doc.save(nom_fichier + ".pdf");
+}
+
+function exportTableToCSVouXLS(type, data, nom_fichier) {
+    fetch("exporter.php?type=" + type, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    })
+        .then((reponse) => reponse.blob())
+        .then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = nom_fichier + "." + type;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch((error) => {});
+}
+
+function exporter(contentId, nom_client = "", siren = "") {
+    // on recupere le type d'export demander par l'utilisateur
+    const select = document.querySelector("form.table-export select");
+    const index = select.selectedIndex;
+    const choix = select.options[index].value;
+    // on recupere la date
+    const date = new Date().toLocaleDateString();
+    // on la met dans le nom du fichier
+    const nom_fichier = "extrait_du_" + date;
+
+    // on met dans un tableau les valeurs du tableau html
     const lignes = document.querySelectorAll("div#" + contentId + " tr");
     const data = [];
     lignes.forEach((ligne) => {
@@ -16,96 +82,10 @@ function exportTableToPdf(contentId, date) {
         }
         data.push(tmp);
     });
-    const header = data.shift();
-
-    const { jsPDF } = window.jspdf; // Import jsPDF
-    const doc = new jsPDF("l", "pt", "a4");
-    doc.text("Hello world!", 10, 10);
-    doc.autoTable({
-        head: [header],
-        body: data,
-    });
-    doc.save("extrait_du_" + date + ".pdf");
-    // const tableToExport = document.querySelector("div#" + contentId);
-    // const opt = {
-    //     margin: 1,
-    //     filename: "extrait_du_" + date + ".pdf",
-    //     image: { type: "jpeg", quality: 0.98 },
-    //     html2canvas: { scale: 2 },
-    //     jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
-    // };
-    // html2pdf().set(opt).from(tableToExport).toContainer().save();
-}
-
-function exportTableToCSV(contentId, date) {
-    const lignes = document.querySelectorAll("div#" + contentId + " tr");
-    const data = [];
-    lignes.forEach((ligne) => {
-        let tds = ligne.querySelectorAll("td");
-        if (tds.length == 0) {
-            tds = ligne.querySelectorAll("th");
-        }
-        const tmp = [];
-        tds.forEach((td) => {
-            tmp.push(td.textContent);
-        });
-        data.push(tmp);
-    });
-
-    fetch("exporter.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-    })
-        .then((reponse) => reponse.blob())
-        .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "extrait_du_" + date + ".csv";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-        })
-        .catch((error) => {});
-}
-
-function exportTableToXLS(contentId, date) {
-    let table = document.querySelector("div#" + contentId);
-    // Extract the HTML content of the table
-    const html = table.outerHTML;
-    // Create a Blob containing the HTML data with Excel MIME type
-    const blob = new Blob([html], { type: "application/vnd.ms-excel" });
-
-    // Create a URL for the Blob
-    const url = URL.createObjectURL(blob);
-
-    // Create a temporary anchor element for downloading
-    const a = document.createElement("a");
-    a.href = url;
-
-    // Set the desired filename for the downloaded file
-    a.download = "extrait_du_" + date + ".xls";
-
-    // Simulate a click on the anchor to trigger download
-    a.click();
-
-    // Release the URL object to free up resources
-    URL.revokeObjectURL(url);
-}
-
-function exporter(contentId) {
-    const select = document.querySelector("form.table-export select");
-    const index = select.selectedIndex;
-    const choix = select.options[index].value;
-    const date = new Date().toLocaleDateString();
-    if (choix === "csv") {
-        exportTableToCSV(contentId, date);
-    } else if (choix === "pdf") {
-        exportTableToPdf(contentId, date);
-    } else if (choix === "xls") {
-        exportTableToXLS(contentId, date);
+    // selon le choix de l'utilisateur on utilise la fonction qui correspond
+    if (choix === "pdf") {
+        exportTableToPdf(data, nom_fichier, nom_client, siren);
+    } else {
+        exportTableToCSVouXLS(choix, data, nom_fichier);
     }
 }
