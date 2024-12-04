@@ -78,12 +78,12 @@ include("connexion.inc.php");
             $test_mail = $cnx->prepare("SELECT mail FROM utilisateur WHERE mail= ?;");
             $test_mail->execute([$mail]);
             if ($test_mail->rowCount() > 0) {
-                echo 'ce mail est deja utiliser par un utilisateur';
+                echo "<h4 class='alert'>Ce mail est deja utiliser par un utilisateur</h4>";
             } else {
                 // si le mail n'est pas deja utiliser on insert dans la bdd
                 $result = $cnx->prepare("INSERT utilisateur SET pseudo =?,raison_social =?,mail=?,typeU =?,mdp =?,mdpProvisoire = 1,nbr_essai = 0;");
                 if (!$result->execute([$pseudo, $raison_social, $mail, $type_compte, password_hash($mdp, PASSWORD_BCRYPT)])) {
-                    echo "Échec de l'ajout de l'utilisateur.";
+                    echo "<h4 class='alert'>Échec de l'ajout de l'utilisateur.</h4>";
                 } else {
                     $num = $_POST["num"];
                     // on envoie un mail a l'utilisateur
@@ -109,25 +109,25 @@ include("connexion.inc.php");
     <footer>
 
         <script>
-        //Option : tous-clients / par-client
-        function displayTable(optionId, displayId) {
-            //remove checked from all options
-            const allOptionsRadio = document.querySelectorAll(" .option-radio");
-            allOptionsRadio.forEach(radio => {
-                radio.checked = false
-            });
-            //add checked to option
-            const toCheck = document.getElementById(optionId);
-            toCheck.checked = true;
-            //remove active from all displays
-            const allDisplays = document.querySelectorAll(".display");
-            allDisplays.forEach(display => {
-                display.classList.remove("active");
-            })
-            //add active to display
-            const toDisplay = document.getElementById(displayId);
-            toDisplay.classList.add("active");
-        }
+            //Option : tous-clients / par-client
+            function displayTable(optionId, displayId) {
+                //remove checked from all options
+                const allOptionsRadio = document.querySelectorAll(" .option-radio");
+                allOptionsRadio.forEach(radio => {
+                    radio.checked = false
+                });
+                //add checked to option
+                const toCheck = document.getElementById(optionId);
+                toCheck.checked = true;
+                //remove active from all displays
+                const allDisplays = document.querySelectorAll(".display");
+                allDisplays.forEach(display => {
+                    display.classList.remove("active");
+                })
+                //add active to display
+                const toDisplay = document.getElementById(displayId);
+                toDisplay.classList.add("active");
+            }
         </script>
 
     </footer>

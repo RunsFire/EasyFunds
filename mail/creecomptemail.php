@@ -27,12 +27,12 @@ try {
     $mail->addAddress($_SESSION['cree_compte_login']);     //Add a recipient
 
     $mail->SMTPDebug = 0;
-    
+
     //Content
     $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Code provisoire de connexion';
-    $mail->Body    = 'Bonjour, <br> Voici votre code de connexion, qui sera a changer lors de la prochaine connexion : <br>'.$_SESSION['cree_compte_mdp'].' <a href=\'https://damien-tremerie.go.yj.fr/easyfunds2/login.php\'><br>Cliquez ici</a> pour vous connecter.<br>Merci pour votre confiance.';
-    $mail->AltBody = 'Bonjour, <br> Voici votre code de connexion, qui sera a changer lors de la prochaine connexion : <br>'.$_SESSION['cree_compte_mdp'].' <a href=\'https://damien-tremerie.go.yj.fr/easyfunds2/login.php\'><br>Cliquez ici</a> pour vous connecter.<br>Merci pour votre confiance.';
+    $mail->Subject = 'Creation de compte';
+    $mail->Body    = 'Bonjour, <br> Votre compte a bien ete cree.<br> Voici votre code de connexion, qui sera a changer lors de la prochaine connexion : <br>' . $_SESSION['cree_compte_mdp'] . ' <a href=\'https://damien-tremerie.go.yj.fr/easyfunds2/login.php\'><br>Cliquez ici</a> pour vous connecter.<br>Merci pour votre confiance.';
+    $mail->AltBody = 'Bonjour, <br> Votre compte a bien ete cree.<br> Voici votre code de connexion, qui sera a changer lors de la prochaine connexion : <br>' . $_SESSION['cree_compte_mdp'] . ' <a href=\'https://damien-tremerie.go.yj.fr/easyfunds2/login.php\'><br>Cliquez ici</a> pour vous connecter.<br>Merci pour votre confiance.';
 
     $mail->send();
 } catch (Exception $e) {
