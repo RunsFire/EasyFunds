@@ -1,35 +1,50 @@
-function exportTableToPdf(contentId) {
-    const tableToExport = document.querySelector(
-        "div#" + contentId + " div.table.frame"
-    );
-    console.log(tableToExport);
-    const opt = {
-        margin: 1,
-        filename: "export.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
-    };
+function exportTableToPdf(data, nom_fichier, nom_client, siren) {
+    // on recupere la premier ligne du tableau (le header)
+    const header = data.shift();
 
-    html2pdf().set(opt).from(tableToExport).save();
+    // on appelle l'API jspdf au format a4 avec une orientation portrait
+    const { jsPDF } = window.jspdf; // Import jsPDF
+    const doc = new jsPDF("p", "pt", "a4");
+
+    // si on a mis les valeurs du client (donc c'est un client qui demande l'export)
+    if (nom_client != "" && siren != "") {
+        // on recupere le nom du ficheir pour savoir si on export des remises, des impayes ou des transactions(tresorerie)
+        var path = window.location.pathname;
+        var nom_fichier_actuel = path.split("/").pop();
+        var nom_page = nom_fichier_actuel.split(".")[0];
+        var nom_page = nom_fichier_actuel.split("_utilisateur")[0];
+        doc.setFontSize(15);
+
+        if (nom_page == "tresorerie") {
+            nom_page = "transactions";
+        } else if (nom_page == "detail") {
+            nom_page += "s remise";
+        }
+        // on ecrit dans le document
+        doc.text(
+            "LISTE DES " +
+                nom_page.toUpperCase() +
+                " DE L'ENTREPRISE " +
+                nom_client.toUpperCase(),
+            300,
+            20,
+            { align: "center" }
+        );
+        doc.text("N° SIREN " + siren.toUpperCase(), 300, 35, {
+            align: "center",
+        });
+    }
+    // on ajoute la table
+    doc.autoTable({
+        head: [header],
+        body: data,
+    });
+    // on fait telechager
+    doc.save(nom_fichier + ".pdf");
 }
 
-function exportTableToCSV(contentId) {
-    const lignes = document.querySelectorAll("div#" + contentId + " tr");
-    const data = [];
-    lignes.forEach((ligne) => {
-        let tds = ligne.querySelectorAll("td");
-        if (tds.length == 0) {
-            tds = ligne.querySelectorAll("th");
-        }
-        const tmp = [];
-        tds.forEach((td) => {
-            tmp.push(td.textContent);
-        });
-        data.push(tmp);
-    });
-
-    fetch("exporter.php", {
+function exportTableToCSVouXLS(type, data, nom_fichier) {
+    fetch("exporter.php?type=" + type, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -41,7 +56,7 @@ function exportTableToCSV(contentId) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "export.csv";
+            a.download = nom_fichier + "." + type;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -49,42 +64,38 @@ function exportTableToCSV(contentId) {
         .catch((error) => {});
 }
 
-function exportTableToXLS(contentId) {
-    let table = document.querySelector("div#" + contentId + " div.table.frame");
-    // Extract the HTML content of the table
-    const html = table.outerHTML;
-
-    // Create a Blob containing the HTML data with Excel MIME type
-    const blob = new Blob([html], { type: "application/vnd.ms-excel" });
-
-    // Create a URL for the Blob
-    const url = URL.createObjectURL(blob);
-
-    // Create a temporary anchor element for downloading
-    const a = document.createElement("a");
-    a.href = url;
-
-    // Set the desired filename for the downloaded file
-    a.download = "export.xls";
-
-    // Simulate a click on the anchor to trigger download
-    a.click();
-
-    // Release the URL object to free up resources
-    URL.revokeObjectURL(url);
-}
-
-function exporter(contentId) {
-    const select = document.querySelector(
-        "div#" + contentId + " form.table-export select"
-    );
+function exporter(contentId, nom_client = "", siren = "") {
+    // on recupere le type d'export demander par l'utilisateur
+    const select = document.querySelector("form.table-export select");
     const index = select.selectedIndex;
     const choix = select.options[index].value;
-    if (choix === "csv") {
-        exportTableToCSV(contentId);
-    } else if (choix === "pdf") {
-        exportTableToPdf(contentId);
-    } else if (choix === "xls") {
-        exportTableToXLS(contentId);
+    // on recupere la date
+    const date = new Date().toLocaleDateString();
+    // on la met dans le nom du fichier
+    const nom_fichier = "extrait_du_" + date;
+
+    // on met dans un tableau les valeurs du tableau html
+    const lignes = document.querySelectorAll("div#" + contentId + " tr");
+    const data = [];
+    lignes.forEach((ligne) => {
+        let tds = ligne.querySelectorAll("td");
+        const tmp = [];
+        if (tds.length == 0) {
+            tds = ligne.querySelectorAll("th");
+            tds.forEach((td) => {
+                tmp.push(td.textContent.toUpperCase());
+            });
+        } else {
+            tds.forEach((td) => {
+                tmp.push(td.textContent);
+            });
+        }
+        data.push(tmp);
+    });
+    // selon le choix de l'utilisateur on utilise la fonction qui correspond
+    if (choix === "pdf") {
+        exportTableToPdf(data, nom_fichier, nom_client, siren);
+    } else {
+        exportTableToCSVouXLS(choix, data, nom_fichier);
     }
 }

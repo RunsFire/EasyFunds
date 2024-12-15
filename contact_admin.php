@@ -1,10 +1,10 @@
-<?php session_start(); 
+<?php session_start();
 include("connexion.inc.php");
 $ok = false;
-if (isset($_POST["message"])){
+if (isset($_POST["message"])) {
     $message = $_POST['message'];
     $num = $_SESSION['num'];
-    $cnx -> exec("INSERT INTO demande_compte(type_demande,info_supplementaire) VALUES ('b','$message');");
+    $cnx->exec("INSERT INTO demande_compte(type_demande,info_supplementaire,num_utilisateur) VALUES ('b','$message',$num);");
     $ok = true;
 } ?>
 <!DOCTYPE html>
@@ -18,42 +18,42 @@ if (isset($_POST["message"])){
 </head>
 
 <body>
-    <header>
-        <img src="easyfunds-icon.png" alt="">
-        <div class="title">
-            Easy Funds
-        </div>
-    </header>
-    <main>
-        <section>
-            <div class="cat">
-                <?php
-            if ($ok){?>
-                Votre demande a bien été prise en compte
-                <?php
-                    $req = $cnx->query("SELECT mail from  utilisateur WHERE typeu='1'");
-                    while( $ligne = $req->fetch(PDO::FETCH_OBJ)){
-                        $_SESSION['mail_admin']=$ligne->mail;
-                        include("mail/mailcomptebloque.php");
-                    }
-                    unset($_SESSION['mail_admin'])
-                ?>
-            </div>
+<header>
+    <img src="easyfunds-icon.png" alt="">
+    <div class="title">
+        Easy Funds
+    </div>
+</header>
+<main>
+    <section>
+        <div class="cat">
             <?php
-            }else{
+            if ($ok) { ?>
+            Votre demande a bien été prise en compte
+            <?php
+            $req = $cnx->query("SELECT mail from  utilisateur WHERE typeu='1'");
+            while ($ligne = $req->fetch(PDO::FETCH_OBJ)) {
+                $_SESSION['mail_admin'] = $ligne->mail;
+                include("mail/mailcomptebloque.php");
+            }
+            unset($_SESSION['mail_admin'])
+            ?>
+        </div>
+        <?php
+        } else {
             ?>
             </div>
-            <form method="POST" action="">
+            <form method="POST" action="" style="display: flex; flex-direction: column; align-items: center">
                 <label for="message">Expliquer pourquoi vous vous êtes trompé autant de fois</label>
-                <textarea name="message" placeholder="Entrez votre message" rows="6" cols="40" required></textarea><br>
-                <input type="submit" name="submit" value="Envoyer" /><br><br>
+                <textarea class="tapercentgrey" name="message" placeholder="Entrez votre message" rows="6" cols="40" required></textarea><br>
+                <input type="submit" name="submit" value="Envoyer" style="width: fit-content; padding: 0 50px"/><br><br>
             </form>
             <?php
-            }
-            ?>
-        </section>
-        <script src="form.js"></script>
-    </main>
+        }
+        ?>
+    </section>
+    <script src="form.js"></script>
+</main>
 </body>
 
 </html>

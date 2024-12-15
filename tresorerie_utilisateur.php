@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <?php
 session_start();
-if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] == '1') {
-    header('location:admin_demande.php');
-}
-else if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
+if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '0') {
     header('location:login.php');
 }
 if (!isset($_SESSION['siren'])) {
@@ -12,16 +9,22 @@ if (!isset($_SESSION['siren'])) {
     $_SESSION['raison'] = "%";
     $_SESSION['date'] = "%";
 }
-// if($_SESSION['typeu']!=2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-// 	header('location:login.php');
-// }
+if ($_SESSION['typeu'] != 0 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
+    header('location:login.php');
+}
+include("connexion.inc.php");
+$num = $_SESSION['num'];
+$requete = $cnx->query("SELECT SIREN, raison_social FROM utilisateur WHERE num= $num ");
+$row = $requete->fetch();
+$siren = $row[0];
+$raison_social = $row[1];
 ?>
 <html>
 
 <head>
     <link rel="stylesheet" href="page.css">
     <meta charset="utf-8">
-    <title>Trésorerie des clients</title>
+    <title>Trésorerie</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <link rel="icon" type="image/png" href="easyfunds-icon.png">
@@ -37,10 +40,9 @@ if (!isset($_SESSION['siren'])) {
 
     <!-- ONGLETS -->
     <div class="tabs">
-        <a class="tab active" href="tresoreriepo.php">Trésorerie</a>
-        <a class="tab" href="remisespo.php">Remises</a>
-        <a class="tab" href="impayespo.php">Impayés</a>
-        <a class="tab" href="demandepo.php">Demandes</a>
+        <a class="tab active" href="tresorerie_utilisateur.php">Trésorerie</a>
+        <a class="tab" href="remises_utilisateur.php">Remises</a>
+        <a class="tab" href="impayes_utilisateur.php">Impayés</a>
     </div>
 </header>
 
@@ -60,8 +62,8 @@ if (!isset($_SESSION['siren'])) {
         <!-- DISPLAY TABLES + DATAS -->
         <section class="table-display">
 
-            <!-- PO TOUS CLIENTS -->
-            <div id="po-tous-clients" class="display active">
+            <!-- CLIENTS -->
+            <div id="clients" class="display active">
 
                 <!-- FILTRES -->
                 <div class="frame filtres">
@@ -106,7 +108,6 @@ if (!isset($_SESSION['siren'])) {
                     <div class="table-datas">
                         <table class="frame">
                             <?php
-                            include("connexion.inc.php");
                             $var = 0;
                             if (!empty($_POST['siren'])) {
                                 $_SESSION['siren'] = $_POST['siren'] . "%";
@@ -135,9 +136,9 @@ if (!isset($_SESSION['siren'])) {
                                 $_SESSION['croissance'] = $_POST['croissance'];
                             }
                             if (isset($_SESSION['filtre']) &&  isset($_SESSION['croissance'])) {
-                                $tresorerie = $cnx->query("SELECT SIREN,raison_sociale,nombre_transactions,date,montant_total FROM tresorerie WHERE SIREN LIKE \"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE \"" . $_SESSION['date'] . "\" ORDER BY " . $_SESSION['filtre'] . " " . $_SESSION['croissance'] . ";");
+                                $tresorerie = $cnx->query("SELECT SIREN,raison_sociale,nombre_transactions,date,montant_total FROM tresorerie WHERE num_utilisateur= $num AND SIREN LIKE \"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE \"" . $_SESSION['date'] . "\" ORDER BY " . $_SESSION['filtre'] . " " . $_SESSION['croissance'] . ";");
                             } else {
-                                $tresorerie = $cnx->query("SELECT SIREN,raison_sociale,nombre_transactions,date,montant_total FROM tresorerie WHERE SIREN LIKE\"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE\"" . $_SESSION['date'] . "\" ;");
+                                $tresorerie = $cnx->query("SELECT SIREN,raison_sociale,nombre_transactions,date,montant_total FROM tresorerie WHERE num_utilisateur= $num AND SIREN LIKE\"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE\"" . $_SESSION['date'] . "\" ;");
                             }
                             if (!$tresorerie) {
                                 echo "Pas de tresoreries";
@@ -145,24 +146,18 @@ if (!isset($_SESSION['siren'])) {
                                 while ($ligne = $tresorerie->fetch(PDO::FETCH_OBJ)) {
                                     $d = date_create($ligne->date);
                                     $date = date_format($d, "d/m/Y");
-                                    $montant = str_replace(".", ",", $ligne->montant_total);
+                                    $montant = str_replace(".", ",", 0 + $ligne->montant_total);
                                     if ($var % 2 == 0) {
                                         echo "<tr class=\"style1\">";
-                                        echo "<td style=\"width:20%\">$ligne->SIREN</td>";
-                                        echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
-                                        echo "<td style=\"width:25%\">$ligne->nombre_transactions</td>";
-                                        echo "<td style=\"width:20%\">$date</td>";
-                                        echo "<td style=\"width:20%\">$montant euros</td>";
-                                        echo "</tr>";
                                     } else {
                                         echo "<tr class=\"style2\">";
-                                        echo "<td style=\"width:20%\">$ligne->SIREN</td>";
-                                        echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
-                                        echo "<td style=\"width:25%\">$ligne->nombre_transactions</td>";
-                                        echo "<td style=\"width:20%\">$date</td>";
-                                        echo "<td style=\"width:20%\">$montant euros</td>";
-                                        echo "</tr>";
                                     }
+                                    echo "<td style=\"width:20%\">$ligne->SIREN</td>";
+                                    echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
+                                    echo "<td style=\"width:25%\">$ligne->nombre_transactions</td>";
+                                    echo "<td style=\"width:20%\">$date</td>";
+                                    echo "<td style=\"width:20%\">$montant euros</td>";
+                                    echo "</tr>";
                                     $var++;
                                 }
                             }
@@ -177,13 +172,12 @@ if (!isset($_SESSION['siren'])) {
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                            include("connexion.inc.php");
-                            $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie WHERE SIREN LIKE\"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE\"" . $_SESSION['date'] . "\"");
+                            $requete = $cnx->query("SELECT count(num_tresorerie), sum(nombre_transactions), sum(montant_total) FROM tresorerie WHERE num_utilisateur= $num AND SIREN LIKE\"" . $_SESSION['siren'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison'] . "\" AND date LIKE\"" . $_SESSION['date'] . "\"");
                             $row = $requete->fetch();
-                            $montant = str_replace(".", ",", $row[2]);
-                            echo "<td style=\"width:20%\">$row[0] remises</td>";
+                            $montant = str_replace(".", ",", 0 + $row[2]);
+                            echo "<td style=\"width:20%\">" . $row[0] . " remises</td>";
                             echo "<td style=\"width:20%\">-</td>";
-                            echo "<td style=\"width:25%\">$row[1] transactions</td>";
+                            echo "<td style=\"width:25%\">" . 0 + $row[1] . " transactions</td>";
                             echo "<td style=\"width:20%\">-</td>";
                             if ($montant<0){
                                 echo "<td style='width:20%; color: white' class=\"negative\">total = $montant euros</td>";
@@ -192,17 +186,6 @@ if (!isset($_SESSION['siren'])) {
                             }
                             ?>
                         </tr>
-                        <!-- Remplissage
-                        <tr class="end-row">
-                            <td style="width:20%;">input N° SIREN</td>
-                            <td style="width:20%">input Raison Sociale</td>
-                            <td style="width:25%">Total de transactions</td>
-                            <td style="width:20%"></td>
-                            <td style="width:20%">Montant total</td>
-                        </tr>
-                        -->
-
-
                     </table>
                 </div>
 
@@ -238,7 +221,8 @@ if (!isset($_SESSION['siren'])) {
                             <option value="pdf">PDF</option>
                             <option value="xls">XLS</option>
                         </select>
-                        <button onclick="exporter('po-tous-clients')" class="export">Exporter</button>
+                        <button onclick="exporter('clients','<?= $siren ?>' , '<?= $raison_social ?>')"
+                            class="export">Exporter</button>
                     </form>
 
                 </div>
@@ -247,7 +231,6 @@ if (!isset($_SESSION['siren'])) {
 
     </section>
     <script src="exports.js"></script>
-
 
     <!-- FOOTER -->
     <footer>

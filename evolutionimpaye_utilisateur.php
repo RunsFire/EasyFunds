@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <?php
 	session_start ();
-    if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] == '1') {
-        header('location:admin_demande.php');
-    }
-    else if (!isset( $_SESSION['typeu']) || $_SESSION['typeu']!='2'){
+    if (!isset( $_SESSION['typeu']) || $_SESSION['typeu']!='0'){
         header('location:login.php');
     }     
     include("connexion.inc.php");
     $date = date_create(date('Y-m-d'));
+    if (!isset($_POST['graphic'])){
+        $_POST['graphic']="bar";
+    }
     if (!isset($_POST["choix"]) || (isset($_POST['choix']) && $_POST['choix']=='4')){
         $_POST["choix"]=4;
         $date2 = date_sub($date,date_interval_create_from_date_string('3 month'));
@@ -29,7 +29,7 @@
                 $compteur++;
             }
             if ($_POST['choix']=='4' || $_POST['choix']=='12' ){
-                $requete = $cnx->query("SELECT date_vente,montant FROM impaye WHERE date_vente>='$date3';");
+                $requete = $cnx->query("SELECT date_vente,montant FROM impaye WHERE date_vente>='$date3' AND num_utilisateur='".$_SESSION['num']."';");
             while( $ligne = $requete->fetch(PDO::FETCH_OBJ)){
                 $date4 = date_create($ligne->date_vente);
                 $donnees[$liste_mois_fr[$date4->format('m')]]=$donnees[$liste_mois_fr[$date4->format('m')]] + abs($ligne->montant);
@@ -71,10 +71,9 @@
 
     <!-- ONGLETS -->
     <div class="tabs">
-        <a class="tab" href="tresoreriepo.php">Trésorerie</a>
-        <a class="tab" href="remisespo.php">Remises</a>
-        <a class="tab active" href="impayespo.php">Impayés</a>
-        <a class="tab" href="demandepo.php">Demandes</a>
+        <a class="tab" href="tresorerie_utilisateur.php">Trésorerie</a>
+        <a class="tab" href="remises_utilisateur.php">Remises</a>
+        <a class="tab active" href="impayes_utilisateur.php">Impayés</a>
     </div>
 </header>
 
@@ -92,35 +91,43 @@
             <div class="frame options">
 
                 <!-- LISTE IMPAYES DES COMPTES CLIENTS -->
-                <a href="impayespo.php" class="option">Liste</a>
+                <a href="impayes_utilisateur.php" class="option">Liste</a>
 
                 <!--GRAPHE IMPAYES PAR COMPTE CLIENT -->
-                <a href="graphimpayespo.php" class="option">Somme des impayés</a>
+                <a href="graphimpayes_utilisateur.php" class="option">Somme des impayés</a>
 
                 <!--GRAPHE IMPAYES PAR COMPTE CLIENT -->
-                <a href="evolutionimpaye.php" class="option active">Évolution des impayés</a>
+                <a href="evolutionimpaye_utilisateur.php" class="option active">Évolution des impayés</a>
 
             </div>
         </section>
-        <form method="POST" action="evolutionimpaye.php" class="radio-form">
+        <p style=color:white>Type de graphique et période : </p>
+        <form method="POST" action="evolutionimpaye_utilisateur.php" class="radio-form">
             <?php
-            if ($_POST['choix']=='4'){
-                echo '<input type="radio" id="quatre" name="choix" value="4" checked /><label for="quatre">Les 4 derniers mois</label>';
-            }else {
-                echo '<input type="radio" id="quatre" name="choix" value="4" /><label for="quatre">Les 4 derniers mois</label>';
-            }if ($_POST['choix']=='12'){
-                echo '<input type="radio" id="six" name="choix" value="12" checked /><label for="six">Les 12 derniers mois</label>';
-            }else {
-                echo '<input type="radio" id="six" name="choix" value="12" /><label for="six">Les 12 derniers mois</label>';
-            } if ($_POST['choix']=='date'){
-                echo '<input type="radio" id="date" name="choix" value="date" checked /><label for="date">Entre 2 dates</label><br><br>';
-                echo '<form method="POST" action="evolutionimpaye.php">';
-                echo 'de <input type="date" name="date" class="filtre" max='.$date->format("Y-m-d").'> à ';
-                echo '<input type="date" name="date2" class="filtre" max='.$date->format("Y-m-d").'>';
+                if ($_POST['graphic']=="bar"){
+                    echo '<input type="radio" id="bar" name="graphic" value="bar" checked /><label for="bar">Histogramme</label>';
+                    echo '<input type="radio" id="bar" name="graphic" value="line" style="margin-bottom: 2rem"/><label for="line">Courbe</label>';
+                } if ($_POST['graphic']=="line"){
+                    echo '<input type="radio" id="bar" name="graphic" value="bar" /><label for="bar">Histogramme</label>';
+                    echo '<input type="radio" id="bar" name="graphic" value="line" style="margin-bottom: 2rem" checked/><label for="line">Courbe</label>';
+                }
+                if ($_POST['choix']=='4'){
+                    echo '<input type="radio" id="quatre" name="choix" value="4" checked /><label for="quatre">Les 4 derniers mois</label>';
+                }else {
+                    echo '<input type="radio" id="quatre" name="choix" value="4" /><label for="quatre">Les 4 derniers mois</label>';
+                }if ($_POST['choix']=='12'){
+                    echo '<input type="radio" id="six" name="choix" value="12" checked /><label for="six">Les 12 derniers mois</label>';
+                }else {
+                    echo '<input type="radio" id="six" name="choix" value="12" /><label for="six">Les 12 derniers mois</label>';
+                } if ($_POST['choix']=='date'){
+                    echo '<input type="radio" id="date" name="choix" value="date" checked /><label for="date">Entre 2 dates</label><br><br>';
+                    echo '<form method="POST" action="evolutionimpaye.php">';
+                    echo 'de <input type="date" name="date" class="filtre" max='.$date->format("Y-m-d").'> à ';
+                    echo '<input type="date" name="date2" class="filtre" max='.$date->format("Y-m-d").'>';
 
-            } else {
-                echo '<input type="radio" id="date" name="choix" value="date"/><label for="date">Entre 2 dates</label><br>';
-            }
+                } else {
+                    echo '<input type="radio" id="date" name="choix" value="date"/><label for="date">Entre 2 dates</label><br>';
+                }
             ?>
             <button type="submit">Choisir</button>
         </form>
@@ -158,11 +165,17 @@
             ?>
             var barColors = ["#9E00FF","#7823AC","#9357B8","#593A6D","#C264FC","#8B12D6","#9E00FF","#995AC1","#A347E0","#6A1E88","#B864EA","#7D38B2"];
             var myChart = new Chart("myChart", {
-            type: "bar",
+            <?php 
+            echo 'type: "'.$_POST['graphic'].'",'
+            ?>
             data: {
                 labels: lstMois,
                 datasets: [{
-                    backgroundColor: barColors,
+                    <?php
+                    if ($_POST['graphic']!='line'){
+                        echo 'backgroundColor: barColors,';
+                    }
+                    ?>
                     label: 'Évolution des impayés',
                     data: donnees,
                 }

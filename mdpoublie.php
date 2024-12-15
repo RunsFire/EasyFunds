@@ -25,7 +25,7 @@
                 <form method="POST" action="mdpoublie.php">
                     <div style="margin-left: 3.8vw">
                         <label for="mail">Mail de connexion</label>
-                        <input type="text" name="mail" id="mail" placeholder="Entrez votre mail" required><br><br>
+                        <input type="email" name="mail" id="mail" placeholder="Entrez votre mail" required><br><br>
                         <?php
                             include("connexion.inc.php");
                             if (isset($_POST['mail'])){

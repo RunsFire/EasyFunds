@@ -5,13 +5,13 @@
  */
 
 .fredoka {
-              font-family: "Fredoka", sans-serif;
-              font-optical-sizing: auto;
-              font-weight: 300;
-              font-style: normal;
-              font-variation-settings:
-                      "wdth" 100;
-          }
+  font-family: "Fredoka", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings:
+          "wdth" 100;
+}
 
 :root {
     --dark-purple-bg: #272528;
@@ -116,6 +116,10 @@ button.here {
     margin-right: 30px;
 }
 
+a.white_link:any-link {
+    color: inherit;
+}
+
 section form input[type="submit"] {
     background-color: var(--secondary-pink);
     color: var(--dark-purple-bg);
@@ -139,7 +143,7 @@ section form input[type="submit"] {
     color: red;
 }
 
-.alert_worked {
+h4.alert_worked {
     color: limegreen;
 }
 
@@ -175,4 +179,23 @@ form .eyeIcon i {
     background-size: contain;
     background-repeat: no-repeat;
     vertical-align: middle;
+}
+
+textarea.tapercentgrey {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    margin: 15px 0;
+    width: 80%;
+    font-size: 20px;
+    height: 40%;
+    resize: none;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+
+}
+
+textarea.tapercentgrey:focus {
+    outline: thick double var(--sec);
+    transition: 0.25s;
 }

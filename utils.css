@@ -84,8 +84,9 @@ th {
     color: white;
     background-color: var(--main);
     border-radius: 3px;
-    padding: 10px 0;
+    padding: 10px 2px;
     font-size: 1.2rem;
+    align-content: center;
 }
 
 tr {
@@ -96,7 +97,7 @@ tr {
     font-family: var(--default-font);
     text-align: center;
     vertical-align: middle;
-    padding: 4px 0;
+    padding: 6px 0;
 }
 
 tr.style1 {
@@ -121,6 +122,14 @@ td {
     font-weight: bold;
     font-size: 1.1rem;
     padding: 4px 0;
+    align-content: center;
+}
+
+.table-butt {
+    background-color: #6a5b78a0;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
 /*OPTIONS, tabs with <a>*/
@@ -136,6 +145,7 @@ a.option {
     opacity: 0.3;
     cursor: pointer;
     box-shadow: 0 0 20px #202020;
+    text-decoration: none;
 }
 
 a.option.active {
@@ -155,6 +165,27 @@ a.option.no-action:hover {
 }
 
 /*FORM*/
+form.radio-form {
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 1em;
+    color: white;
+    width: fit-content;
+}
+
+form.twopart-form {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1rem 1rem;
+    color: white;
+    width: fit-content;
+    align-items: center;
+}
+
+form.twopart-form label{
+    text-align: end;
+}
+
 input {
     background-color: var(--light);
     border: solid 2px var(--main);
@@ -166,18 +197,44 @@ input {
     width: 220px;
 }
 
-button.search {
+input[type="submit"].sub-cent {
     background-color: var(--sec);
     font-weight: bold;
+    padding: 10px 15px;
     border: none;
     border-radius: 15px;
-    padding: 0 15px;
     cursor: pointer;
+    color: black;
+    width: fit-content;
+    font-size: 1.5rem;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
 }
 
-button.search:hover {
-    transition: 0.1s;
+input[type="submit"].sub-cent:hover {
+    transition: ease-in-out 0.2s;
     background-color: var(--main);
+    border: 1px solid white;
+}
+
+input[type="date"] {
+    width: fit-content;
+}
+
+input[type="number"] {
+    width: 185px;
+}
+
+input[type="radio"] {
+    width: fit-content;
+    accent-color: var(--sec);
+}
+
+input[type="email"].forform {
+    font-size: 0.75rem;
+    min-height: 32px;
+    width: 300px;
 }
 
 .table-format {
@@ -196,7 +253,7 @@ select {
     font-weight: bold;
     color: var(--main);
     font-size: 1rem;
-
+    width: fit-content;
     padding: 5px 10px;
 }
 
@@ -217,6 +274,8 @@ button {
     border: none;
     border-radius: 15px;
     cursor: pointer;
+    width: fit-content;
+    justify-self: center;
 }
 
 button:hover {
@@ -224,6 +283,70 @@ button:hover {
     background-color: var(--main);
 }
 
+button.search {
+    background-color: var(--sec);
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    padding: 0 15px;
+    cursor: pointer;
+}
+
+button.search:hover {
+    transition: 0.1s;
+    background-color: var(--main);
+}
+
+textarea.ta-grey {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    margin: 15px 0;
+    width: 90vw; /* 100 - 2*main.dmdad margin left */
+    font-size: 20px;
+    height: 40vh;
+    resize: none;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+textarea.ta-grey:focus {
+    outline: thick double var(--sec);
+    transition: 0.25s;
+}
+
+textarea.ta-perct-grey {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    margin: 15px 0;
+    width: 70%; /* 100 - 2*main.dmdad margin left */
+    font-size: 20px;
+    height: 40%;
+    resize: none;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+textarea.ta-perct-grey:focus {
+    outline: thick double var(--sec);
+    transition: 0.25s;
+}
+
+/*BODY PARTS*/
+h1.pttl {
+    text-align: center;
+    color: var(--sec);
+    font-weight: bold;
+    font-size: 2rem;
+    margin-top: 15px;
+}
+
+h6.sbttl {
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
 
 /*INFO*/
 .info {
@@ -245,6 +368,25 @@ button:hover {
 td.negative {
     background-color: var(--red);
     border-radius: 3px;
+}
+
+h4.alert {
+    color: red;
+    font-size: larger;
+}
+
+h4.alert_worked {
+    color: limegreen;
+}
+
+section.has-frame {
+    border: 2px solid var(--sec);
+    border-radius: 40px;
+    padding: 50px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10vh;
 }
 
 /*Retour*/
