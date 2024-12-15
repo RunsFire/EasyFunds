@@ -1,5 +1,5 @@
 <?php
-	session_start ();
+session_start();
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,8 +16,7 @@
 
 <body>
     <header>
-        <img src="easyfunds-icon.png"
-            alt="">
+        <img src="easyfunds-icon.png" alt="">
         <div class="title">
             Easy Funds
         </div>
@@ -36,59 +35,56 @@
                 <button type="button" class="here" id="toggle-password" onclick="togglePasswordVisibility()">
                     <i id="eye-icon" class="eye"></i>
                 </button>
-                <a class="rightnote" href="mdpoublie.php">Mot de passe oubli&eacute; ?</a>
+                <div class="rightnote"> <a href="mdpoublie.php">Mot de passe oubli&eacute; ?</a></div>
                 <?php
                 include("connexion.inc.php");
-                if (isset($_POST['mail']) && isset($_POST['mdp'])){
+                if (isset($_POST['mail']) && isset($_POST['mdp'])) {
                     $_SESSION['login'] = $_POST['mail'];
                     $_SESSION['mdp'] = $_POST['mdp'];
-                    $requete = $cnx -> query("SELECT mdp,typeu,mdpprovisoire,num,mail,nbr_essai,pseudo FROM utilisateur WHERE mail='". $_SESSION['login']."';");
-                    $row=$requete->fetch();
-                    if ($row==0 || !(password_verify($_SESSION['mdp'],$row[0])) || $row[5]==3){
-                        if ($row==0){
+                    $requete = $cnx->query("SELECT mdp,typeu,mdpprovisoire,num,mail,nbr_essai,raison_social FROM utilisateur WHERE mail='" . $_SESSION['login'] . "';");
+                    $row = $requete->fetch();
+                    if ($row == 0 || !(password_verify($_SESSION['mdp'], $row[0])) || $row[5] == 3) {
+                        if ($row == 0) {
                             echo "<h4 class='alert'>login ou mot de passe incorrect</h4>";
                         }
-                        if ($row!=0 && $row[5]!=3){
-                            $cnx->exec("UPDATE utilisateur SET nbr_essai=nbr_essai+1 WHERE mail='".$_SESSION['login']."';");
+                        if ($row != 0 && $row[5] != 3) {
+                            $cnx->exec("UPDATE utilisateur SET nbr_essai=nbr_essai+1 WHERE mail='" . $_SESSION['login'] . "';");
                             $row[5]++;
                         }
-                        if ($row!=0 &&$row[5]<2){
+                        if ($row != 0 && $row[5] < 2) {
                             echo "<h4 class='alert'>login ou mot de passe incorrect</h4>";
-                        }else if ($row!=0 &&$row[5]==2){
+                        } else if ($row != 0 && $row[5] == 2) {
                             echo "<h4 class='alert'>ATTENTION : PLUS QUE UN ESSAI AVANT LE BLOCAGE DU COMPTE </h4>";
-                        }else if ($row!=0 &&$row[5]==3){
-                            $_SESSION['num']=$row[3];
+                        } else if ($row != 0 && $row[5] == 3) {
+                            $_SESSION['num'] = $row[3];
                             echo "<h4 class='alert'>Votre compte est maintenant bloqué. Contactez un admin en<a href=\"contact_admin.php\"> cliquant ici </a></h4>";
                         }
-                        
+
                         unset($_SESSION['login']);
-                        unset( $_SESSION['mdp']);
-                        
-                    }
-                    else {
-                        $_SESSION['typeu']=$row[1];
-                        $_SESSION['mdpProvisoire']=$row[2];
-                        $_SESSION['num']=$row[3];
-                        $_SESSION['pseudo']=$row[6];
-                        $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='".$_SESSION['login']."';");
-                        if ( $_SESSION['typeu']=='0' && $row[2]==0){
-                                header('location:accueilUser.php');
-                        } else if( $_SESSION['typeu']=='0' &&$row[2]==1){
-                                header('location:mdpmdp.php');
-                        }
-                        else if ( $_SESSION['typeu']=='1' && $row[2]==0 ){
-                            header('location:po_des_compte_client.php');
-                        }else if ( $_SESSION['typeu']=='1' && $row[2]==1 ){
+                        unset($_SESSION['mdp']);
+                    } else {
+                        $_SESSION['typeu'] = $row[1];
+                        $_SESSION['mdpProvisoire'] = $row[2];
+                        $_SESSION['num'] = $row[3];
+                        $_SESSION['pseudo'] = $row[6];
+                        $cnx->exec("UPDATE utilisateur SET nbr_essai=0 WHERE mail='" . $_SESSION['login'] . "';");
+                        if ($_SESSION['typeu'] == '0' && $row[2] == 0) {
+                            header('location:tresorerie_utilisateur.php');
+                        } else if ($_SESSION['typeu'] == '0' && $row[2] == 1) {
                             header('location:mdpmdp.php');
-                        }else if ( $_SESSION['typeu']=='2' && $row[2]==0 ){
-                            header('location:po_des_compte_client.php');
-                        }else if ( $_SESSION['typeu']=='2' && $row[2]==1 ){
+                        } else if ($_SESSION['typeu'] == '1' && $row[2] == 0) {
+                            header('location:admin_demande.php');
+                        } else if ($_SESSION['typeu'] == '1' && $row[2] == 1) {
+                            header('location:mdpmdp.php');
+                        } else if ($_SESSION['typeu'] == '2' && $row[2] == 0) {
+                            header('location:tresoreriepo.php');
+                        } else if ($_SESSION['typeu'] == '2' && $row[2] == 1) {
                             header('location:mdpmdp.php');
                         }
                     }
-                    }
-            echo "<br>";
-            ?>
+                }
+                echo "<br>";
+                ?>
                 <input type="submit" value="Se connecter" />
             </form>
         </section>

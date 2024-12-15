@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <?php
-	session_start ();
-    if ($_SESSION['typeu']!='2'){
-        header('location:login.php');
-    } 
-    // if($_SESSION['typeu']!=2 ||  !isset($_SESSION['login']) && !isset($_SESSION['mdp'])) {
-	// 	header('location:login.php');
-	// }
+session_start();
+if (!isset($_SESSION['typeu']) || $_SESSION['typeu'] != '2') {
+    header('location:login.php');
+}
+if (!isset($_SESSION['siren2'])) {
+    $_SESSION['siren2'] = "%";
+    $_SESSION['raison2'] = "%";
+    $_SESSION['date2'] = "%";
+}
 ?>
 <html>
 
 <head>
     <link rel="stylesheet" href="page.css">
     <meta charset="utf-8">
-    <title>Accueil</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="./node_modules/jspdf/dist/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <title>Remises des clients</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
     <link rel="icon" type="image/png" href="easyfunds-icon.png">
 </head>
 
@@ -32,8 +33,8 @@
     <div class="tabs">
         <a class="tab" href="tresoreriepo.php">Trésorerie</a>
         <a class="tab active" href="remisespo.php">Remises</a>
-        <a class="tab" href="">Impayés</a>
-        <a class="tab" href="">Demandes</a>
+        <a class="tab" href="impayespo.php">Impayés</a>
+        <a class="tab" href="demandepo.php">Demandes</a>
     </div>
 </header>
 
@@ -44,7 +45,7 @@
         <section>
             <!-- BONJOUR [UTILISATEUR] -->
             <div class="frame greet-user ">
-                <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">".$_SESSION['pseudo']."</span></p>" ?>
+                <?php echo "<p>Bonjour <span class=\"username\" style=\"color:white\">" . $_SESSION['pseudo'] . "</span></p>" ?>
                 <a class="disconnect" href="deconnexion.php">Se déconnecter</a>
             </div>
         </section>
@@ -57,21 +58,23 @@
             <div id="po-par-client-display" class="display active">
                 <!-- FILTRES -->
                 <div class="frame filtres">
-                    <form method="GET" action="remisespo.php">
+                    <form method="POST" action="remisespo.php">
                         <?php
-                            if (!empty($_GET['siren'])){
-                                echo '<input type="text" name="siren" class="filtre" value='.$_GET['siren'].' placeholder='.$_GET['siren'].'>';
-                            }else{
-                                echo '<input type="text" name="siren" class="filtre" placeholder="SIREN">';
-                            }if (!empty($_GET['raison'])){
-                                echo '<input type="text" name="raison" class="filtre" value='.$_GET['raison'].' placeholder='.$_GET['raison'].'>';
-                            }else{
-                                echo '<input type="text" name="raison" class="filtre" placeholder="Raison sociale">';
-                            }if (!empty($_GET['date'])){
-                                echo '<input type="date" name="date" class="filtre" value='.$_GET['date'].'>';
-                            }else{
-                                echo '<input type="date" name="date" class="filtre">';
-                            }
+                        if (!empty($_POST['siren'])) {
+                            echo '<input type="text" name="siren" class="filtre" value=' . $_POST['siren'] . ' placeholder="SIREN">';
+                        } else {
+                            echo '<input type="text" name="siren" class="filtre" placeholder="SIREN">';
+                        }
+                        if (!empty($_POST['raison'])) {
+                            echo '<input type="text" name="raison" class="filtre" value=' . $_POST['raison'] . ' placeholder="Raison sociale">';
+                        } else {
+                            echo '<input type="text" name="raison" class="filtre" placeholder="Raison sociale">';
+                        }
+                        if (!empty($_POST['date'])) {
+                            echo '<input type="date" name="date" class="filtre" value=' . $_POST['date'] . '>';
+                        } else {
+                            echo '<input type="date" name="date" class="filtre">';
+                        }
                         ?>
                         <button type="submit" class="search">Rechercher</button>
                         <button name="reset" value="reset" class="search">Rénitialiser</button>
@@ -95,62 +98,76 @@
                     <!-- TABLEAU DATAS -->
                     <div class="table-datas shorter-table" id="po-par-client">
                         <table class="frame">
-                        <?php
-                                include("connexion.inc.php");
-                                $var = 0;
-                                if (!empty($_GET['siren'])){
-                                    $_SESSION['siren'] =$_GET['siren']."%";
-                                } if (!empty($_GET['raison']) ){
-                                    $_SESSION['raison'] = "%".$_GET['raison']."%";
-                                } if (!empty($_GET['date'])){
-                                    $_SESSION['date']= "%".$_GET['date']."%";
-                                } if (!empty($_GET['reset'])){
-                                    $_SESSION['siren']= "%";
-                                    $_SESSION['raison']= "%";
-                                    $_SESSION['date']= "%";      
-                                    unset($_GET['reset']);
-                                }if (!empty($_GET['resets'])){
-                                    unset( $_SESSION['filtre']);
-                                    unset( $_SESSION['croissance']);
-                                    unset($_GET['filtre']);
-                                    unset($_GET['croissance']);
-                                    unset($_GET['resets']);
-                                }
-                                if (!empty($_GET['filtre']) && !empty($_GET['croissance']) ){
-                                    $_SESSION['filtre']=$_GET['filtre'];
-                                    $_SESSION['croissance']=$_GET['croissance'];
-                                } if (isset($_SESSION['filtre']) &&  isset($_SESSION['croissance'])){
-                                    $tresorerie = $cnx-> query("SELECT numero_remise, SIREN,raison_sociale,nbre_transaction,date_traitement,montant_total FROM remise WHERE SIREN LIKE \"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date_traitement LIKE \"".$_SESSION['date']."\" ORDER BY ". $_SESSION['filtre']." ". $_SESSION['croissance'].";");
-                                }else{
-                                    $tresorerie = $cnx-> query("SELECT numero_remise, SIREN,raison_sociale,nbre_transaction,date_traitement,montant_total FROM remise WHERE SIREN LIKE\"".$_SESSION['siren']."\" AND raison_sociale  LIKE \"".$_SESSION['raison']."\" AND date_traitement LIKE\"".$_SESSION['date']."\" ;");
-                                }
-                                if ($tresorerie==null){
-                                    echo "Pas de tresoreries";
-                                }else {
-                                    while( $ligne = $tresorerie->fetch(PDO::FETCH_OBJ)){ 
-                                        $d=date_create($ligne->date_traitement);
-                                        $date = date_format($d,"d/m/Y");
-                                        if ($var%2==0){
-                                            echo "<tr class=\"style1\" onclick=\"window.location.href='detail_po.php?remise=$ligne->numero_remise'\">";
-                                            echo "<td style=\"width:20%\">$ligne->SIREN</td>";
-                                            echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
-                                            echo "<td style=\"width:25%\">$ligne->nbre_transaction</td>";
-                                            echo "<td style=\"width:20%\">$date</td>";
-                                            echo "<td style=\"width:20%\">$ligne->montant_total euros</td>";
-                                            echo "</tr>";
-                                        }else{
-                                            echo "<tr class=\"style2\" onclick=\"window.location.href='detail_po.php?remise=$ligne->numero_remise'\">";
-                                            echo "<td style=\"width:20%\">$ligne->SIREN</td>";
-                                            echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
-                                            echo "<td style=\"width:25%\">$ligne->nbre_transaction</td>";
-                                            echo "<td style=\"width:20%\">$date</td>";
-                                            echo "<td style=\"width:20%\">$ligne->montant_total euros</td>";
-                                            echo "</tr>";
+                            <?php
+                            include("connexion.inc.php");
+                            $var = 0;
+                            if (!empty($_POST['siren'])) {
+                                $_SESSION['siren2'] = $_POST['siren'] . "%";
+                            }
+                            if (!empty($_POST['raison'])) {
+                                $_SESSION['raison2'] =$_POST['raison'] . "%";
+                            }
+                            if (!empty($_POST['date'])) {
+                                $_SESSION['date2'] = "%" . $_POST['date'] . "%";
+                            }
+                            if (!empty($_POST['reset'])) {
+                                $_SESSION['siren2'] = "%";
+                                $_SESSION['raison2'] = "%";
+                                $_SESSION['date2'] = "%";
+                                unset($_POST['reset']);
+                            }
+                            if (!empty($_POST['resets'])) {
+                                unset($_SESSION['filtre']);
+                                unset($_SESSION['croissance']);
+                                unset($_POST['filtre']);
+                                unset($_POST['croissance']);
+                                unset($_POST['resets']);
+                            }
+                            if (!empty($_POST['filtre']) && !empty($_POST['croissance'])) {
+                                $_SESSION['filtre2'] = $_POST['filtre'];
+                                $_SESSION['croissance2'] = $_POST['croissance'];
+                            }
+                            if (isset($_SESSION['filtre2']) &&  isset($_SESSION['croissance2'])) {
+                                $tresorerie = $cnx->query("SELECT numero_remise, SIREN,raison_sociale,nbre_transaction,date_traitement,montant_total FROM remise WHERE SIREN LIKE \"" . $_SESSION['siren2'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison2'] . "\" AND date_traitement LIKE \"" . $_SESSION['date2'] . "\" ORDER BY " . $_SESSION['filtre2'] . " " . $_SESSION['croissance2'] . ";");
+                            } else {
+                                $tresorerie = $cnx->query("SELECT numero_remise, SIREN,raison_sociale,nbre_transaction,date_traitement,montant_total FROM remise WHERE SIREN LIKE\"" . $_SESSION['siren2'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison2'] . "\" AND date_traitement LIKE\"" . $_SESSION['date2'] . "\" ;");
+                            }
+                            if ($tresorerie == null) {
+                                echo "Pas de tresoreries";
+                            } else {
+                                while ($ligne = $tresorerie->fetch(PDO::FETCH_OBJ)) {
+                                    $d = date_create($ligne->date_traitement);
+                                    $date = date_format($d, "d/m/Y");
+                                    $montant = str_replace(".", ",", $ligne->montant_total);
+                                    if ($var % 2 == 0) {
+                                        echo "<tr class=\"style1\" onclick=\"window.location.href='detailpo.php?remise=$ligne->numero_remise'\">";
+                                        echo "<td style=\"width:20%\">$ligne->SIREN</td>";
+                                        echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
+                                        echo "<td style=\"width:25%\">$ligne->nbre_transaction</td>";
+                                        echo "<td style=\"width:20%\">$date</td>";
+                                        if ($ligne->montant_total < 0) {
+                                            echo "<td style=\"width:20%\" class=\"negative\">$montant euros</td>";
+                                        } else {
+                                            echo "<td style=\"width:20%\">$montant euros</td>";
                                         }
-                                        $var++;
+                                        echo "</tr>";
+                                    } else {
+                                        echo "<tr class=\"style2\" onclick=\"window.location.href='detailpo.php?remise=$ligne->numero_remise'\">";
+                                        echo "<td style=\"width:20%\">$ligne->SIREN</td>";
+                                        echo "<td style=\"width:20%\">$ligne->raison_sociale</td>";
+                                        echo "<td style=\"width:25%\">$ligne->nbre_transaction</td>";
+                                        echo "<td style=\"width:20%\">$date</td>";
+                                        if ($ligne->montant_total < 0) {
+                                            echo "<td style=\"width:20%\" class=\"negative\">$montant euros</td>";
+                                        } else {
+                                            echo "<td style=\"width:20%\">$montant euros</td>";
+                                        }
+                                        echo "</tr>";
+                                    }
+                                    $var++;
                                 }
-                                }
-                                $tresorerie->closeCursor();
+                            }
+                            $tresorerie->closeCursor();
                             ?>
                         </table>
                     </div>
@@ -162,14 +179,19 @@
                         <!-- DEFAULT -->
                         <tr class="end-row">
                             <?php
-                                include("connexion.inc.php");
-                                $requete = $cnx->query("SELECT count(numero_remise), sum(nbre_transaction), sum(montant_total) FROM remise");
-                                $row=$requete->fetch();
-                                echo "<td style=\"width:20%\">$row[0] remises</td>";
-                                echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:25%\">$row[1] transactions</td>";
-                                echo "<td style=\"width:20%\">-</td>";
-                                echo "<td style=\"width:20%\">total = $row[2] euros</td>";
+                            include("connexion.inc.php");
+                            $requete = $cnx->query("SELECT count(numero_remise), sum(nbre_transaction), sum(montant_total) FROM remise WHERE SIREN LIKE\"" . $_SESSION['siren2'] . "\" AND raison_sociale  LIKE \"" . $_SESSION['raison2'] . "\" AND date_traitement LIKE\"" . $_SESSION['date2'] . "\" ");
+                            $row = $requete->fetch();
+                            $montant = str_replace(".", ",", $row[2]);
+                            echo "<td style=\"width:20%\">$row[0] remises</td>";
+                            echo "<td style=\"width:20%\">-</td>";
+                            echo "<td style=\"width:25%\">$row[1] transactions</td>";
+                            echo "<td style=\"width:20%\">-</td>";
+                            if ($montant<0){
+                                echo "<td style='width:20%; color: white' class=\"negative\">total = $montant euros</td>";
+                            }else{
+                                echo "<td style=\"width:20%\">total = $montant euros</td>";
+                            }
                             ?>
                         </tr>
                         <!-- Remplissage
@@ -190,13 +212,13 @@
                 <div class="frame row-space-between" style="margin-top: 2px;">
 
                     <!-- TRI -->
-                    <form method="GET" action="remisespo.php">
+                    <form method="POST" action="remisespo.php">
                         <select name="filtre">
                             <option selected disabled hidden>--</option>
                             <option value="SIREN"> SIREN</option>
                             <option value="raison_sociale">Raison Sociale</option>
-                            <option value="nombre_transactions">Nb de transactions</option>
-                            <option value="date">Date</option>
+                            <option value="nbre_transaction">Nb de transactions</option>
+                            <option value="date_traitement">Date</option>
                             <option value="montant_total">Montant total</option>
                         </select>
                         <select name="croissance">
@@ -232,25 +254,25 @@
     <footer>
 
         <script>
-        //Option : tous-clients / par-client
-        function displayTable(optionId, displayId) {
-            //remove checked from all options
-            const allOptionsRadio = document.querySelectorAll(".option-radio");
-            allOptionsRadio.forEach(radio => {
-                radio.checked = false
-            });
-            //add checked to option
-            const toCheck = document.getElementById(optionId);
-            toCheck.checked = true;
-            //remove active from all displays
-            const allDisplays = document.querySelectorAll(".display");
-            allDisplays.forEach(display => {
-                display.classList.remove("active");
-            })
-            //add active to display
-            const toDisplay = document.getElementById(displayId);
-            toDisplay.classList.add("active");
-        }
+            //Option : tous-clients / par-client
+            function displayTable(optionId, displayId) {
+                //remove checked from all options
+                const allOptionsRadio = document.querySelectorAll(".option-radio");
+                allOptionsRadio.forEach(radio => {
+                    radio.checked = false
+                });
+                //add checked to option
+                const toCheck = document.getElementById(optionId);
+                toCheck.checked = true;
+                //remove active from all displays
+                const allDisplays = document.querySelectorAll(".display");
+                allDisplays.forEach(display => {
+                    display.classList.remove("active");
+                })
+                //add active to display
+                const toDisplay = document.getElementById(displayId);
+                toDisplay.classList.add("active");
+            }
         </script>
 
     </footer>

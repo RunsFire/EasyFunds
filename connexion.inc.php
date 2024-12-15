@@ -2,8 +2,8 @@
 // Informations de connexion
 $host = 'localhost';        // Serveur de base de données, souvent 'localhost' pour PlanetHoster
 $dbname = 'zzytafus_easyfunds';  // Nom de ta base de données
-$username = 'zzytafus_admin'; // Nom d'utilisateur de la base de données
-$password = 'zzvY&nz)38T/3ze$&9';  // Mot de passe de l'utilisateur
+$username = '[username]'; // Nom d'utilisateur de la base de données
+$password = '[password]';  // Mot de passe de l'utilisateur
 
 try {
     // Créer une nouvelle connexion PDO
